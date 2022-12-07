@@ -1,3 +1,3 @@
 # jumeau_numerique
-ISAE Supaero PIE
-et oui
+Repo git du jumeaux numérique d'un système de surveillance de l'espace
+

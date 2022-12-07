@@ -1,5 +1,4 @@
-package src.Kalman;
-
+package Kalman;
 import java.io.File;
 
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class brouillon_Kalman {
     public static void main(String[] args) throws Exception
     {
     	//importation des donnees de base (toujour mettre ça en début de programme)
-    	File orekitData = new File("lib/orekit-data-master/");
+    	File orekitData = new File("../lib/orekit-data-master");
     	DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();
     	manager.addProvider(new DirectoryCrawler(orekitData));
     	
