@@ -1,4 +1,4 @@
-package src.Propagator;
+package Propagator;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
