@@ -18,13 +18,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 public class PropagateTLE {
 
-    List<String[]> pvCoordinatesStringList = new ArrayList<>();
+    List<String[]> pvCoordinatesStringList;
 
     PropagateTLE() throws Exception {
         this.pvCoordinatesStringList = PropagateTLE.readPvCSV();
@@ -34,7 +33,7 @@ public class PropagateTLE {
         List<String[]> tleList = new ArrayList<>();
 
         BufferedReader br = new BufferedReader(new FileReader("src/TLE/pv.csv"));
-        String line = null;
+        String line;
         while ((line = br.readLine()) != null)
         {
             // Retourner la ligne dans un tableau
@@ -42,9 +41,6 @@ public class PropagateTLE {
             tleList.add(data);
         }
         br.close();
-        for (String[] tle : tleList){
-            System.out.println(Arrays.toString(tle));
-        }
 
         return tleList;
     }
@@ -66,7 +62,7 @@ public class PropagateTLE {
 
         double dateDouble = Double.parseDouble(pvCoordinatesString[6]);
         int year = (int)Math.floor(dateDouble/1000);
-        AbsoluteDate yearDate = null;
+        AbsoluteDate yearDate;
 
         if (year < 20){
             yearDate = new AbsoluteDate(1900 + year, 1, 1, utc);
@@ -98,11 +94,11 @@ public class PropagateTLE {
 
         PropagateTLE propagator = new PropagateTLE();
 
-        System.out.println(propagator.pvCoordinatesStringList.size());
-        System.out.println(propagator.absoluteCoordinatesFromStringPV(propagator.pvCoordinatesStringList.get(0)));
-
         AbsolutePVCoordinates initialAbsPV = propagator.absoluteCoordinatesFromStringPV(propagator.pvCoordinatesStringList.get(0));
         AbsoluteDate initialDate = initialAbsPV.getDate();
+
+        System.out.println(propagator.pvCoordinatesStringList.size());
+        System.out.println(initialAbsPV);
 
         KeplerianPropagator kepler = propagator.createKeplerianPropagatorFromAbsPVC(initialAbsPV);
 
@@ -110,12 +106,9 @@ public class PropagateTLE {
         AbsoluteDate finalDate = initialDate.shiftedBy(duration);
         double stepT = 60.;
         int cpt = 1;
-        for (AbsoluteDate extrapDate = initialDate;
-             extrapDate.compareTo(finalDate) <= 0;
-             extrapDate = extrapDate.shiftedBy(stepT))  {
+        for (AbsoluteDate extrapDate = initialDate; extrapDate.compareTo(finalDate) <= 0; extrapDate = extrapDate.shiftedBy(stepT)) {
             SpacecraftState currentState = kepler.propagate(extrapDate);
-            System.out.format(Locale.US, "step %2d %s %s%n",
-                    cpt++, currentState.getDate(), currentState.getOrbit());
+            System.out.format(Locale.US, "step %2d %s %s%n", cpt++, currentState.getDate(), currentState.getOrbit());
         }
 
     }
