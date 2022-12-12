@@ -13,6 +13,7 @@ public class brouillon_groundStation {
     
     final double ae = Constants.WGS84_EARTH_EQUATORIAL_RADIUS;
     final double f = 0.;
+    final double randomo = 0.;
     OneAxisEllipsoid earthShape = new OneAxisEllipsoid(ae, f, FramesFactory.getITRF(ITRFVersion.ITRF_2000, IERSConventions.IERS_2010, false));
     GeodeticPoint station1Location = new GeodeticPoint(0., 0., 0.) ;
     TopocentricFrame topocentricFrame = new TopocentricFrame(earthShape, station1Location, "station_1");
