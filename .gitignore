@@ -4,6 +4,7 @@ out/
 .out/*
 .classpath
 .prject
+jumeau_numerique.iml
 # Compiled class file
 *.class
 
