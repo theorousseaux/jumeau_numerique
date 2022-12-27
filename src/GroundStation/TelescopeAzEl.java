@@ -21,6 +21,7 @@ import org.orekit.data.DataContext;
 import org.orekit.data.DataProvidersManager;
 import org.orekit.data.DirectoryCrawler;
 import org.orekit.estimation.leastsquares.BatchLSEstimator;
+import org.orekit.estimation.measurements.AngularAzEl;
 import org.orekit.estimation.measurements.GroundStation;
 import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.estimation.measurements.ObservedMeasurement;
@@ -146,6 +147,24 @@ public class TelescopeAzEl {
 
     	BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, nightDetector);
 		this.finalDetector = finalDetector;
+	}
+
+	
+	/** Method : Create scheduled observations for an orbital object */
+	//////////////////////////////////////////////////////////////////
+	public SortedSet<ObservedMeasurement<?>> scheduledObservations(ObservableSatellite object, Propagator propagator, FixedStepSelector dateSelector, AbsoluteDate initialDate, AbsoluteDate finalDate) throws Exception {
+
+		AngularAzElBuilder mesuresBuilder = new AngularAzElBuilder(this.noiseSource, this.station, this.sigma, this.baseWeight, object);
+		EventBasedScheduler scheduler = new EventBasedScheduler(mesuresBuilder, dateSelector, propagator, finalDetector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
+
+    	//Generator
+    	Generator generator = new Generator();
+    	generator.addPropagator(propagator);
+    	generator.addScheduler(scheduler);
+
+    	SortedSet<ObservedMeasurement<?>> list_measurement = generator.generate(initialDate, finalDate);
+		
+		return list_measurement;
 	}
 
 	
