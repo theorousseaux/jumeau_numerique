@@ -11,6 +11,8 @@ curl --limit-rate 100K --cookie cookies.txt https://www.space-track.org/basicspa
 
 python3 3LE2TLE.py $sourceFile $TLEFile
 rm $sourceFile
-python3 TLE2PV.py $TLEFile $pvFile
+python3 TLE2PV.py $TLEFile $sourceFile
 rm cookies.txt
+python3 setSM.py $sourceFile $pvFile
+rm $sourceFile
 echo "Data collected"
