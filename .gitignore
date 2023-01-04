@@ -1,6 +1,9 @@
 .idea
 .out/
+out/
 .out/*
+.classpath
+.prject
 # Compiled class file
 *.class
 
