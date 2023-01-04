@@ -5,6 +5,7 @@ from sympy import Symbol
 from sympy import cos,sin,tan,sqrt
 import math
 import sys
+from tqdm import tqdm
 
 ### Utility functions
 
@@ -70,9 +71,7 @@ Time = [] #list of epoch
 ### we fetch the orbital parameters from TLES
 
 
-for j in range(int(N/2)):
-    if (j%10 == 0):
-        print('\r'+str(round(2*j/N*100,1))+'%')
+for j in tqdm(range(int(N/2))):
     line1 = Lines[2*j]
     line2 = Lines[2*j+1]
     #line = list(map(float, line))
