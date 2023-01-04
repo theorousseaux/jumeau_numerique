@@ -1,16 +1,14 @@
 package src.GroundStation;
 
-import java.io.File;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
 
+import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.linear.DiagonalMatrix;
-import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer;
 import org.hipparchus.random.CorrelatedRandomVectorGenerator;
 import org.hipparchus.random.GaussianRandomGenerator;
 import org.hipparchus.random.RandomDataGenerator;
@@ -18,9 +16,6 @@ import org.hipparchus.random.RandomGenerator;
 import org.orekit.bodies.GeodeticPoint;
 import org.orekit.bodies.OneAxisEllipsoid;
 import org.orekit.data.DataContext;
-import org.orekit.data.DataProvidersManager;
-import org.orekit.data.DirectoryCrawler;
-import org.orekit.estimation.leastsquares.BatchLSEstimator;
 import org.orekit.estimation.measurements.AngularAzEl;
 import org.orekit.estimation.measurements.GroundStation;
 import org.orekit.estimation.measurements.ObservableSatellite;
@@ -29,9 +24,6 @@ import org.orekit.estimation.measurements.generation.AngularAzElBuilder;
 import org.orekit.estimation.measurements.generation.EventBasedScheduler;
 import org.orekit.estimation.measurements.generation.Generator;
 import org.orekit.estimation.measurements.generation.SignSemantic;
-import org.orekit.estimation.sequential.ConstantProcessNoise;
-import org.orekit.estimation.sequential.KalmanEstimator;
-import org.orekit.estimation.sequential.KalmanEstimatorBuilder;
 import org.orekit.frames.Frame;
 import org.orekit.frames.FramesFactory;
 import org.orekit.frames.ITRFVersion;
@@ -43,17 +35,12 @@ import org.orekit.orbits.Orbit;
 import org.orekit.orbits.PositionAngle;
 import org.orekit.propagation.Propagator;
 import org.orekit.propagation.analytical.KeplerianPropagator;
-import org.orekit.propagation.conversion.DormandPrince853IntegratorBuilder;
-import org.orekit.propagation.conversion.KeplerianPropagatorBuilder;
-import org.orekit.propagation.conversion.NumericalPropagatorBuilder;
 import org.orekit.propagation.events.BooleanDetector;
 import org.orekit.propagation.events.ElevationDetector;
 import org.orekit.propagation.events.EventDetector;
 import org.orekit.propagation.events.GroundAtNightDetector;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.time.FixedStepSelector;
-import org.orekit.time.TimeScale;
-import org.orekit.time.TimeScalesFactory;
 import org.orekit.utils.Constants;
 import org.orekit.utils.IERSConventions;
 import org.orekit.utils.PVCoordinatesProvider;
@@ -150,6 +137,7 @@ public class TelescopeAzEl {
 	}
 
 	
+	
 	/** Method : Create scheduled observations for an orbital object */
 	//////////////////////////////////////////////////////////////////
 	public SortedSet<ObservedMeasurement<?>> scheduledObservations(ObservableSatellite object, Propagator propagator, FixedStepSelector dateSelector, AbsoluteDate initialDate, AbsoluteDate finalDate) throws Exception {
@@ -167,5 +155,7 @@ public class TelescopeAzEl {
 		return list_measurement;
 	}
 
-	
+
+
+
 }
