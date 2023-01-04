@@ -173,5 +173,8 @@ public class PropagateTLE {
             System.out.format(Locale.US, "step %2d %s %s%n", cpt++, currentState.getDate(), currentState.getOrbit());
         }
 
+        System.out.println("\nTotal number of objects : " + propagateTLE.propagatorsList.size());
+        System.out.println(propagateTLE.propagatorsList.get(2000).getInitialState().getOrbit());
+
     }
 }

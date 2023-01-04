@@ -5,7 +5,7 @@ package src.App;
 import javax.swing.*;
 import java.awt.*;
 class gui {
- public static void main(String args[]) {
+ public static void main(String[] args) {
 
      //Creating the Frame
      JFrame frame = new JFrame("Space Observation Digital Twin");
