@@ -3,7 +3,6 @@ package src.GroundStation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
 
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.linear.DiagonalMatrix;
@@ -15,32 +14,17 @@ import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.orekit.bodies.GeodeticPoint;
 import org.orekit.bodies.OneAxisEllipsoid;
-import org.orekit.data.DataContext;
-import org.orekit.estimation.measurements.AngularAzEl;
 import org.orekit.estimation.measurements.GroundStation;
-import org.orekit.estimation.measurements.ObservableSatellite;
-import org.orekit.estimation.measurements.ObservedMeasurement;
-import org.orekit.estimation.measurements.generation.AngularAzElBuilder;
-import org.orekit.estimation.measurements.generation.EventBasedScheduler;
-import org.orekit.estimation.measurements.generation.Generator;
-import org.orekit.estimation.measurements.generation.SignSemantic;
-import org.orekit.frames.Frame;
 import org.orekit.frames.FramesFactory;
 import org.orekit.frames.ITRFVersion;
 import org.orekit.frames.TopocentricFrame;
+import org.orekit.geometry.fov.DoubleDihedraFieldOfView;
 import org.orekit.models.AtmosphericRefractionModel;
-import org.orekit.orbits.CartesianOrbit;
-import org.orekit.orbits.KeplerianOrbit;
-import org.orekit.orbits.Orbit;
-import org.orekit.orbits.PositionAngle;
-import org.orekit.propagation.Propagator;
-import org.orekit.propagation.analytical.KeplerianPropagator;
 import org.orekit.propagation.events.BooleanDetector;
 import org.orekit.propagation.events.ElevationDetector;
 import org.orekit.propagation.events.EventDetector;
 import org.orekit.propagation.events.GroundAtNightDetector;
-import org.orekit.time.AbsoluteDate;
-import org.orekit.time.FixedStepSelector;
+import org.orekit.propagation.events.GroundFieldOfViewDetector;
 import org.orekit.utils.Constants;
 import org.orekit.utils.IERSConventions;
 import org.orekit.utils.PVCoordinatesProvider;
@@ -63,14 +47,19 @@ public class TelescopeAzEl {
 	/** sigma - normalisation. */
 	public double[] sigma;
 
+	/** Measures weight */
+	public double[] baseWeight;
+
 	/** GroundStation - TopocentricFrame */
 	public GroundStation station;
+
+	/**Topocentric frame of the station */
+	public TopocentricFrame topocentricFrame;
 
 	/** FinalDetector to determine the observation's conditions */
 	public EventDetector finalDetector;
 
-	/** Measures weight */
-	public double[] baseWeight;
+ 
 
 
 	/** Constructor */
@@ -101,10 +90,11 @@ public class TelescopeAzEl {
 		AtmosphericRefractionModel refractionModel = null;
 
 		//groundstation, topocentricFrame 
-		GeodeticPoint station1Location = new GeodeticPoint(latitude, longitude, altitude) ;
-    	TopocentricFrame topocentricFrame = new TopocentricFrame(earthShape, station1Location, "station");
+		GeodeticPoint stationLocation = new GeodeticPoint(latitude, longitude, altitude) ;
+    	TopocentricFrame topocentricFrame = new TopocentricFrame(earthShape, stationLocation, "station");
     	GroundStation station = new GroundStation(topocentricFrame);
 		
+		this.topocentricFrame = topocentricFrame;
 		this.station = station;
 
 		//EventDetector, conditions for the observations
@@ -135,25 +125,69 @@ public class TelescopeAzEl {
     	BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, nightDetector);
 		this.finalDetector = finalDetector;
 	}
-
 	
-	
-	/** Method : Create scheduled observations for an orbital object */
-	//////////////////////////////////////////////////////////////////
-	public SortedSet<ObservedMeasurement<?>> scheduledObservations(ObservableSatellite object, Propagator propagator, FixedStepSelector dateSelector, AbsoluteDate initialDate, AbsoluteDate finalDate) throws Exception {
 
-		AngularAzElBuilder mesuresBuilder = new AngularAzElBuilder(this.noiseSource, this.station, this.sigma, this.baseWeight, object);
-		EventBasedScheduler scheduler = new EventBasedScheduler(mesuresBuilder, dateSelector, propagator, finalDetector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
+	//GroundFieldOfViewDetectors
+	public List<GroundFieldOfViewDetector> getFieldOfViewDetectors() {
 
-    	//Generator
-    	Generator generator = new Generator();
-    	generator.addPropagator(propagator);
-    	generator.addScheduler(scheduler);
+		            //cadrillage du ciel en azimuth,elevation
+            /////////////////////////////////////////
+            List<List<Integer>> azElskyCuadrilled  = new ArrayList<>();
+            int cpt = 0;
+            for (int elevation = 35; elevation <= 145; elevation+=10){
+                cpt+=1;
+                
+                if (cpt%2 == 1){
+                    
+                    for (int azimuth = 5; azimuth <= 175; azimuth+=10) {
+                        List<Integer> aePosition = new ArrayList<Integer>();
+                        aePosition.add(azimuth);
+                        aePosition.add(elevation);
+                        azElskyCuadrilled.add(aePosition);
+                    }
+                }
+    
+                else {
+                    for (int azimuth = 175; azimuth >= 5; azimuth-=10){
+                        List<Integer> aePosition = new ArrayList<Integer>();
+                        aePosition.add(azimuth);
+                        aePosition.add(elevation);
+                        azElskyCuadrilled.add(aePosition);
+                    }
+                }
+            }
+            System.out.println("coucou c'est le cadrillage’”");
+            System.out.println(azElskyCuadrilled);
+    
+            //Liste des groundFieldofViewDetector 
+            List<Vector3D> vectorSkyCuadrilled  = new ArrayList<>();
+            List<GroundFieldOfViewDetector> fovDetectorsList  = new ArrayList<>();
+            
+            Vector3D axis1 = new Vector3D(1,0,0);
+            Vector3D axis2 = new Vector3D(0, Math.sqrt(2)/2, Math.sqrt(2)/2);
+            
+            for (int i = 0; i < azElskyCuadrilled.size(); i++){
+                    
+                List<Integer> aePosition = azElskyCuadrilled.get(i);
+                int azimuth = aePosition.get(0);
+                int elevation = aePosition.get(1);
+    
+                Vector3D vectorCenter = new Vector3D(azimuth*Math.PI/180, elevation*Math.PI/180);
+                DoubleDihedraFieldOfView fov = new DoubleDihedraFieldOfView(vectorCenter, axis1, 10*Math.PI/180, axis2, 10*Math.PI/180, 0.);
+                GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(this.topocentricFrame, fov);
 
-    	SortedSet<ObservedMeasurement<?>> list_measurement = generator.generate(initialDate, finalDate);
-		
-		return list_measurement;
+                vectorSkyCuadrilled.add(vectorCenter);
+                fovDetectorsList.add(fovDetector);
+
+            }
+            System.out.println(vectorSkyCuadrilled);
+            System.out.println(fovDetectorsList);
+
+			return fovDetectorsList;
 	}
+
+	
+	
 
 
 

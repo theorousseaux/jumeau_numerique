@@ -12,7 +12,9 @@ import org.orekit.estimation.measurements.generation.EventBasedScheduler;
 import org.orekit.estimation.measurements.generation.Generator;
 import org.orekit.estimation.measurements.generation.SignSemantic;
 import org.orekit.propagation.Propagator;
+import org.orekit.propagation.events.BooleanDetector;
 import org.orekit.propagation.events.EventDetector;
+import org.orekit.propagation.events.GroundFieldOfViewDetector;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.time.FixedStepSelector;
 
@@ -35,6 +37,7 @@ public class Observations {
 
     public FixedStepSelector dateSelector;
 
+    /* Constructor */
     public Observations(AbsoluteDate startDate, AbsoluteDate endDate, FixedStepSelector dateSelector, List<TelescopeAzEl> stations, List<ObservableSatellite> objects) {
 
         this.stations = stations;
@@ -43,6 +46,8 @@ public class Observations {
         this.startDate = startDate;
         this.endDate = endDate;
         this.dateSelector = dateSelector;
+
+        Generator generator = new Generator();
 
         for (int i = 0; i < stations.size(); i++) {
             
@@ -53,24 +58,31 @@ public class Observations {
             double[] sigma = telescope.sigma;
             double[] baseWeight = telescope.baseWeight;
             EventDetector finalDetector = telescope.finalDetector;
+            List<GroundFieldOfViewDetector> fovDetectorsList = telescope.getFieldOfViewDetectors();
 
             for (int j = 0; j < objects.size(); j++) {
 
                 ObservableSatellite object = objects.get(j);
                 int index = object.getPropagatorIndex();
-                Propagator propagator = propagatorList.get(index);
-
-                AngularAzElBuilder mesuresBuilder = new AngularAzElBuilder(noiseSource, station, sigma, baseWeight, object);
                 
-                EventBasedScheduler scheduler = new EventBasedScheduler(mesuresBuilder, dateSelector, propagator, finalDetector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
+                for (int k = 0; k < fovDetectorsList.size(); k++){
 
-                Generator generator = new Generator();
-                generator.addPropagator(propagator);
-                generator.addScheduler(scheduler);
-        
-                SortedSet<ObservedMeasurement<?>> list_measurement = generator.generate(startDate, endDate);
+                
+                    Propagator propagator = propagatorList.get(index);
+                    GroundFieldOfViewDetector fovDetector = fovDetectorsList.get(k);
+                    BooleanDetector fusionDetector = BooleanDetector.andCombine(finalDetector, fovDetector);
+
+                    AngularAzElBuilder mesuresBuilder = new AngularAzElBuilder(noiseSource, station, sigma, baseWeight, object);
+
+                    EventBasedScheduler scheduler = new EventBasedScheduler(mesuresBuilder, dateSelector, propagator, fusionDetector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
+
+                    generator.addPropagator(propagator);
+                    generator.addScheduler(scheduler);
+                    //SortedSet<ObservedMeasurement<?>> list_measurement = generator.generate(startDate, endDate);
+                }
             }
+        }
 
+        this.generator = generator;
     }
-
 }
