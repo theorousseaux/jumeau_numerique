@@ -1,6 +1,7 @@
 package src.GroundStation;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import org.orekit.utils.PVCoordinatesProvider;
 import org.orekit.bodies.CelestialBodyFactory;
 
 public class TelescopeAzEl {
-    
+    	
     /** biais */
 	public double[] mean;
 
@@ -59,8 +60,11 @@ public class TelescopeAzEl {
 	/** FinalDetector to determine the observation's conditions */
 	public EventDetector finalDetector;
 
- 
-
+	/** Limites de Field of View */
+	public int[] azimuthField = {0 ,180};
+	public int[] elevationField = {0 ,180};
+	public int elevationLimit = 30;
+	public int angularPrecision = 90;
 
 	/** Constructor */
     public TelescopeAzEl(double[] mean, double angularIncertitude, double[] sigma, double[] baseWeight, double latitude, double longitude, double altitude) {
@@ -91,7 +95,7 @@ public class TelescopeAzEl {
 
 		//groundstation, topocentricFrame 
 		GeodeticPoint stationLocation = new GeodeticPoint(latitude, longitude, altitude) ;
-    	TopocentricFrame topocentricFrame = new TopocentricFrame(earthShape, stationLocation, "station");
+    	TopocentricFrame topocentricFrame = new TopocentricFrame(earthShape, stationLocation, "stationTopo");
     	GroundStation station = new GroundStation(topocentricFrame);
 		
 		this.topocentricFrame = topocentricFrame;
@@ -134,26 +138,29 @@ public class TelescopeAzEl {
             /////////////////////////////////////////
             List<List<Integer>> azElskyCuadrilled  = new ArrayList<>();
             int cpt = 0;
-            for (int elevation = 35; elevation <= 145; elevation+=10){
+            for (int elevation = elevationField[0]+angularPrecision/2; elevation <= elevationField[1]-angularPrecision/2; elevation+=angularPrecision){
                 cpt+=1;
                 
                 if (cpt%2 == 1){
                     
-                    for (int azimuth = 5; azimuth <= 175; azimuth+=10) {
-                        List<Integer> aePosition = new ArrayList<Integer>();
+                    for (int azimuth = azimuthField[0]+angularPrecision/2; azimuth <= azimuthField[1]-angularPrecision/2; azimuth+=angularPrecision) {
+                        System.out.println(azimuth);
+						List<Integer> aePosition = new ArrayList<Integer>();
                         aePosition.add(azimuth);
                         aePosition.add(elevation);
                         azElskyCuadrilled.add(aePosition);
                     }
+					
                 }
     
                 else {
-                    for (int azimuth = 175; azimuth >= 5; azimuth-=10){
+                    for (int azimuth = azimuthField[1]-angularPrecision/2; azimuth >= azimuthField[0]+angularPrecision/2; azimuth-=angularPrecision){
                         List<Integer> aePosition = new ArrayList<Integer>();
                         aePosition.add(azimuth);
                         aePosition.add(elevation);
                         azElskyCuadrilled.add(aePosition);
                     }
+					
                 }
             }
             System.out.println("coucou c'est le cadrillage’”");
@@ -173,7 +180,7 @@ public class TelescopeAzEl {
                 int elevation = aePosition.get(1);
     
                 Vector3D vectorCenter = new Vector3D(azimuth*Math.PI/180, elevation*Math.PI/180);
-                DoubleDihedraFieldOfView fov = new DoubleDihedraFieldOfView(vectorCenter, axis1, 10*Math.PI/180, axis2, 10*Math.PI/180, 0.);
+                DoubleDihedraFieldOfView fov = new DoubleDihedraFieldOfView(vectorCenter, axis1, angularPrecision*Math.PI/180, axis2, angularPrecision*Math.PI/180, 0.);
                 GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(this.topocentricFrame, fov);
 
                 vectorSkyCuadrilled.add(vectorCenter);
