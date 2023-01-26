@@ -1,6 +1,6 @@
 package src.GroundStation;
 
-
+import src.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,28 +8,24 @@ import java.util.List;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.ode.events.Action;
+
 import org.hipparchus.random.CorrelatedRandomVectorGenerator;
 import org.hipparchus.random.GaussianRandomGenerator;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.orekit.bodies.GeodeticPoint;
-import org.orekit.bodies.OneAxisEllipsoid;
+
 import org.orekit.estimation.measurements.GroundStation;
-import org.orekit.frames.FramesFactory;
-import org.orekit.frames.ITRFVersion;
+
+
 import org.orekit.frames.TopocentricFrame;
 import org.orekit.geometry.fov.DoubleDihedraFieldOfView;
-import org.orekit.models.AtmosphericRefractionModel;
 import org.orekit.propagation.events.BooleanDetector;
 import org.orekit.propagation.events.ElevationDetector;
 import org.orekit.propagation.events.EventDetector;
 import org.orekit.propagation.events.GroundAtNightDetector;
 import org.orekit.propagation.events.GroundFieldOfViewDetector;
-import org.orekit.utils.Constants;
-import org.orekit.utils.IERSConventions;
-import org.orekit.utils.PVCoordinatesProvider;
-import org.orekit.bodies.CelestialBodyFactory;
+
 
 public class TelescopeAzEl {
     	
@@ -66,6 +62,7 @@ public class TelescopeAzEl {
 	public int elevationLimit = 30;
 	public int angularPrecision = 90;
 
+	/*****************/
 	/** Constructor */
     public TelescopeAzEl(double[] mean, double angularIncertitude, double[] sigma, double[] baseWeight, double latitude, double longitude, double altitude) {
 
@@ -75,7 +72,7 @@ public class TelescopeAzEl {
 		this.baseWeight = baseWeight;
 		
 		// bruit de mesures 
-		double[] covarianceDiag = {angularIncertitude*3.14/180, angularIncertitude*3.14/180};//incertitude de mesure : 0.3°
+		double[] covarianceDiag = {angularIncertitude*Math.PI/180, angularIncertitude*Math.PI/180};//incertitude de mesure : 0.3°
     	RealMatrix covariance = new DiagonalMatrix(covarianceDiag);
     	RandomGenerator randomGenerator = new RandomDataGenerator();
     	GaussianRandomGenerator gaussianRandomGenerator = new GaussianRandomGenerator(randomGenerator);
@@ -84,18 +81,10 @@ public class TelescopeAzEl {
 		this.covariance = covariance;
 		this.noiseSource = noiseSource;
 		
-		//Celest bodies
-		//Earth
-		final double ae = Constants.WGS84_EARTH_EQUATORIAL_RADIUS;
-		final double f = 0.;
-    	OneAxisEllipsoid earthShape = new OneAxisEllipsoid(ae, f, FramesFactory.getITRF(ITRFVersion.ITRF_2000, IERSConventions.IERS_2010, false));
-		//Sun 
-		PVCoordinatesProvider Sun = CelestialBodyFactory.getSun();
-		AtmosphericRefractionModel refractionModel = null;
 
 		//groundstation, topocentricFrame 
 		GeodeticPoint stationLocation = new GeodeticPoint(latitude, longitude, altitude) ;
-    	TopocentricFrame topocentricFrame = new TopocentricFrame(earthShape, stationLocation, "stationTopo");
+    	TopocentricFrame topocentricFrame = new TopocentricFrame(util.getEarth(), stationLocation, "stationTopo");
     	GroundStation station = new GroundStation(topocentricFrame);
 		
 		this.topocentricFrame = topocentricFrame;
@@ -103,75 +92,27 @@ public class TelescopeAzEl {
 
 		//EventDetector, conditions for the observations
 		//elevation detector
-		ElevationDetector elevationDetector = new ElevationDetector(topocentricFrame);
-    	elevationDetector = elevationDetector.withHandler(
-                (s, detector, increasing) -> {
-                    System.out.println(
-                            " Visibility on " +
-                                    detector.getTopocentricFrame().getName() +
-                                    (increasing ? " begins at " : " ends at ") +
-                                    s.getDate()
-                    );
-                    return increasing ? Action.CONTINUE : Action.CONTINUE;
-                });
+		ElevationDetector elevationDetector = util.getElevationDetector(topocentricFrame);
+  
     	//Night detector
-    	GroundAtNightDetector nightDetector = new GroundAtNightDetector(topocentricFrame, Sun, GroundAtNightDetector.ASTRONOMICAL_DAWN_DUSK_ELEVATION, refractionModel);
-    	nightDetector = nightDetector.withHandler(
-                (s, detector, increasing) -> {
-                    System.out.println(
-                            " Night " +
-                                    (increasing ? " begins at " : " ends at ") +
-                                    s.getDate()
-                    );
-                    return increasing ? Action.CONTINUE : Action.CONTINUE;
-                });
+    	GroundAtNightDetector nightDetector = util.getNightDetector(topocentricFrame);
 
     	BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, nightDetector);
 		this.finalDetector = finalDetector;
 	}
 	
-
-	//GroundFieldOfViewDetectors
+	/**************************** */
+	/* GroundFieldOfViewDetectors*/
 	public List<GroundFieldOfViewDetector> getFieldOfViewDetectors() {
 
-		            //cadrillage du ciel en azimuth,elevation
-            /////////////////////////////////////////
-            List<List<Integer>> azElskyCuadrilled  = new ArrayList<>();
-            int cpt = 0;
-            for (int elevation = elevationField[0]+angularPrecision/2; elevation <= elevationField[1]-angularPrecision/2; elevation+=angularPrecision){
-                cpt+=1;
-                
-                if (cpt%2 == 1){
-                    
-                    for (int azimuth = azimuthField[0]+angularPrecision/2; azimuth <= azimuthField[1]-angularPrecision/2; azimuth+=angularPrecision) {
-                        System.out.println(azimuth);
-						List<Integer> aePosition = new ArrayList<Integer>();
-                        aePosition.add(azimuth);
-                        aePosition.add(elevation);
-                        azElskyCuadrilled.add(aePosition);
-                    }
-					
-                }
-    
-                else {
-                    for (int azimuth = azimuthField[1]-angularPrecision/2; azimuth >= azimuthField[0]+angularPrecision/2; azimuth-=angularPrecision){
-                        List<Integer> aePosition = new ArrayList<Integer>();
-                        aePosition.add(azimuth);
-                        aePosition.add(elevation);
-                        azElskyCuadrilled.add(aePosition);
-                    }
-					
-                }
-            }
+		    //cadrillage du ciel en azimuth,elevation
+            List<List<Integer>> azElskyCuadrilled  = util.getazElskyCuadrilled(this.azimuthField, this.elevationField, this.angularPrecision);
+            
             System.out.println("coucou c'est le cadrillage’”");
             System.out.println(azElskyCuadrilled);
     
             //Liste des groundFieldofViewDetector 
-            List<Vector3D> vectorSkyCuadrilled  = new ArrayList<>();
             List<GroundFieldOfViewDetector> fovDetectorsList  = new ArrayList<>();
-            
-            Vector3D axis1 = new Vector3D(1,0,0);
-            Vector3D axis2 = new Vector3D(0, Math.sqrt(2)/2, Math.sqrt(2)/2);
             
             for (int i = 0; i < azElskyCuadrilled.size(); i++){
                     
@@ -180,15 +121,13 @@ public class TelescopeAzEl {
                 int elevation = aePosition.get(1);
     
                 Vector3D vectorCenter = new Vector3D(azimuth*Math.PI/180, elevation*Math.PI/180);
-                DoubleDihedraFieldOfView fov = new DoubleDihedraFieldOfView(vectorCenter, axis1, angularPrecision*Math.PI/180, axis2, angularPrecision*Math.PI/180, 0.);
+                DoubleDihedraFieldOfView fov = new DoubleDihedraFieldOfView(vectorCenter, util.axis1, (angularPrecision*Math.PI/180)/2, util.axis2, (angularPrecision*Math.PI/180)/2, 0.);
                 GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(this.topocentricFrame, fov);
 
-                vectorSkyCuadrilled.add(vectorCenter);
                 fovDetectorsList.add(fovDetector);
-
+				
             }
-            System.out.println(vectorSkyCuadrilled);
-            System.out.println(fovDetectorsList);
+
 
 			return fovDetectorsList;
 	}

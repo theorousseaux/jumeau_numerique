@@ -44,13 +44,13 @@ public class simulation_main {
         final TimeScale utc = TimeScalesFactory.getUTC();
         FixedStepSelector dateSelector = new FixedStepSelector(60, utc); //mesure toutes les 1min
         AbsoluteDate initialDate = new AbsoluteDate(2014, 6, 25, utc);
-        final AbsoluteDate finalDate = new AbsoluteDate(2014, 6, 26, utc); 
+        final AbsoluteDate finalDate = new AbsoluteDate(2014, 6, 30, utc); 
 
         /* Satellites */
         //Satellite 1
-        double a = (6370+2500)*2*1000;
+        double a = (6370+2500)*1000;
     	double e = 0.01;
-    	double i = 80*Math.PI/180;
+    	double i = 70*Math.PI/180;
     	double pa = 0.2;
     	double raan = 0.2;
     	double anomaly = 1;
