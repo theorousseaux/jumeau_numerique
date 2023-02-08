@@ -1,13 +1,22 @@
 package Data;
-import Kalman.Station;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import Kalman.Station;
+
+/**
+ * Cette classe permet d'enregisterer les changements faits par l'utilisateur dans la base de données du site
+ */
 public class WriteFile {
     
-
+    /**
+     * Methode pour ajouter une nouvelle station à la base de donnée globale de l'application
+     * 
+     * @param station la station que l'on souhaite ajouter à la base de données
+     * @throws NumberFormatException
+     * @throws IOException
+     */
     public void writeStation(Station station) throws NumberFormatException, IOException{
     
         try {
