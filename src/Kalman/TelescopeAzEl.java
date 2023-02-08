@@ -56,7 +56,7 @@ public class TelescopeAzEl {
 	LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
 	/** Constructor */
-    public TelescopeAzEl(double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, int breakTime, Station station) {
+    public TelescopeAzEl(double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, int breakTime) {
 
 		this.sigma = angularIncertitude;
 		this.baseWeight = new double[]{1., 1.};
@@ -74,13 +74,17 @@ public class TelescopeAzEl {
     	CorrelatedRandomVectorGenerator noiseSource = new CorrelatedRandomVectorGenerator(mean, covariance, 1.0e-10, gaussianRandomGenerator);//mesures parfaites:null
 		this.noiseSource = noiseSource;
 
-		this.station = station;
+		this.station = null;
 		this.stepMeasure = stepMeasure;
 		this.breakTime = breakTime;
 		
 		this.skyCoveringMap = createSkyCoveringMap();
 	}
     
+    public void updateStation(Station station) {
+    	this.station = station;
+    }
+
     public BooleanDetector createDetector(LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {
     	//EventDetector, conditions for the observations
     	//elevation detector
@@ -141,6 +145,11 @@ public class TelescopeAzEl {
                 }	
             }
         }
+        
+        for(List<Double> aePosition : azElSkyCovering) {
+        	System.out.println(aePosition.get(0));
+        	System.out.println(aePosition.get(1));        	
+        }
         return azElSkyCovering;
     }
 
@@ -182,7 +191,6 @@ public class TelescopeAzEl {
         
 		return skyCoveringMap;
     }
-    
 
     public EventBasedScheduler createEventBasedScheduler(ObservableSatellite satellite, Propagator propagator) {
     	BooleanDetector detector = createDetector(this.skyCoveringMap);
