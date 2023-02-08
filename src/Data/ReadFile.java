@@ -1,17 +1,18 @@
 package Data;
 import Kalman.Station;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class readFile {
+public class ReadFile {
 
     public List<Station> readStation() throws NumberFormatException, IOException{
     
         List<Station> GSList = new ArrayList<>(); // list of stations in the network
-        BufferedReader br = new BufferedReader(new FileReader("GS.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("src/Data/GS.csv"));
         String line;
         while ((line = br.readLine()) != null)
         {
