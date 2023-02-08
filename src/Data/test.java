@@ -1,4 +1,4 @@
-package Data;
+package src.Data;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import org.orekit.data.DataContext;
 import org.orekit.data.DataProvidersManager;
 import org.orekit.data.DirectoryCrawler;
 
-import Kalman.Station;
+import src.Kalman.Station;
 
 public class test {
 

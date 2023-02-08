@@ -3,6 +3,8 @@ package src.App;
 import org.orekit.data.DataContext;
 import org.orekit.data.DataProvidersManager;
 import org.orekit.data.DirectoryCrawler;
+import src.App.Dialog.DisplayGSDialog;
+import src.App.Dialog.NewGroundStationDialog;
 import src.Kalman.Station;
 
 import javax.swing.*;
@@ -14,7 +16,7 @@ import java.util.List;
 
 public class MainFrame extends JFrame {
 
-    public static List<Station> groundStationList = new ArrayList<>();
+    public List<Station> groundStationList = new ArrayList<>();
 
     public MainFrame() {
 
@@ -81,23 +83,8 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Affichage de la liste des stations sol dans une fenêtre de dialogue
-                StringBuilder sb = new StringBuilder();
-                for (src.Kalman.Station groundStation : groundStationList) {
-                    sb.append(groundStation.getName());
-                    sb.append(groundStation.getLongitude());
-                    sb.append(", ");
-                    sb.append(groundStation.getLatitude());
-                    sb.append(", ");
-                    sb.append(groundStation.getAltitude());
-                    sb.append("\n");
-                }
-
-                ImageIcon imageIcon = new ImageIcon("src/App/img/station_sol_icon.png"); // load the image to a imageIcon
-                Image image = imageIcon.getImage(); // transform it
-                Image newimg = image.getScaledInstance(60, 80,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-                imageIcon = new ImageIcon(newimg);  // transform it back
-
-                JOptionPane.showMessageDialog(MainFrame.this, sb.toString(), "Ground Stations", JOptionPane.INFORMATION_MESSAGE, imageIcon);
+                DisplayGSDialog displayGSDialog = new DisplayGSDialog(MainFrame.this);
+                displayGSDialog.display();
             }
         });
 

@@ -1,4 +1,6 @@
-package src.App;
+package src.App.Dialog;
+
+import src.App.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
