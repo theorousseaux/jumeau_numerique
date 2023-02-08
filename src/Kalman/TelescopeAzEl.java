@@ -141,6 +141,11 @@ public class TelescopeAzEl {
                 }	
             }
         }
+        
+        for(List<Double> aePosition : azElSkyCovering) {
+        	System.out.println(aePosition.get(0));
+        	System.out.println(aePosition.get(1));        	
+        }
         return azElSkyCovering;
     }
 
@@ -182,7 +187,6 @@ public class TelescopeAzEl {
         
 		return skyCoveringMap;
     }
-    
 
     public EventBasedScheduler createEventBasedScheduler(ObservableSatellite satellite, Propagator propagator) {
     	BooleanDetector detector = createDetector(this.skyCoveringMap);
