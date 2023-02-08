@@ -16,8 +16,8 @@ public class test {
         File orekitData = new File("lib/orekit-data-master");
     	DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();
     	manager.addProvider(new DirectoryCrawler(orekitData));	
-        // ReadFile reader = new ReadFile();
-        // reader.readStation();
+        ReadFile reader = new ReadFile();
+        reader.readStation();
 
         Station station = new Station("Tournan-en-Brie", 3., 20., 310.);
 

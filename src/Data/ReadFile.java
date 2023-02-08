@@ -7,12 +7,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe de lecture des bases de données
+ */
 public class ReadFile {
 
+
+    /**
+     * Creation de toutes les stations à partir de la base de données
+     * @return La liste des {@Station} de la base de donné
+     * @throws NumberFormatException
+     * @throws IOException
+     */
     public List<Station> readStation() throws NumberFormatException, IOException{
     
         List<Station> GSList = new ArrayList<>(); // list of stations in the network
-        BufferedReader br = new BufferedReader(new FileReader("src/Data/GS.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("Data/GS.csv"));
         String line;
         while ((line = br.readLine()) != null)
         {
@@ -26,6 +36,14 @@ public class ReadFile {
         return GSList;
     }
 
+
+    /**
+     * Création d'une liste de stations sélectionnées par l'utilisateur
+     * @param reqStations
+     * @return la liste des station dans la classe {@Station}
+     * @throws NumberFormatException
+     * @throws IOException
+     */
     public List<Station> readStation(List<String> reqStations) throws NumberFormatException, IOException{
     
         List<Station> GSList = new ArrayList<>(); // list of stations in the network
