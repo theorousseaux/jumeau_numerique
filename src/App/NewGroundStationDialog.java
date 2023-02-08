@@ -17,8 +17,8 @@ public class NewGroundStationDialog extends JDialog {
         JTextField altitudeTextField = new JTextField(10);
         JTextField nameTextField = new JTextField(10);
 
-        String[] typeGS ={"Radar","Laser"};
-        JComboBox<String> cbType = new JComboBox<>(typeGS);
+//        String[] typeGS ={"Radar","Laser"};
+//        JComboBox<String> cbType = new JComboBox<>(typeGS);
 
 
         // Création du formulaire
@@ -56,13 +56,13 @@ public class NewGroundStationDialog extends JDialog {
         gc.gridx++;
         gc.anchor = GridBagConstraints.LINE_START;
         formPanel.add(nameTextField, gc);
-        gc.gridx = 0;
-        gc.gridy++;
-        gc.anchor = GridBagConstraints.LINE_END;
-        formPanel.add(new JLabel("Type: "), gc);
-        gc.gridx++;
-        gc.anchor = GridBagConstraints.LINE_START;
-        formPanel.add(cbType, gc);
+//        gc.gridx = 0;
+//        gc.gridy++;
+//        gc.anchor = GridBagConstraints.LINE_END;
+//        formPanel.add(new JLabel("Type: "), gc);
+//        gc.gridx++;
+//        gc.anchor = GridBagConstraints.LINE_START;
+//        formPanel.add(cbType, gc);
 
         // Création du bouton "Add"
         JButton addButton = new JButton("Add");
@@ -70,14 +70,13 @@ public class NewGroundStationDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Récupération des données saisies
-                double longitude = Double.parseDouble(longitudeTextField.getText());
-                double latitude = Double.parseDouble(latitudeTextField.getText());
+                double longitude = Double.parseDouble(longitudeTextField.getText())*Math.PI/180;
+                double latitude = Double.parseDouble(latitudeTextField.getText())*Math.PI/180;
                 double altitude = Double.parseDouble(altitudeTextField.getText());
                 String name = nameTextField.getText();
-                String type = Objects.requireNonNull(cbType.getSelectedItem()).toString();
 
                 // Création de l'objet GroundStation avec les données saisies
-                src.App.GroundStation groundStation = new src.App.GroundStation(longitude, latitude, altitude, name, type);
+                src.Kalman.Station groundStation = new src.Kalman.Station(name, latitude, longitude, altitude);
 
                 // Ajout de la station sol à la liste de la fenêtre principale
                 MainFrame mainFrame = (MainFrame) getParent();

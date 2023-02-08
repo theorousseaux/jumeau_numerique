@@ -1,6 +1,6 @@
-package UseCase1_GSNetwork;
+package src.UseCase1_GSNetwork;
 
-import Kalman.station;
+import src.Kalman.Station;
 
 import java.io.File;
 import java.io.IOException;

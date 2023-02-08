@@ -1,14 +1,20 @@
 package src.App;
 
+import org.orekit.data.DataContext;
+import org.orekit.data.DataProvidersManager;
+import org.orekit.data.DirectoryCrawler;
+import src.Kalman.Station;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainFrame extends JFrame {
 
-    public static List<GroundStation> groundStationList = new ArrayList<>();
+    public static List<Station> groundStationList = new ArrayList<>();
 
     public MainFrame() {
 
@@ -76,11 +82,8 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Affichage de la liste des stations sol dans une fenêtre de dialogue
                 StringBuilder sb = new StringBuilder();
-                for (src.App.GroundStation groundStation : groundStationList) {
+                for (src.Kalman.Station groundStation : groundStationList) {
                     sb.append(groundStation.getName());
-                    sb.append(" (");
-                    sb.append(groundStation.getType());
-                    sb.append("): ");
                     sb.append(groundStation.getLongitude());
                     sb.append(", ");
                     sb.append(groundStation.getLatitude());
@@ -108,11 +111,16 @@ public class MainFrame extends JFrame {
     }
 
     // Méthode pour ajouter une station sol à la liste
-    public void addGroundStation(src.App.GroundStation groundStation) {
+    public void addGroundStation(Station groundStation) {
         groundStationList.add(groundStation);
     }
 
     public static void main(String[] args) {
+        //importation des donnees de base (toujour mettre ça en début de programme)
+        File orekitData = new File("lib/orekit-data-master");
+        DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();
+        manager.addProvider(new DirectoryCrawler(orekitData));
+
         new MainFrame();
     }
 }

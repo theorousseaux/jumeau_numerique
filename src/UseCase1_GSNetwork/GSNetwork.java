@@ -1,6 +1,6 @@
-package UseCase1_GSNetwork;
+package src.UseCase1_GSNetwork;
 
-import Kalman.station;
+import src.Kalman.Station;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class GSNetwork {
     
     String Name;
-    List<station> Network;
+    List<Station> Network;
 
 
     public GSNetwork() throws NumberFormatException, IOException{
@@ -85,7 +85,7 @@ public class GSNetwork {
             // Retourner la ligne dans un tableau
             String[] data = line.split(",");
             if (GSList.contains(data[0])){
-                this.Network.add(new station(data[0], Double.parseDouble(data[1]), Double.parseDouble(data[2])));
+                this.Network.add(new Station(data[0], Double.parseDouble(data[1]), Double.parseDouble(data[2])));
             }
         }
         br2.close();
