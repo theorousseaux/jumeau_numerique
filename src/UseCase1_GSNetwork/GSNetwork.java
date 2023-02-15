@@ -12,6 +12,11 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.SortedSet;
+import org.orekit.estimation.measurements.AngularAzEl;
+
+
+import org.orekit.estimation.measurements.ObservedMeasurement;
 
 import Data.ReadFile;
 
@@ -79,14 +84,38 @@ public class GSNetwork {
                 GSList.add(stationName);
             }
         }while(end==false);//loops until validData is true
-
         System.out.println("Stations saved!");
         
         ReadFile networkBuilder = new ReadFile();
         this.Network = networkBuilder.readStation("src/Data/GS.csv", GSList);
-        scan.close();
+        
     }
 
+    public GSNetwork(String name, List<String> stations) throws NumberFormatException, IOException{
+        List<String> GSList = new ArrayList<>(); // list of stations in the network
+        List<String> stationsList = new ArrayList<>();  //list of available stations in DB
+
+
+        // creation of list of available stations
+        BufferedReader br = new BufferedReader(new FileReader("src/Data/GS.csv"));
+        String line;
+        while ((line = br.readLine()) != null)
+        {
+            // Retourner la ligne dans un tableau
+            String[] data = line.split(",");
+            if (!data[0].equals("name")){
+                stationsList.add(data[0]);
+            }
+        }
+
+        Collections.sort(stationsList);  
+        br.close();
+
+        this.Name = name;
+        ReadFile networkBuilder = new ReadFile();
+        this.Network = networkBuilder.readStation("src/Data/GS.csv", stations);
+        this.addTelescopes();
+    }
 
     public void display(){
         System.out.println("Network name: " + this.getName());
@@ -116,6 +145,12 @@ public class GSNetwork {
         Network = network;
     }
 
+    public void addTelescopes(){
+        for (Station station : this.Network){
+            station.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+        }
+    }
+
     public List<TelescopeAzEl> getTelescopes(){
         List<TelescopeAzEl> netTelescopes = new ArrayList<>();
         for (Station station : this.getNetwork()){
@@ -125,6 +160,18 @@ public class GSNetwork {
         }
         return netTelescopes;
 
+    }
+
+    public int countObservations(List<SortedSet<ObservedMeasurement<?>>> observations){
+        int i = 0;
+        for (SortedSet<ObservedMeasurement<?>> object : observations){
+            for (ObservedMeasurement<?> obs : object){
+                if (this.getNetwork().contains(((AngularAzEl) obs).getStation())){
+                    i+=1;
+                }
+            }
+        }
+        return i;
     }
 
 }

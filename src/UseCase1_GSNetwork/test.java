@@ -1,14 +1,18 @@
 package UseCase1_GSNetwork;
 
 import Kalman.Station;
+import Kalman.TelescopeAzEl;
+import Kalman.constants;
 import Kalman.Observation;
 import Kalman.OD;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;  // Import the Scanner class
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 
@@ -86,29 +90,69 @@ import org.orekit.utils.PVCoordinatesProvider;
 import org.orekit.utils.ParameterDriver;
 import org.orekit.utils.ParameterDriversList;
 import org.orekit.utils.TimeStampedPVCoordinates;
+
+import Data.ReadFile;
+
 import org.orekit.bodies.CelestialBodyFactory;
 
 public class test {
 
-    public static void main(String[] args) throws NumberFormatException, IOException {
+    public static void main(String[] args) throws NumberFormatException, IOException, NoSuchElementException {
         
         File orekitData = new File("lib/orekit-data-master");
     	DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();
     	manager.addProvider(new DirectoryCrawler(orekitData));	
         
         
-        
+        // Networks generation
 
-        GSNetwork network1 = new GSNetwork();
+        GSNetwork network1 = new GSNetwork("net1",Arrays.asList("Toulouse","Singapour"));
         network1.display();
         
 
-        GSNetwork network2 = new GSNetwork();
+        GSNetwork network2 = new GSNetwork("net2",Arrays.asList("Kiruna"));
         network2.display();
+
+        // Adding telescopes to stations
+        List<TelescopeAzEl> telescopesList = new ArrayList<>();
+        for (TelescopeAzEl tel :network1.getTelescopes() ){
+            telescopesList.add(tel);
+        }
+        for (TelescopeAzEl tel :network2.getTelescopes() ){
+            telescopesList.add(tel);
+        }
         
+        // Interval of the simulation
 
-        Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
+        AbsoluteDate initialDate = new AbsoluteDate(2014, 6, 27, 15, 28, 10, constants.utc);
+        AbsoluteDate finalDate = initialDate.shiftedBy(60*60*24);
 
+        // Satellites generation 
+
+        int n = 40; //nb of satellites
+        List<String> satNames = new ArrayList<>();
+        List<ObservableSatellite> objectsList = new ArrayList<ObservableSatellite>();
+        for (int i =0; i<n; i++){
+            satNames.add("Sat"+String.valueOf(i));
+            objectsList.add(new ObservableSatellite(i));
+        }
+        
+        List<Propagator> propagatorsList = new ArrayList<Propagator>();
+        ReadFile fetcher = new ReadFile();
+
+        propagatorsList = fetcher.readSat("src/Data/Sat.csv", initialDate,n);
+
+        // Making observations
+
+        Observation observation1 = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
+        List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList1 = observation1.measure(false);
+
+        // Evaluating networks performances 
+
+        System.out.println("Number of observations by network 1:");
+        System.out.println(network1.countObservations(measurementsSetsList1));
+        System.out.println("Number of observations by network 2:");
+        System.out.println(network2.countObservations(measurementsSetsList1));
 
     }
 

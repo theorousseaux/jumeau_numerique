@@ -55,7 +55,8 @@ M = 5.9722e24  # earth mass
 R = 6400  # earth radius (km)
 
 sourcefile = open(sys.argv[1], 'r')
-outputfile = open(sys.argv[2],'w')
+outputFile = open(sys.argv[2],'w')
+orbParam = open(sys.argv[3],'w')
 Lines = sourcefile.readlines()
 N= len(Lines) #number of objects
 
@@ -69,9 +70,9 @@ Time = [] #list of epoch
 
 
 ### we fetch the orbital parameters from TLES
+orbParam.write('a, e, i, pa, raan, ma \n')
 
-
-for j in tqdm(range(int(N/2))):
+for j in tqdm(range(int(N/1000))):
     line1 = Lines[2*j]
     line2 = Lines[2*j+1]
     #line = list(map(float, line))
@@ -83,6 +84,7 @@ for j in tqdm(range(int(N/2))):
     ma = float(line2[43:51])*np.pi/180
     time = float(line1[18:32])
     a = Kepler3(T)
+    orbParam.write(str(a) +','+ str(e) +','+str(i)+','+str(argP)+','+str(raan)+','+str(ma)+'\n')
     A.append(a)
     E.append(e)
     I.append(i)
@@ -92,11 +94,12 @@ for j in tqdm(range(int(N/2))):
     Time.append(time)
     X,V = Spherical2xyz(a,e,i,raan,ma,argP)
     for x in X:
-        outputfile.write(str(x[0,0])+',')
+        outputFile.write(str(x[0,0])+',')
     for v in V:
-        outputfile.write(str(v[0,0])+',')
-    outputfile.write(str(time))
-    outputfile.write('\n')
+        outputFile.write(str(v[0,0])+',')
+    outputFile.write(str(time))
+    outputFile.write('\n')
 
-outputfile.close()
+outputFile.close()
 sourcefile.close()
+orbParam.close()
