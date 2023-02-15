@@ -146,10 +146,6 @@ public class simu {
     	Station station_Paris = new Station("PARIS", 48.866667*Math.PI/180, 2.333333*Math.PI/180, 0.);
     	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
     	station_Paris.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
-<<<<<<< HEAD
-    	List<TelescopeAzEl> telescopesList = station_Paris.getListTelescope();
-    	
-=======
     	// NANTES
     	//Station station_Nantes = new Station("NANTES", 48.766667*Math.PI/180, 2.333333*Math.PI/180, 0.);
     	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
@@ -161,7 +157,6 @@ public class simu {
     	
        	
        	// OBSERVATIONS
->>>>>>> origin/eliott
     	Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
     	List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = observation.measure(true);
     	

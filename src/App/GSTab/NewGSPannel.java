@@ -1,4 +1,4 @@
-package src.App.Dialog;
+package src.App.GSTab;
 
 import src.App.MainFrame;
 
@@ -6,12 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Objects;
 
-public class NewGroundStationDialog extends JDialog {
+public class NewGSPannel extends JPanel {
 
-    public NewGroundStationDialog(JFrame parent) {
-        super(parent, "Add Ground Station", true);
+    public NewGSPannel() {
 
         // Création des champs de saisie
         JTextField longitudeTextField = new JTextField(10);
@@ -32,17 +30,19 @@ public class NewGroundStationDialog extends JDialog {
         gc.weightx = 1;
         gc.weighty = 1;
         gc.fill = GridBagConstraints.NONE;
-        gc.anchor = GridBagConstraints.LINE_END;
+        gc.anchor = GridBagConstraints.LINE_START;
         formPanel.add(new JLabel("Longitude: "), gc);
         gc.gridx++;
         gc.anchor = GridBagConstraints.LINE_START;
+        gc.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(longitudeTextField, gc);
         gc.gridx = 0;
         gc.gridy++;
-        gc.anchor = GridBagConstraints.LINE_END;
+        gc.anchor = GridBagConstraints.LINE_START;
         formPanel.add(new JLabel("Latitude: "), gc);
         gc.gridx++;
         gc.anchor = GridBagConstraints.LINE_START;
+        gc.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(latitudeTextField, gc);
         gc.gridx = 0;
         gc.gridy++;
@@ -50,6 +50,7 @@ public class NewGroundStationDialog extends JDialog {
         formPanel.add(new JLabel("Altitude: "), gc);
         gc.gridx++;
         gc.anchor = GridBagConstraints.LINE_START;
+        gc.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(altitudeTextField, gc);
         gc.gridx = 0;
         gc.gridy++;
@@ -57,6 +58,7 @@ public class NewGroundStationDialog extends JDialog {
         formPanel.add(new JLabel("Name: "), gc);
         gc.gridx++;
         gc.anchor = GridBagConstraints.LINE_START;
+        gc.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(nameTextField, gc);
 //        gc.gridx = 0;
 //        gc.gridy++;
@@ -94,8 +96,11 @@ public class NewGroundStationDialog extends JDialog {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Fermeture de la fenêtre de dialogue
-                setVisible(false);
+                // On efface les données saisies
+                longitudeTextField.setText("");
+                latitudeTextField.setText("");
+                altitudeTextField.setText("");
+                nameTextField.setText("");
             }
         });
 
@@ -104,13 +109,12 @@ public class NewGroundStationDialog extends JDialog {
         buttonPanel.add(addButton);
         buttonPanel.add(cancelButton);
 
-        // Ajout du formulaire et des boutons à la fenêtre de dialogue
+        // Ajout du formulaire et des boutons à la fenêtre
         setLayout(new BorderLayout());
         add(formPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Configuration de la fenêtre de dialogue
         setSize(400, 300);
-        setLocationRelativeTo(parent);
     }
 }

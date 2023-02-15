@@ -1,4 +1,4 @@
-package src.App.Dialog;
+package src.App.GSTab;
 
 import org.hipparchus.util.Precision;
 import src.App.MainFrame;

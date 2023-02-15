@@ -1,11 +1,7 @@
 package src.UseCase1_GSNetwork;
 
-<<<<<<< HEAD
 import src.Kalman.Station;
-=======
-import Kalman.Station;
-import Kalman.TelescopeAzEl;
->>>>>>> origin/eliott
+import src.Kalman.TelescopeAzEl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,17 +13,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import Data.ReadFile;
+import src.Data.ReadFile;
 
 
 public class GSNetwork {
     
     String Name;
     List<Station> Network;
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/eliott
 
     public GSNetwork() throws NumberFormatException, IOException{
         List<String> GSList = new ArrayList<>(); // list of stations in the network
@@ -90,20 +82,8 @@ public class GSNetwork {
 
         System.out.println("Stations saved!");
         
-<<<<<<< HEAD
-        while ((line = br2.readLine()) != null)
-        {
-            // Retourner la ligne dans un tableau
-            String[] data = line.split(",");
-            if (GSList.contains(data[0])){
-                this.Network.add(new Station(data[0], Double.parseDouble(data[1]), Double.parseDouble(data[2])));
-            }
-        }
-        br2.close();
-=======
         ReadFile networkBuilder = new ReadFile();
         this.Network = networkBuilder.readStation("src/Data/GS.csv", GSList);
->>>>>>> origin/eliott
         scan.close();
     }
 

@@ -3,97 +3,57 @@ package src.App;
 import org.orekit.data.DataContext;
 import org.orekit.data.DataProvidersManager;
 import org.orekit.data.DirectoryCrawler;
-import src.App.Dialog.DisplayGSDialog;
-import src.App.Dialog.NewGroundStationDialog;
+
+import src.App.AnalysisTab.AnalysisPannel;
+import src.App.GSTab.GSpannel;
+import src.App.HomeTab.HomePannel;
+import src.App.SatelliteTab.SatellitePannel;
+import src.Data.ReadFile;
+import src.Data.WriteFile;
 import src.Kalman.Station;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainFrame extends JFrame {
 
-    public List<Station> groundStationList = new ArrayList<>();
+    public List<Station> groundStationList;
+    public ReadFile fileReader;
+    public WriteFile fileWriter;
 
-    public MainFrame() {
+    public MainFrame() throws NumberFormatException, IOException {
+
+        this.groundStationList = new ArrayList<>();
+        this.fileReader = new ReadFile();
+        this.fileWriter = new WriteFile();
+        this.groundStationList = fileReader.readStation("src/Data/GS.csv");
 
         JFrame frame = new JFrame("Space Observation Digital Twin");
 
-        // Création de la barre de menu
-        JMenuBar menuBar = new JMenuBar();
+        // Création des onglets
+        JTabbedPane tabbedPane=new JTabbedPane(); 
+        JPanel homePanel = new HomePannel();
+        JPanel satellitePanel = new SatellitePannel();
+        JPanel groundStationPanel = new GSpannel(this);
+        JPanel analysisPanel = new AnalysisPannel();
 
-        // Création des menus
-        JMenu homeMenu = new JMenu("Home");
-        JMenu satelliteMenu = new JMenu("Satellite");
-        JMenu groundStationMenu = new JMenu("Ground Station");
-        JMenu analysisMenu = new JMenu("Analysis");
-
-        // Création des items de menu pour le menu Satellite
-        JMenuItem updateDatabse = new JMenuItem("Update databse");
-        JMenuItem addSatelliteItem = new JMenuItem("Add");
-
-        // Ajout des items de menu au menu Satellite
-        satelliteMenu.add(updateDatabse);
-        satelliteMenu.add(addSatelliteItem);
-
-        // Création des items de menu pour le menu Ground Station
-        JMenuItem addGSMenuItem = new JMenuItem("Add");
-        JMenuItem displayGSMenuItem = new JMenuItem("Display");
-
-        // Ajout des items de menu au menu Ground Station
-        groundStationMenu.add(addGSMenuItem);
-        groundStationMenu.add(displayGSMenuItem);
-
-        // Création des items de menu pour le menu Analysis
-        JMenuItem performanceMenuItem = new JMenuItem("Performance");
-        JMenuItem riskMenuItem = new JMenuItem("Risk");
-
-        // Ajout des items de menu au menu Analysis
-        analysisMenu.add(performanceMenuItem);
-        analysisMenu.add(riskMenuItem);
-
-
-        // Ajout des menus à la barre de menu
-        menuBar.add(homeMenu);
-        menuBar.add(satelliteMenu);
-        menuBar.add(groundStationMenu);
-        menuBar.add(analysisMenu);
-
-        // Ajout de la barre de menu à la fenêtre
-        frame.setJMenuBar(menuBar);
-
-        // Création du panneau d'onglets
-        JTabbedPane tabbedPane = new JTabbedPane();
-
-        //Gestion de l'événnement lorsque l'item "Add" du menu "Ground Station" est cliqué
-        addGSMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Création du panneau
-                NewGroundStationDialog newGroundStationDialog = new NewGroundStationDialog(MainFrame.this);
-                newGroundStationDialog.setVisible(true);
-            }
-        });
-
-        // Ajout d'un listener pour l'élément de menu "Display" de "Ground Station"
-        displayGSMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Affichage de la liste des stations sol dans une fenêtre de dialogue
-                DisplayGSDialog displayGSDialog = new DisplayGSDialog(MainFrame.this);
-                displayGSDialog.display();
-            }
-        });
+        // Ajout des onglets au panneau d'onglets
+        tabbedPane.addTab("Home", homePanel);
+        tabbedPane.addTab("Satellite", satellitePanel);
+        tabbedPane.addTab("Ground Station", groundStationPanel);
+        tabbedPane.addTab("Analysis", analysisPanel);
 
 
         // Configuration de la fenêtre
+        frame.add(tabbedPane);
         frame.setTitle("Main Window");
-        frame.setSize(600, 400);
+        frame.setSize(1200, 800);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 
@@ -102,7 +62,7 @@ public class MainFrame extends JFrame {
         groundStationList.add(groundStation);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NumberFormatException, IOException {
         //importation des donnees de base (toujour mettre ça en début de programme)
         File orekitData = new File("lib/orekit-data-master");
         DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();

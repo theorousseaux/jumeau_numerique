@@ -10,8 +10,6 @@ import java.util.List;
 
 import org.orekit.propagation.Propagator;
 
-import org.orekit.propagation.Propagator;
-
 /**
  * Classe de lecture des bases de données
  */
@@ -37,7 +35,6 @@ public class ReadFile {
     public List<Station> readStation(String fname, List<String> reqStations) throws NumberFormatException, IOException{
     
         List<Station> GSList = new ArrayList<>(); // list of stations in the network
-        List<String> stationsList = new ArrayList<>();  //list of available stations in DB
         BufferedReader br = new BufferedReader(new FileReader(fname));
         String line;
         while ((line = br.readLine()) != null)

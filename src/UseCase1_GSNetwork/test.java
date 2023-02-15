@@ -1,12 +1,8 @@
 package src.UseCase1_GSNetwork;
 
-<<<<<<< HEAD:src/UseCase1_GSNetwork/UC1.java
 import src.Kalman.Station;
-=======
-import Kalman.Station;
-import Kalman.Observation;
-import Kalman.OD;
->>>>>>> origin/eliott:src/UseCase1_GSNetwork/test.java
+import src.Kalman.Observation;
+import src.Kalman.OD;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,7 +107,7 @@ public class test {
         network2.display();
         
 
-        Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
+        //Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
 
 
     }
