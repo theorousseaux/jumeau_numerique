@@ -33,11 +33,14 @@ public class Observation {
 	
 	public List<SortedSet<ObservedMeasurement<?>>> measure(boolean plot){
 		Generator generator = new Generator();
+		for(int i = 0; i < this.objectsList.size(); i++) {
+			generator.addPropagator(propagatorsList.get(i));
+		}
 	    for(TelescopeAzEl telescope : this.telescopesList) {
 	    	for(int i = 0; i < this.objectsList.size(); i++) {
 	    		EventBasedScheduler scheduler = telescope.createEventBasedScheduler(this.objectsList.get(i), this.propagatorsList.get(i));
 	        	generator.addScheduler(scheduler);
-	        	generator.addPropagator(propagatorsList.get(i));
+	        	//generator.addPropagator(propagatorsList.get(i));
 	        }
 	    }
 	    SortedSet<ObservedMeasurement<?>> measurementsList = generator.generate(this.initialDate, this.finalDate);

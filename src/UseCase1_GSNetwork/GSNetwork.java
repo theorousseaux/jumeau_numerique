@@ -1,6 +1,11 @@
 package src.UseCase1_GSNetwork;
 
+<<<<<<< HEAD
 import src.Kalman.Station;
+=======
+import Kalman.Station;
+import Kalman.TelescopeAzEl;
+>>>>>>> origin/eliott
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,12 +17,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import Data.ReadFile;
+
 
 public class GSNetwork {
     
     String Name;
     List<Station> Network;
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/eliott
 
     public GSNetwork() throws NumberFormatException, IOException{
         List<String> GSList = new ArrayList<>(); // list of stations in the network
@@ -25,7 +35,7 @@ public class GSNetwork {
 
 
         // creation of list of available stations
-        BufferedReader br = new BufferedReader(new FileReader("/home/eliott/Documents/4A/COS/PIE/jumeau_numerique/src/UseCase1_GSNetwork/GS.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("src/Data/GS.csv"));
         String line;
         while ((line = br.readLine()) != null)
         {
@@ -67,7 +77,9 @@ public class GSNetwork {
                 end = true;
             }else if(stationName.equals("d")){
                 for (String station : stationsList){
+                    if (!(GSList.contains(station))){
                     System.out.println(station);
+                    }
                 }
             }else if(!stationsList.contains(stationName)){
                 System.out.println("Invalid name");            
@@ -77,9 +89,8 @@ public class GSNetwork {
         }while(end==false);//loops until validData is true
 
         System.out.println("Stations saved!");
-
-        BufferedReader br2 = new BufferedReader(new FileReader("/home/eliott/Documents/4A/COS/PIE/jumeau_numerique/src/UseCase1_GSNetwork/GS.csv"));
         
+<<<<<<< HEAD
         while ((line = br2.readLine()) != null)
         {
             // Retourner la ligne dans un tableau
@@ -89,9 +100,51 @@ public class GSNetwork {
             }
         }
         br2.close();
+=======
+        ReadFile networkBuilder = new ReadFile();
+        this.Network = networkBuilder.readStation("src/Data/GS.csv", GSList);
+>>>>>>> origin/eliott
         scan.close();
-
     }
 
+
+    public void display(){
+        System.out.println("Network name: " + this.getName());
+        System.out.println("Network stations: ");
+        for (Station station : this.getNetwork()){
+            System.out.println("    - " + station.getName());
+        }
+    }
+
+
+    public String getName() {
+        return Name;
+    }
+
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+
+    public List<Station> getNetwork() {
+        return Network;
+    }
+
+
+    public void setNetwork(List<Station> network) {
+        Network = network;
+    }
+
+    public List<TelescopeAzEl> getTelescopes(){
+        List<TelescopeAzEl> netTelescopes = new ArrayList<>();
+        for (Station station : this.getNetwork()){
+            for(TelescopeAzEl telescope : station.getListTelescope()){
+                netTelescopes.add(telescope);
+            }
+        }
+        return netTelescopes;
+
+    }
 
 }

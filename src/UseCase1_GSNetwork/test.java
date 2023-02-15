@@ -1,6 +1,12 @@
 package src.UseCase1_GSNetwork;
 
+<<<<<<< HEAD:src/UseCase1_GSNetwork/UC1.java
 import src.Kalman.Station;
+=======
+import Kalman.Station;
+import Kalman.Observation;
+import Kalman.OD;
+>>>>>>> origin/eliott:src/UseCase1_GSNetwork/test.java
 
 import java.io.File;
 import java.io.IOException;
@@ -86,7 +92,7 @@ import org.orekit.utils.ParameterDriversList;
 import org.orekit.utils.TimeStampedPVCoordinates;
 import org.orekit.bodies.CelestialBodyFactory;
 
-public class UC1 {
+public class test {
 
     public static void main(String[] args) throws NumberFormatException, IOException {
         
@@ -95,55 +101,17 @@ public class UC1 {
     	manager.addProvider(new DirectoryCrawler(orekitData));	
         
         
-        /*
-        * -------------------------------------------
-        * Targets selection
-        * -------------------------------------------
-        * 
-        * In this part the user chooses which satellites/ debris he wants to observe
-        * The selection could be based on size, orbit properties, belonging to a constelation...
-        */
-            
-        // a first example with only one satellite
-
-        // ISS
-        // double i = 51.6416*Math.PI/180;
-        // double raan = 247.4627*Math.PI/180;
-        // double e = 0.0006703;//(enlever le 1 normalement)
-        // double pa = 130.5360*Math.PI/180;
-        // double anomaly = 261.6196828895407;//261.6196828895407;
-        // double rev_day = 15.72125391;
-        // double T = 3600*24/rev_day;
-        // double a = Math.cbrt(Math.pow(T, 2)*Kalman.constants.mu/(4*Math.pow(Math.PI,2))); //6730.960 km, soit h=352.823 km
-        // double[] listParamOrbitaux = {a,e,Math.IEEEremainder(i, 2*Math.PI),Math.IEEEremainder(raan, 2*Math.PI),Math.IEEEremainder(pa, 2*Math.PI),Math.IEEEremainder(anomaly, 2*Math.PI)};
-        // AbsoluteDate initialDate = new AbsoluteDate(2014, 6, 27, 15, 28, 10, Kalman.constants.utc);//AbsoluteDate initialDate = new AbsoluteDate(2014, 6, 27, 15, 28, 10, Kalman.constants.utc);
-        // KeplerianOrbit initialOrbit = new KeplerianOrbit(a, e, i, pa, raan, anomaly, Kalman.constants.type, Kalman.constants.gcrf, initialDate, Constants.EGM96_EARTH_MU);
         
-        // double t = initialOrbit.getKeplerianPeriod();
 
-        // AbsoluteDate finalDate = initialDate.shiftedBy(t * 450.); // on propagera sur 300 orbites
+        GSNetwork network1 = new GSNetwork();
+        network1.display();
         
-        // ObservableSatellite satellite = new ObservableSatellite(0); 
 
-        // a more complex version will allow queries into the satellite database
+        GSNetwork network2 = new GSNetwork();
+        network2.display();
+        
 
-        /*
-        * -------------------------------------------
-        * Ground stations choice
-        * -------------------------------------------
-        * 
-        * The user chooses the different configurations he wants to compare.
-        */
-
-        GSNetwork network = new GSNetwork();
-        /*
-        * ------------------------------------------
-        * Best network computation
-        * ------------------------------------------
-        *
-        * The algorithm computes which of the specified networks gives the best observations
-        */
-
+        Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
 
 
     }

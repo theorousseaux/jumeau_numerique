@@ -3,6 +3,7 @@ package src.Kalman;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ import org.orekit.propagation.SpacecraftState;
 import org.orekit.propagation.analytical.KeplerianPropagator;
 import org.orekit.propagation.conversion.DormandPrince853IntegratorBuilder;
 import org.orekit.propagation.conversion.NumericalPropagatorBuilder;
+import org.orekit.propagation.conversion.OrbitDeterminationPropagatorBuilder;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.utils.Constants;
 import org.orekit.utils.PVCoordinates;
@@ -52,44 +54,43 @@ public class simu {
     	double rev_day = 15.72125391;
     	double T = 3600*24/rev_day;
     	double a = Math.cbrt(Math.pow(T, 2)*constants.mu/(4*Math.pow(Math.PI,2))); //6730.960 km, soit h=352.823 km
-    	double[] listParamOrbitaux = {a,e,Math.IEEEremainder(i, 2*Math.PI),Math.IEEEremainder(raan, 2*Math.PI),Math.IEEEremainder(pa, 2*Math.PI),Math.IEEEremainder(anomaly, 2*Math.PI)};
+    	double[] trueParamOrbitaux = {a,e,Math.IEEEremainder(i, 2*Math.PI),Math.IEEEremainder(raan, 2*Math.PI),Math.IEEEremainder(pa, 2*Math.PI),Math.IEEEremainder(anomaly, 2*Math.PI)};
     	AbsoluteDate initialDate = new AbsoluteDate(2014, 6, 27, 15, 28, 10, constants.utc);
-    	KeplerianOrbit initialOrbit = new KeplerianOrbit(a, e, i, pa, raan, anomaly, constants.type, constants.gcrf, initialDate, Constants.EGM96_EARTH_MU);
-    	double t = initialOrbit.getKeplerianPeriod();
-    	final KeplerianPropagator propagator_ISS = new KeplerianPropagator(initialOrbit);
+    	KeplerianOrbit trueOrbit = new KeplerianOrbit(a, e, i, pa, raan, anomaly, constants.type, constants.gcrf, initialDate, Constants.EGM96_EARTH_MU);
+    	double t = trueOrbit.getKeplerianPeriod();
+    	final KeplerianPropagator truePropagator = new KeplerianPropagator(trueOrbit);
     	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-    	SpacecraftState state1 = new SpacecraftState(initialOrbit);
-    	Vector3D VInInertialFrame = state1.getPVCoordinates().getVelocity();
-    	Vector3D PInInertialFrame = state1.getPVCoordinates().getPosition();
-    	double[] mean = {PInInertialFrame.getX(), PInInertialFrame.getY(), PInInertialFrame.getZ(), VInInertialFrame.getX(), VInInertialFrame.getY(), VInInertialFrame.getZ()};
+    	SpacecraftState trueState = new SpacecraftState(trueOrbit);
+    	Vector3D V_InertialFrame = trueState.getPVCoordinates().getVelocity();
+    	Vector3D P_InertialFrame = trueState.getPVCoordinates().getPosition();
+    	double[] mean = {P_InertialFrame.getX(), P_InertialFrame.getY(), P_InertialFrame.getZ(), V_InertialFrame.getX(), V_InertialFrame.getY(), V_InertialFrame.getZ()};
     	//double[] variance = {Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2)};
-    	double[] variance = {.1e-4, 4.e-3, 1.e-3, 5.e-3, 6.e-5, 1.e-4};
-    	double[][] covariance = createDiagonalMatrix(variance); // matrice de covariance
+    	double[] variance = {Math.pow(100,2),Math.pow(100,2),Math.pow(100 ,2),Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2)};
+    	//double[] variance = {.1e-4, 4.e-3, 1.e-3, 5.e-3, 6.e-5, 1.e-4};
+    	double[][] covariance = createDiagonalMatrix(variance);
     	MultivariateNormalDistribution distribution = new MultivariateNormalDistribution(mean, covariance);
-    	double[] new_param = distribution.sample(); // Générez un nombre aléatoire selon la loi gaussienne
-    	Vector3D VIODInInertialFrame = new Vector3D(Arrays.copyOfRange(new_param,3,6));
-    	Vector3D PIODInInertialFrame = new Vector3D(Arrays.copyOfRange(new_param,0,3));
-    	PVCoordinates pv = new PVCoordinates(PIODInInertialFrame, VIODInInertialFrame);
-    	TimeStampedPVCoordinates tspv = new TimeStampedPVCoordinates(initialDate, 1., pv);
-    	KeplerianOrbit iiodOrbit = new KeplerianOrbit(tspv, constants.gcrf, constants.mu);
-    	double[] param = {iiodOrbit.getA(), iiodOrbit.getE(), Math.IEEEremainder(iiodOrbit.getI(), 2 * Math.PI), Math.IEEEremainder(iiodOrbit.getRightAscensionOfAscendingNode(), 2 * Math.PI), Math.IEEEremainder(iiodOrbit.getPerigeeArgument(), 2 * Math.PI), Math.IEEEremainder(iiodOrbit.getAnomaly(constants.type), 2 * Math.PI)};  	
-    	double aIod = param[0];
-    	double eIod = param[1];
-    	double iIod = param[2];
-    	double raanIod = param[3];
-    	double paIod = param[4];
-    	double anomalyIod = param[5];
-    	double[] listNewParamOrbitaux = {aIod,eIod,Math.IEEEremainder(iIod, 2*Math.PI),Math.IEEEremainder(raanIod, 2*Math.PI),Math.IEEEremainder(paIod, 2*Math.PI),Math.IEEEremainder(anomalyIod, 2*Math.PI)};
+    	double[] estimatedParameters = distribution.sample(); // Générez un nombre aléatoire selon la loi gaussienne
+    	Vector3D estimatedV_InertialFrame = new Vector3D(Arrays.copyOfRange(estimatedParameters,3,6));
+    	Vector3D estimatedP_InertialFrame = new Vector3D(Arrays.copyOfRange(estimatedParameters,0,3));
+    	PVCoordinates estimatedPV = new PVCoordinates(estimatedP_InertialFrame, estimatedV_InertialFrame);
+    	TimeStampedPVCoordinates estimatedTSPV = new TimeStampedPVCoordinates(initialDate, 1., estimatedPV);
+    	KeplerianOrbit estimatedOrbit = new KeplerianOrbit(estimatedTSPV, constants.gcrf, constants.mu);
+    	double[] estimatedParamOrbitaux = {estimatedOrbit.getA(), estimatedOrbit.getE(), Math.IEEEremainder(estimatedOrbit.getI(), 2 * Math.PI), Math.IEEEremainder(estimatedOrbit.getRightAscensionOfAscendingNode(), 2 * Math.PI), Math.IEEEremainder(estimatedOrbit.getPerigeeArgument(), 2 * Math.PI), Math.IEEEremainder(estimatedOrbit.getAnomaly(constants.type), 2 * Math.PI)};  	
+    	double estimatedA = estimatedParamOrbitaux[0];
+    	double estimatedE = estimatedParamOrbitaux[1];
+    	double estimatedI = estimatedParamOrbitaux[2];
+    	double estimatedRaan = estimatedParamOrbitaux[3];
+    	double estimatedPa = estimatedParamOrbitaux[4];
+    	double estimatedAnomaly = estimatedParamOrbitaux[5];
+    	KeplerianOrbit estimatedOrbit__ = new KeplerianOrbit(estimatedA, estimatedE, estimatedI, estimatedPa, estimatedRaan, estimatedAnomaly, constants.type, constants.gcrf, initialDate, Constants.EGM96_EARTH_MU);
+    	CartesianOrbit estimatedOrbit_ =new CartesianOrbit(estimatedOrbit__);
+    
     	
     	System.out.println("RESULTS (true/iod)");
-    	System.out.println(Arrays.toString(listParamOrbitaux));
-    	System.out.println(Arrays.toString(listNewParamOrbitaux));
-    	
-    	KeplerianOrbit iodOrbitK = new KeplerianOrbit(aIod, eIod, iIod, paIod, raanIod, anomalyIod, constants.type, constants.gcrf, initialDate, Constants.EGM96_EARTH_MU);
-    	CartesianOrbit iodOrbit =new CartesianOrbit(iodOrbitK);
-    	
-    	incertitudes(propagator_ISS.getInitialState(), new SpacecraftState(iodOrbit));
+    	System.out.println(Arrays.toString(trueParamOrbitaux));
+    	System.out.println(Arrays.toString(estimatedParamOrbitaux));
+    	incertitudes(truePropagator.getInitialState(), new SpacecraftState(estimatedOrbit));
     	
     	
     	double prop_min_step = 0.001;// # s
@@ -97,7 +98,7 @@ public class simu {
     	double prop_position_error = 10.0;// # m
     	double estimator_position_scale = 1.0;// # m
     	DormandPrince853IntegratorBuilder integratorBuilder = new DormandPrince853IntegratorBuilder(prop_min_step, prop_max_step, prop_position_error);
-    	NumericalPropagatorBuilder numericalPropagatorBuilder = new NumericalPropagatorBuilder(iodOrbit, integratorBuilder, constants.type, estimator_position_scale);
+    	NumericalPropagatorBuilder numericalPropagatorBuilder = new NumericalPropagatorBuilder(estimatedOrbit_, integratorBuilder, constants.type, estimator_position_scale);
     	//OrbitType orbitType = OrbitType.CARTESIAN;
     	// initial covariance matrix
     	double[] ip = variance;
@@ -137,19 +138,37 @@ public class simu {
      	List<ObservableSatellite> objectsList = new ArrayList<ObservableSatellite>();
     	List<Propagator> propagatorsList = new ArrayList<Propagator>();
     	objectsList.add(satellite_ISS);
-    	propagatorsList.add(propagator_ISS);
+    	propagatorsList.add(truePropagator);
     	
     	
     	// STATIONS ET TELESCOPES
+    	// PARIS
     	Station station_Paris = new Station("PARIS", 48.866667*Math.PI/180, 2.333333*Math.PI/180, 0.);
     	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
     	station_Paris.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+<<<<<<< HEAD
     	List<TelescopeAzEl> telescopesList = station_Paris.getListTelescope();
     	
+=======
+    	// NANTES
+    	//Station station_Nantes = new Station("NANTES", 48.766667*Math.PI/180, 2.333333*Math.PI/180, 0.);
+    	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
+    	//station_Nantes.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+    	//List<TelescopeAzEl> telescopesList_Nantes = station_Nantes.getListTelescope();
+    	// LISTE DE TELESCOPES
+       	List<TelescopeAzEl> telescopesList = station_Paris.getListTelescope();
+    	//telescopesList.add(telescopesList_Nantes.get(0));
+    	
+       	
+       	// OBSERVATIONS
+>>>>>>> origin/eliott
     	Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
     	List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = observation.measure(true);
     	
     	
+    	// OD
+    	OD od = new OD(satellite_ISS, truePropagator, numericalPropagatorBuilder, measurementsSetsList.get(0), initialDate, finalDate);
+    	LinkedHashMap<ObservedMeasurement<?>,Propagator> newEstimatedKalman = od.Kalman(processNoise);
 	}
 	
     static double[][] createDiagonalMatrix(double[] diagonal) {
