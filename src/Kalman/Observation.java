@@ -33,14 +33,22 @@ public class Observation {
 	
 	public List<SortedSet<ObservedMeasurement<?>>> measure(boolean plot){
 		Generator generator = new Generator();
+		
+		for(int i = 0; i < this.objectsList.size(); i++) {
+			generator.addPropagator(propagatorsList.get(i));
+		}
+
 	    for(TelescopeAzEl telescope : this.telescopesList) {
 	    	for(int i = 0; i < this.objectsList.size(); i++) {
+				System.out.println("considering object : " + i);
 	    		EventBasedScheduler scheduler = telescope.createEventBasedScheduler(this.objectsList.get(i), this.propagatorsList.get(i));
 	        	generator.addScheduler(scheduler);
-	        	generator.addPropagator(propagatorsList.get(i));
+	        	//generator.addPropagator(propagatorsList.get(i));
 	        }
 	    }
+		System.out.println("generating measurements : ");
 	    SortedSet<ObservedMeasurement<?>> measurementsList = generator.generate(this.initialDate, this.finalDate);
+		System.out.println("done");
 	    
 	    if(plot) {
 	    	System.out.println("MESURES");
@@ -50,7 +58,7 @@ public class Observation {
 	    		System.out.println(Arrays.stream(measure.getObservedValue()).map(iii -> iii * 180/Math.PI).boxed().collect(Collectors.toList()));
 	    		System.out.println(((AngularAzEl) measure).getStation().getBaseFrame().getName());
 	    		System.out.println(((AngularAzEl) measure).getSatellites().get(0).getPropagatorIndex());
-
+ 
 	    	}
 	    	System.out.println("END MESURES");
 	    }

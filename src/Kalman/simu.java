@@ -59,7 +59,7 @@ public class simu {
     	final KeplerianPropagator propagator_ISS = new KeplerianPropagator(initialOrbit);
     	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-    	SpacecraftState state1 = new SpacecraftState(initialOrbit);
+    /* 	SpacecraftState state1 = new SpacecraftState(initialOrbit);
     	Vector3D VInInertialFrame = state1.getPVCoordinates().getVelocity();
     	Vector3D PInInertialFrame = state1.getPVCoordinates().getPosition();
     	double[] mean = {PInInertialFrame.getX(), PInInertialFrame.getY(), PInInertialFrame.getZ(), VInInertialFrame.getX(), VInInertialFrame.getY(), VInInertialFrame.getZ()};
@@ -109,6 +109,7 @@ public class simu {
     	//double[] q = {1, 1, 1, 1, 1, 1};
     	//double[] q = {0, 0, 0, 0, 0, 0};
     	RealMatrix Q = MatrixUtils.createRealDiagonalMatrix(q);
+		*/
 
     	/*
     	final RealMatrix measurementP = MatrixUtils.createRealDiagonalMatrix(new double [] {
@@ -128,25 +129,60 @@ public class simu {
                 }
             }
         }
-        */
-    	ConstantProcessNoise processNoise = new ConstantProcessNoise(initialP, Q);
+        
+    	ConstantProcessNoise processNoise = new ConstantProcessNoise(initialP, Q); */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    	AbsoluteDate finalDate = initialDate.shiftedBy(t * 450.); // on propagera sur 450 orbites
+
+		// ORBITE SIMULEE (TEST)
+		ObservableSatellite satelliteTest = new ObservableSatellite(1);
     	
-     	List<ObservableSatellite> objectsList = new ArrayList<ObservableSatellite>();
+		double i2 = 60.6416*Math.PI/180;
+		double raan2 = 247.4627*Math.PI/180;
+		double e2 = 0.0006703;
+		double pa2 = 130.5360*Math.PI/180;
+		double anomaly2 = 200.6196828895407;
+		double rev_day2 = 15.72125391;
+		double T2 = 3600*24/rev_day2;
+		double a2 = Math.cbrt(Math.pow(T2, 2)*constants.mu/(4*Math.pow(Math.PI,2))); //6730.960 km, soit h=352.823 km
+		double[] listParamOrbitaux2 = {a2,e2,Math.IEEEremainder(i2, 2*Math.PI),Math.IEEEremainder(raan2, 2*Math.PI),Math.IEEEremainder(pa2, 2*Math.PI),Math.IEEEremainder(anomaly2, 2*Math.PI)};
+		//AbsoluteDate initialDate = new AbsoluteDate(2014, 6, 27, 15, 28, 10, constants.utc);
+		KeplerianOrbit initialOrbit2 = new KeplerianOrbit(a2, e2, i2, pa2, raan2, anomaly2, constants.type, constants.gcrf, initialDate, Constants.EGM96_EARTH_MU);
+		//double t = initialOrbit.getKeplerianPeriod();
+		final KeplerianPropagator propagatorTest = new KeplerianPropagator(initialOrbit2);
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+    	AbsoluteDate finalDate = initialDate.shiftedBy(t*450);
+    	
+
+
+		/* Creating lists of observables satellites */
+		List<ObservableSatellite> objectsList = new ArrayList<ObservableSatellite>();
     	List<Propagator> propagatorsList = new ArrayList<Propagator>();
+
     	objectsList.add(satellite_ISS);
     	propagatorsList.add(propagator_ISS);
+		objectsList.add(satelliteTest);
+		propagatorsList.add(propagatorTest);
     	
     	
     	// STATIONS ET TELESCOPES
     	Station station_Paris = new Station("PARIS", 48.866667*Math.PI/180, 2.333333*Math.PI/180, 0.);
-    	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
-    	station_Paris.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, station_Paris));
-    	List<TelescopeAzEl> telescopesList = station_Paris.getListTelescope();
+		TelescopeAzEl telescope1 = new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10);
+    	station_Paris.addTelescope(telescope1);
+
     	
+		Station stationGuyanne = new Station("GUYANNE", 3.933889*Math.PI/180, -53.125782*Math.PI/180, 0.);
+		TelescopeAzEl telescope2 = new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10);
+		stationGuyanne.addTelescope(telescope2);
+
+		List<TelescopeAzEl> telescopesList = new ArrayList<>();
+		telescopesList.add(telescope1);
+		telescopesList.add(telescope2);
+
+		System.out.println("OBSERVATIONS C'EST PARTI :");
     	Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
+		System.out.println("ça va plot");
     	List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = observation.measure(true);
     	
     	
