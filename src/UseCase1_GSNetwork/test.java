@@ -1,6 +1,8 @@
 package UseCase1_GSNetwork;
 
 import Kalman.Station;
+import Kalman.Observation;
+import Kalman.OD;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,7 +102,12 @@ public class test {
         GSNetwork network1 = new GSNetwork();
         network1.display();
         
+
+        GSNetwork network2 = new GSNetwork();
+        network2.display();
         
+
+        Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
 
 
     }

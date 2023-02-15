@@ -1,6 +1,7 @@
 package UseCase1_GSNetwork;
 
 import Kalman.Station;
+import Kalman.TelescopeAzEl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -113,6 +114,17 @@ public class GSNetwork {
 
     public void setNetwork(List<Station> network) {
         Network = network;
+    }
+
+    public List<TelescopeAzEl> getTelescopes(){
+        List<TelescopeAzEl> netTelescopes = new ArrayList<>();
+        for (Station station : this.getNetwork()){
+            for(TelescopeAzEl telescope : station.getListTelescope()){
+                netTelescopes.add(telescope);
+            }
+        }
+        return netTelescopes;
+
     }
 
 }
