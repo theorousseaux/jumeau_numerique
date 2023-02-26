@@ -16,9 +16,9 @@ import org.orekit.utils.PVCoordinatesProvider;
 
 public class constants {
 	
-	final static PositionAngle type = PositionAngle.TRUE;
-	final static TimeScale utc = TimeScalesFactory.getUTC();
-	final static  Frame gcrf = FramesFactory.getGCRF();//FramesFactory.getEME2000();
+	public final static PositionAngle type = PositionAngle.TRUE;
+	public final static TimeScale utc = TimeScalesFactory.getUTC();
+	public final static  Frame gcrf = FramesFactory.getGCRF();//FramesFactory.getEME2000();
     final static Frame itrf = FramesFactory.getITRF(IERSConventions.IERS_2010, false);
 	
 	//Corps celestes

@@ -20,7 +20,7 @@ public class WriteFile {
     public void writeStation(Station station) throws NumberFormatException, IOException{
     
         try {
-            FileWriter fw = new FileWriter("Data/GS.csv", true);
+            FileWriter fw = new FileWriter("src/Data/GS.csv", true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.newLine();
             bw.write(station.getName() + ", " + station.getLatitude() + ", " + station.getLongitude() + ", " + station.getAltitude());

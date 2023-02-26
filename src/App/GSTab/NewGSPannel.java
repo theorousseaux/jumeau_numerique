@@ -6,10 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class NewGSPannel extends JPanel {
 
-    public NewGSPannel() {
+    public NewGSPannel(MainFrame parent, DisplayGSPannel displayGSPannel) {
 
         // Création des champs de saisie
         JTextField longitudeTextField = new JTextField(10);
@@ -83,11 +84,18 @@ public class NewGSPannel extends JPanel {
                 src.Kalman.Station groundStation = new src.Kalman.Station(name, latitude, longitude, altitude);
 
                 // Ajout de la station sol à la liste de la fenêtre principale
-                MainFrame mainFrame = (MainFrame) getParent();
-                mainFrame.addGroundStation(groundStation);
+                parent.addGroundStation(groundStation);
 
-                // Fermeture de la fenêtre de dialogue
-                setVisible(false);
+                // update
+                try {
+                    parent.fileWriter.writeStation(groundStation);
+                    // Mise à jour du panneau d'affichage des stations sol
+                    displayGSPannel.displayNewStation(groundStation);
+                    displayGSPannel.repaint();
+                    displayGSPannel.revalidate();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
