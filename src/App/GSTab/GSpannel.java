@@ -39,20 +39,12 @@ public class GSpannel extends JPanel {
         gc.gridy = 0;
         gc.weightx = 1;
         gc.weighty = 1;
-        this.add(addGSLabel, gc);
-        gc.gridx = 1;
-        this.add(displayGSButton, gc);
-        gc.gridx = 0;
-        gc.gridy = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
         this.add(newGSPannel, gc);
-
         gc.gridx = 1;
-        gc.gridy = 1;
-        gc.weightx = 1;
-        gc.weighty = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
         this.add(displayGSPannel, gc);
+
 
         // Ajout d'un listener pour l'élément de menu "Display" de "Ground Station"
         displayGSButton.addActionListener(new ActionListener() {

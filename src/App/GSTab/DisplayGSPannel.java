@@ -23,9 +23,21 @@ public class DisplayGSPannel extends JPanel{
         this.parent = parent;
         setLayout(new GridBagLayout());
 
+        // Titre
+        JLabel tittle = new JLabel("Ground stations list");
+        tittle.setFont(new Font("Arial", Font.BOLD, 18)); // Définit la police d'écriture en Arial, en gras et en taille 18
+        tittle.setForeground(Color.BLUE); // Définit la couleur du texte en bleu
+
+        gc.gridx = 0;
+        gc.gridy = 0;
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        this.add(tittle, gc);
+
         gc.gridx = 0;
         gc.gridy = 1;
         gc.weightx = 0;
+        gc.gridwidth = 1;
         for (src.Kalman.Station groundStation: parent.groundStationList) {
             // Affichage de la liste des stations sol dans une fenêtre de dialogue
             StringBuilder sb = new StringBuilder();
