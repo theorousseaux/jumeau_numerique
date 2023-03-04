@@ -8,6 +8,7 @@ import src.App.AnalysisTab.AnalysisPannel;
 import src.App.GSTab.GSpannel;
 import src.App.HomeTab.HomePannel;
 import src.App.SatelliteTab.SatellitePannel;
+import src.App.SimuParam.ParametersView;
 import src.Data.ReadGSFile;
 import src.Data.WriteGSFile;
 import src.Kalman.Station;
@@ -51,12 +52,16 @@ public class MainFrame extends JFrame {
         JPanel satellitePanel = new SatellitePannel();
         JPanel groundStationPanel = new GSpannel(this);
         JPanel analysisPanel = new AnalysisPannel();
+        JPanel parametersPanel = new ParametersView();
+
 
         // Ajout des onglets au panneau d'onglets
         tabbedPane.addTab("Home", homePanel);
         tabbedPane.addTab("Satellite", satellitePanel);
         tabbedPane.addTab("Ground Station", groundStationPanel);
         tabbedPane.addTab("Analysis", analysisPanel);
+        tabbedPane.addTab("Simulation parameters", parametersPanel);
+
 
 
         // Configuration de la fenêtre
