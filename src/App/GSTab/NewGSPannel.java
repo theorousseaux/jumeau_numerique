@@ -1,6 +1,7 @@
 package src.App.GSTab;
 
 import src.App.MainFrame;
+import src.Kalman.TelescopeAzEl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.io.IOException;
 
 public class NewGSPannel extends JPanel {
 
-    public NewGSPannel(MainFrame parent, DisplayGSPannel displayGSPannel) {
+    public NewGSPannel(MainFrame parent, DisplayGSPannel displayGSPannel, CreateNetworkPannel createNetworkPannel) {
 
         // Titre
         JLabel addGSLabel = new JLabel("Add a new ground station");
@@ -105,16 +106,25 @@ public class NewGSPannel extends JPanel {
                 // Création de l'objet GroundStation avec les données saisies
                 src.Kalman.Station groundStation = new src.Kalman.Station(name, latitude, longitude, altitude);
 
+                // Ajout d'un télescope standard à la station sol
+                groundStation.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+
                 // Ajout de la station sol à la liste de la fenêtre principale
                 parent.addGroundStation(groundStation);
 
                 // update
                 try {
-                    parent.fileWriter.writeStation(groundStation);
+                    parent.GSWriter.writeStation(groundStation);
+
                     // Mise à jour du panneau d'affichage des stations sol
                     displayGSPannel.displayNewStation(groundStation);
                     displayGSPannel.repaint();
                     displayGSPannel.revalidate();
+
+                    // Mise à jour du panneau de choix des stations sol
+                    createNetworkPannel.displayNewGS(groundStation);
+                    createNetworkPannel.repaint();
+                    createNetworkPannel.revalidate();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

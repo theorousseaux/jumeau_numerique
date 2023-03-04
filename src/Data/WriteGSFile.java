@@ -8,7 +8,7 @@ import src.Kalman.Station;
 /**
  * Cette classe permet d'enregisterer les changements faits par l'utilisateur dans la base de données du site
  */
-public class WriteFile {
+public class WriteGSFile {
     
     /**
      * Methode pour ajouter une nouvelle station à la base de donnée globale de l'application

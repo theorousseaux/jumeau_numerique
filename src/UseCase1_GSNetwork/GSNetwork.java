@@ -3,14 +3,12 @@ package src.UseCase1_GSNetwork;
 import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.SortedSet;
 import org.orekit.estimation.measurements.AngularAzEl;
@@ -18,7 +16,7 @@ import org.orekit.estimation.measurements.AngularAzEl;
 
 import org.orekit.estimation.measurements.ObservedMeasurement;
 
-import src.Data.ReadFile;
+import src.Data.ReadGSFile;
 
 
 public class GSNetwork {
@@ -86,7 +84,7 @@ public class GSNetwork {
         }while(end==false);//loops until validData is true
         System.out.println("Stations saved!");
         
-        ReadFile networkBuilder = new ReadFile();
+        ReadGSFile networkBuilder = new ReadGSFile();
         this.Network = networkBuilder.readStation("src/Data/GS.csv", GSList);
         
     }
@@ -112,7 +110,7 @@ public class GSNetwork {
         br.close();
 
         this.Name = name;
-        ReadFile networkBuilder = new ReadFile();
+        ReadGSFile networkBuilder = new ReadGSFile();
         this.Network = networkBuilder.readStation("src/Data/GS.csv", stations);
         this.addTelescopes();
     }

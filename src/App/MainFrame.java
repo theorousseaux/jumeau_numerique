@@ -8,9 +8,11 @@ import src.App.AnalysisTab.AnalysisPannel;
 import src.App.GSTab.GSpannel;
 import src.App.HomeTab.HomePannel;
 import src.App.SatelliteTab.SatellitePannel;
-import src.Data.ReadFile;
-import src.Data.WriteFile;
+import src.Data.ReadGSFile;
+import src.Data.WriteGSFile;
 import src.Kalman.Station;
+import src.Kalman.TelescopeAzEl;
+import src.UseCase1_GSNetwork.GSNetwork;
 
 import javax.swing.*;
 
@@ -22,15 +24,24 @@ import java.util.List;
 public class MainFrame extends JFrame {
 
     public List<Station> groundStationList;
-    public ReadFile fileReader;
-    public WriteFile fileWriter;
+    public ReadGSFile GSReader;
+    public WriteGSFile GSWriter;
+    public int numberOfGS = 0;
+
+    public GSNetwork gsNetwork;
 
     public MainFrame() throws NumberFormatException, IOException {
 
         this.groundStationList = new ArrayList<>();
-        this.fileReader = new ReadFile();
-        this.fileWriter = new WriteFile();
-        this.groundStationList = fileReader.readStation("src/Data/GS.csv");
+        this.GSReader = new ReadGSFile();
+        this.GSWriter = new WriteGSFile();
+
+        this.groundStationList = GSReader.readStation("src/Data/GS.csv");
+
+        // Ajou d'un télescope standard à chaque station sol
+        for (Station station : groundStationList) {
+            station.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+        }
 
         JFrame frame = new JFrame("Space Observation Digital Twin");
 

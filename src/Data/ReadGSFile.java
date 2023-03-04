@@ -3,8 +3,6 @@ import src.Kalman.Station;
 import src.Kalman.constants;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ import org.orekit.propagation.analytical.KeplerianPropagator;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.utils.Constants;
 
-public class ReadFile {
+public class ReadGSFile {
 
     public List<Station> readStation(String fname) throws NumberFormatException, IOException{
     

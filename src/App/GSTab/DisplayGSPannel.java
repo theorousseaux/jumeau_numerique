@@ -17,8 +17,6 @@ public class DisplayGSPannel extends JPanel{
     MainFrame parent;
     GridBagConstraints gc = new GridBagConstraints();
 
-    int numberOfGS = 0;
-
     public DisplayGSPannel(MainFrame parent) {
         this.parent = parent;
         setLayout(new GridBagLayout());
@@ -55,7 +53,7 @@ public class DisplayGSPannel extends JPanel{
             gc.anchor = GridBagConstraints.LINE_START;
             this.add(new JLabel(sb.toString()), gc);
             gc.gridy++;
-            numberOfGS++;
+            parent.numberOfGS++;
         }
 
         ImageIcon imageIcon = new ImageIcon("src/App/img/station_sol_icon.png"); // load the image to a imageIcon
@@ -77,7 +75,7 @@ public class DisplayGSPannel extends JPanel{
         GridBagConstraints newGC = new GridBagConstraints();
         newGC.weightx = 0;
         newGC.gridx = 0;
-        newGC.gridy = numberOfGS+1;
+        newGC.gridy = parent.numberOfGS+1;
 
         // Affichage de la liste des stations sol dans une fenêtre de dialogue
         StringBuilder sb = new StringBuilder();
@@ -94,6 +92,6 @@ public class DisplayGSPannel extends JPanel{
 
         newGC.anchor = GridBagConstraints.LINE_START;
         this.add(new JLabel(sb.toString()), newGC);
-        numberOfGS++;
+        parent.numberOfGS++;
     }
 }
