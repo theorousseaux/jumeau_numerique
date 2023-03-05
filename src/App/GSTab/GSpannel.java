@@ -9,7 +9,7 @@ import java.awt.*;
 public class GSpannel extends JPanel {
 
     MainFrame parent;
-    GridBagConstraints gc = new GridBagConstraints();;
+    GridBagConstraints gc = new GridBagConstraints();
 
     public GSpannel(MainFrame parent) {
 

@@ -18,3 +18,5 @@ rm cookies.txt
 python3 setSM.py $sourceFile $pvFile
 rm $sourceFile
 echo "Data collected"
+
+

@@ -25,6 +25,7 @@ public class DisplayNetworkPannel extends JPanel {
         gc.gridy = 0;
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.insets = new Insets(0, 0, 20, 0); // Ajoute 5 pixels de padding en bas
         this.add(tittle, gc);
     }
 
@@ -44,7 +45,7 @@ public class DisplayNetworkPannel extends JPanel {
         GridBagConstraints gc = new GridBagConstraints(); // Réinitialisation de gc pour chaque nouvel élément
         gc.gridx = 0;
         gc.gridy = 1;
-        gc.anchor = GridBagConstraints.PAGE_START;
+        gc.anchor = GridBagConstraints.WEST;
         JLabel networkNameLabel = new JLabel("Network name :");
         this.add(networkNameLabel, gc);
 
@@ -58,7 +59,7 @@ public class DisplayNetworkPannel extends JPanel {
         gc = new GridBagConstraints(); // Réinitialisation de gc pour chaque nouvel élément
         gc.gridx = 0;
         gc.gridy = 2;
-        gc.anchor = GridBagConstraints.PAGE_START;
+        gc.anchor = GridBagConstraints.WEST;
         JLabel numberOfStationLabel = new JLabel("Number of ground stations :");
         this.add(numberOfStationLabel, gc);
 
