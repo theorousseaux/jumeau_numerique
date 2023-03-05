@@ -13,9 +13,9 @@ import src.App.MainFrame;
 import java.awt.event.*;
 import java.awt.*;
 
-public class ParameterFormView extends JPanel{
+public class ParametersFormView extends JPanel{
 
-    private ParameterController controller = new ParameterController(new Parameters(), this);
+    private ParametersController controller = new ParametersController(new Parameters(), this);
     GridBagConstraints gc = new GridBagConstraints();
     MainFrame parent;
 
@@ -155,7 +155,7 @@ public class ParameterFormView extends JPanel{
 
   
 
-   public ParameterFormView() {
+   public ParametersFormView() {
         parametersForm();
    }
 }

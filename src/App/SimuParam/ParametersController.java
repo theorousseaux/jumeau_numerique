@@ -3,11 +3,11 @@ package src.App.SimuParam;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.time.TimeScalesFactory;
 
-public class ParameterController {
+public class ParametersController {
     private Parameters model;
-    private ParameterFormView view;
+    private ParametersFormView view;
 
-    public ParameterController(Parameters model, ParameterFormView view) {
+    public ParametersController(Parameters model, ParametersFormView view) {
         this.model = model;
         this.view = view;
     }

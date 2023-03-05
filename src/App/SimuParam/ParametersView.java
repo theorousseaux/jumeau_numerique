@@ -26,7 +26,7 @@ public class ParametersView extends JPanel {
         SateliteDataView displayGSPannel = new SateliteDataView();
 
         // Affichage du formulaire d'ajout d'une station sol
-        ParameterFormView newGSPannel = new ParameterFormView();
+        ParametersFormView newGSPannel = new ParametersFormView();
 
         // Ajout des éléments au panel
         gc.gridx = 0;
