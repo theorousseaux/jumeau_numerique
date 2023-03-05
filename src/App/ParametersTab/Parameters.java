@@ -1,4 +1,4 @@
-package src.App.SimuParam;
+package src.App.ParametersTab;
 
 import org.orekit.time.AbsoluteDate;
 

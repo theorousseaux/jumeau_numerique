@@ -1,4 +1,4 @@
-package src.App.SimuParam;
+package src.App.ParametersTab;
 
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -15,13 +15,13 @@ import java.awt.*;
 
 public class ParametersFormView extends JPanel{
 
-    private ParametersController controller = new ParametersController(new Parameters(), this);
+    private ParametersController controller = new ParametersController();
     GridBagConstraints gc = new GridBagConstraints();
     MainFrame parent;
 
     
 
-    public void parametersForm(){
+    public void parametersForm(MainFrame parent){
         JLabel paramLabel = new JLabel("Set simulation parameters");
         paramLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Définit la police d'écriture en Arial, en gras et en taille 18
         paramLabel.setForeground(Color.BLUE); // Définit la couleur du texte en bleu
@@ -155,8 +155,8 @@ public class ParametersFormView extends JPanel{
 
   
 
-   public ParametersFormView() {
-        parametersForm();
+   public ParametersFormView(MainFrame parent) {
+        parametersForm(parent);
    }
 }
 

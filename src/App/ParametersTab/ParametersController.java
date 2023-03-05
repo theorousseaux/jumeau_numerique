@@ -1,15 +1,18 @@
-package src.App.SimuParam;
+package src.App.ParametersTab;
 
 import org.orekit.time.AbsoluteDate;
 import org.orekit.time.TimeScalesFactory;
 
 public class ParametersController {
     private Parameters model;
-    private ParametersFormView view;
+    public Parameters getModel() {
+        return model;
+    }
 
-    public ParametersController(Parameters model, ParametersFormView view) {
-        this.model = model;
-        this.view = view;
+    private ParametersView view;
+
+    public ParametersController() {
+        this.model = new Parameters();
     }
 
     public String getNoiseLevel(){

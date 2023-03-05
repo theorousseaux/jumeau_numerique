@@ -1,4 +1,4 @@
-package src.App.SimuParam;
+package src.App.ParametersTab;
 
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import src.App.MainFrame;
 import java.awt.event.*;
 import java.awt.*;
 
-public class SateliteDataView extends JPanel{
+public class SatelliteDataView extends JPanel{
     GridBagConstraints gc = new GridBagConstraints();
     MainFrame parent;
 
@@ -41,7 +41,7 @@ public class SateliteDataView extends JPanel{
     }
 
 
-   public SateliteDataView() {
+   public SatelliteDataView(MainFrame parent) {
         satellitesInformation("ISS", "PLEIADE", "20-08-2000", "30-05-2002");
    }
 }

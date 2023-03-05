@@ -1,4 +1,4 @@
-package src.App.SimuParam;
+package src.App.ParametersTab;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -12,21 +12,20 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 public class ParametersView extends JPanel {
+
     MainFrame parent;
     GridBagConstraints gc = new GridBagConstraints();
 
-    public ParametersView() {
+    public ParametersView(MainFrame parent) {
 
         this.parent = parent;
 
         setLayout(new GridBagLayout());
 
 
-        // Affichage des stations sol
-        SateliteDataView displayGSPannel = new SateliteDataView();
+        SatelliteDataView satDataView = new SatelliteDataView(parent);
 
-        // Affichage du formulaire d'ajout d'une station sol
-        ParametersFormView newGSPannel = new ParametersFormView();
+        ParametersFormView paramSettingForm = new ParametersFormView(parent);
 
         // Ajout des éléments au panel
         gc.gridx = 0;
@@ -34,10 +33,10 @@ public class ParametersView extends JPanel {
         gc.weightx = 1;
         gc.weighty = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
-        this.add(displayGSPannel, gc);
+        this.add(satDataView, gc);
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
-        this.add(newGSPannel, gc);
+        this.add(paramSettingForm, gc);
         
 
     }
