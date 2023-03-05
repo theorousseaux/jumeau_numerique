@@ -110,11 +110,11 @@ public class NewGSPannel extends JPanel {
                 groundStation.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
 
                 // Ajout de la station sol à la liste de la fenêtre principale
-                parent.addGroundStation(groundStation);
+                parent.gsController.addGroundStation(groundStation);
 
                 // update
                 try {
-                    parent.GSWriter.writeStation(groundStation);
+                    parent.gsController.GSWriter.writeStation(groundStation);
 
                     // Mise à jour du panneau d'affichage des stations sol
                     displayGSPannel.displayNewStation(groundStation);

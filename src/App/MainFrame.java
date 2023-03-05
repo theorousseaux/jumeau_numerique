@@ -5,6 +5,7 @@ import org.orekit.data.DataProvidersManager;
 import org.orekit.data.DirectoryCrawler;
 
 import src.App.AnalysisTab.AnalysisPannel;
+import src.App.GSTab.GSController;
 import src.App.GSTab.GSpannel;
 import src.App.HomeTab.HomePannel;
 import src.App.SatelliteTab.SatellitePannel;
@@ -24,25 +25,12 @@ import java.util.List;
 
 public class MainFrame extends JFrame {
 
-    public List<Station> groundStationList;
-    public ReadGSFile GSReader;
-    public WriteGSFile GSWriter;
-    public int numberOfGS = 0;
-
-    public GSNetwork gsNetwork;
+    public GSController gsController;
 
     public MainFrame() throws NumberFormatException, IOException {
 
-        this.groundStationList = new ArrayList<>();
-        this.GSReader = new ReadGSFile();
-        this.GSWriter = new WriteGSFile();
-
-        this.groundStationList = GSReader.readStation("src/Data/GS.csv");
-
-        // Ajou d'un télescope standard à chaque station sol
-        for (Station station : groundStationList) {
-            station.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
-        }
+        // Initialisation du controller des stations sol
+        gsController = new GSController();
 
         JFrame frame = new JFrame("Space Observation Digital Twin");
 
@@ -71,11 +59,6 @@ public class MainFrame extends JFrame {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-    }
-
-    // Méthode pour ajouter une station sol à la liste
-    public void addGroundStation(Station groundStation) {
-        groundStationList.add(groundStation);
     }
 
     public static void main(String[] args) throws NumberFormatException, IOException {

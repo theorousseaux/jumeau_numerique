@@ -35,7 +35,7 @@ public class CreateNetworkPannel extends JPanel {
         gc.gridwidth = GridBagConstraints.REMAINDER;
         this.add(tittle, gc);
 
-        for (Station station : parent.groundStationList) {
+        for (Station station : parent.gsController.groundStationList) {
             JCheckBox checkBox = new JCheckBox(station.getName());
             gc.gridy ++;
             gc.anchor = GridBagConstraints.WEST;
@@ -79,7 +79,7 @@ public class CreateNetworkPannel extends JPanel {
                     }
                 }
                 try {
-                    parent.gsNetwork = new GSNetwork(textField.getText(), stations);
+                    parent.gsController.gsNetwork = new GSNetwork(textField.getText(), stations);
                     displayNetworkPannel.update();
                     displayNetworkPannel.repaint();
                     displayNetworkPannel.revalidate();
@@ -93,7 +93,7 @@ public class CreateNetworkPannel extends JPanel {
     public void displayNewGS(Station groundStation) {
         GridBagConstraints newGC = new GridBagConstraints();
         newGC.gridx = 0;
-        newGC.gridy = parent.numberOfGS+1;
+        newGC.gridy = parent.gsController.numberOfGS+1;
 
         JCheckBox checkBox = new JCheckBox(groundStation.getName());
         newGC.gridy ++;
