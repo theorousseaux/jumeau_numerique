@@ -2,14 +2,14 @@ package src.Data;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import org.orekit.data.DataContext;
 import org.orekit.data.DataProvidersManager;
 import org.orekit.data.DirectoryCrawler;
 
+import src.Data.GS.ReadGSFile;
+import src.Data.GS.WriteGSFile;
 import src.Kalman.Station;
-import src.Kalman.TelescopeAzEl;
 
 public class test {
 

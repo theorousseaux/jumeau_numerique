@@ -1,0 +1,2 @@
+ID (station:type:id), mean1, mean2, angularIncertitude1, angularIncertitude2, elevationLimit, angularFoV, stepMeasure, breakTime
+Toulouse:telescope:1, 0.0, 0.0, 0.00524, 0.00524, 0.5236, 2.07694, 10, 10

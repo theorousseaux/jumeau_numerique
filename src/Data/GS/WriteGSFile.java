@@ -1,4 +1,4 @@
-package src.Data;
+package src.Data.GS;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class WriteGSFile {
     public void writeStation(Station station) throws NumberFormatException, IOException{
     
         try {
-            FileWriter fw = new FileWriter("src/Data/GS.csv", true);
+            FileWriter fw = new FileWriter("src/Data/GS/GS.csv", true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.newLine();
             bw.write(station.getName() + ", " + station.getLatitude() + ", " + station.getLongitude() + ", " + station.getAltitude());
