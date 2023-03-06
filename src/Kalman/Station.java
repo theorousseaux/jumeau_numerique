@@ -48,4 +48,8 @@ public class Station extends GroundStation {
 	public Double getAltitude() {
 		return getBaseFrame().getPoint().getAltitude();
 	}
+
+	public String toString() {
+		return "Station: " + getName();
+	}
 }

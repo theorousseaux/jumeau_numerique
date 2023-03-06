@@ -1,6 +1,8 @@
 package src.App.ObserverTab;
 
+import src.App.GSTab.GSController;
 import src.App.MainFrame;
+import src.Kalman.Station;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,10 +11,15 @@ import java.awt.event.ActionListener;
 
 public class NewObserverPannel extends JPanel {
 
+    MainFrame parent;
+    GSController gsController;
     private JComboBox<String> cbType;
     private JPanel formPanel;
 
-    public NewObserverPannel(MainFrame parent) {
+    public NewObserverPannel(MainFrame parent, GSController gsController) {
+
+        this.parent = parent;
+        this.gsController = gsController;
 
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
@@ -63,17 +70,55 @@ public class NewObserverPannel extends JPanel {
         assert selectedType != null;
         if (selectedType.equals("Telescope")) {
             formPanel.removeAll();
-            formPanel.setLayout(new GridLayout(2, 2));
+            formPanel.setLayout(new GridLayout(9, 2));
 
-            JLabel telescopeLabel = new JLabel("Telescope:");
-            JTextField telescopeField = new JTextField();
-            JLabel apertureLabel = new JLabel("Aperture:");
-            JTextField apertureField = new JTextField();
+            JLabel mean1Label = new JLabel("Mean 1 :");
+            formPanel.add(mean1Label);
+            JTextField mean1Field = new JTextField();
+            formPanel.add(mean1Field);
 
-            formPanel.add(telescopeLabel);
-            formPanel.add(telescopeField);
-            formPanel.add(apertureLabel);
-            formPanel.add(apertureField);
+            JLabel mean2Label = new JLabel("Mean 2 :");
+            formPanel.add(mean2Label);
+            JTextField mean2Field = new JTextField();
+            formPanel.add(mean2Field);
+
+            JLabel angularIncertitude1Label = new JLabel("Angular incertitude 1 :");
+            formPanel.add(angularIncertitude1Label);
+            JTextField angularIncertitude1Field = new JTextField();
+            formPanel.add(angularIncertitude1Field);
+
+            JLabel angularIncertitude2Label = new JLabel("Angular incertitude 2 :");
+            formPanel.add(angularIncertitude2Label);
+            JTextField angularIncertitude2Field = new JTextField();
+            formPanel.add(angularIncertitude2Field);
+
+            JLabel elevationLabel = new JLabel("Elevation limit :");
+            formPanel.add(elevationLabel);
+            JTextField elevationField = new JTextField();
+            formPanel.add(elevationField);
+
+            JLabel angularoVLabel = new JLabel("Angular field of view :");
+            formPanel.add(angularoVLabel);
+            JTextField angularoVField = new JTextField();
+            formPanel.add(angularoVField);
+
+            JLabel stepMeasureLabel = new JLabel("Step measure :");
+            formPanel.add(stepMeasureLabel);
+            JTextField stepMeasureField = new JTextField();
+            formPanel.add(stepMeasureField);
+
+            JLabel breakTimeLabel = new JLabel("Break time :");
+            formPanel.add(breakTimeLabel);
+            JTextField breakTimeField = new JTextField();
+            formPanel.add(breakTimeField);
+
+            JLabel stationLabel = new JLabel("Station :");
+            formPanel.add(stationLabel);
+            JComboBox<Station> stationComboBox = new JComboBox<>();
+            for(Station s : gsController.groundStationList){
+                stationComboBox.addItem(s);
+            }
+            formPanel.add(stationComboBox);
 
             formPanel.revalidate();
             formPanel.repaint();
