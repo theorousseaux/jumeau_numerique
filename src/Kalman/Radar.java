@@ -21,6 +21,7 @@ import org.orekit.estimation.measurements.generation.SignSemantic;
 import org.orekit.geometry.fov.DoubleDihedraFieldOfView;
 import org.orekit.geometry.fov.FieldOfView;
 import org.orekit.propagation.Propagator;
+import org.orekit.propagation.events.AltitudeDetector;
 import org.orekit.propagation.events.BooleanDetector;
 import org.orekit.propagation.events.ElevationDetector;
 import org.orekit.propagation.events.GroundFieldOfViewDetector;
@@ -29,6 +30,9 @@ import org.orekit.time.TimeComponents;
 
 public class Radar {
     
+    /** ID (station:type:id) */	
+	private String ID;
+
     /** noiseSource */
 	public CorrelatedRandomVectorGenerator noiseSource;
 
@@ -55,11 +59,13 @@ public class Radar {
     public double sigmaRadar;
 
     /** Constructor */
-    public Radar(double[] mean, double[] angularIncertitude, double angularFoV, double stepMeasure) {
+    public Radar(String ID, double[] mean, double[] angularIncertitude, double angularFoV, double stepMeasure) {
+
+        this.ID = ID;
 
         this.sigma = angularIncertitude;
         this.baseWeight = new double[]{1., 1.};
-        this.sigmaRadar = 1.;
+        this.sigmaRadar = 30.;
         this.baseWeightRadar = 1.;
 
         // Mise en place field of view 
@@ -99,14 +105,13 @@ public class Radar {
     			(s, detector, increasing) -> {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
-    	elevationDetector = elevationDetector.withConstantElevation(30*Math.PI/180);
-<<<<<<< HEAD
-    
-=======
-
+    	
         //AltitudeDetector
-        
->>>>>>> UI
+        AltitudeDetector altitudeDetector = new AltitudeDetector(2000000, constants.earthShape);
+        altitudeDetector = altitudeDetector.withHandler(
+            (s, detector, increasing) -> {
+                return increasing ? Action.CONTINUE : Action.CONTINUE;
+            });
     
     	//FOV detector
     	GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(station.getBaseFrame(), fov); // positif quand c'est visible
@@ -116,7 +121,8 @@ public class Radar {
     	        });
             
         //Final
-    	BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, fovDetector);
+    	BooleanDetector intermediateDetector = BooleanDetector.andCombine(elevationDetector, fovDetector);
+        BooleanDetector finalDetector = BooleanDetector.andCombine(intermediateDetector, altitudeDetector);
     	return finalDetector;
     }
     
@@ -127,11 +133,6 @@ public class Radar {
     	return dateSelector;
     }
     
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> UI
     /* Creation des mesureBuilder */
     public AngularAzElBuilder createAzElBuilder(ObservableSatellite satellite) {
     	AngularAzElBuilder azElBuilder = new AngularAzElBuilder(this.noiseSource, this.station, this.sigma, this.baseWeight, satellite);
