@@ -26,7 +26,7 @@ public class Station extends GroundStation {
 	
 	public void addTelescope(TelescopeAzEl telescope) {
 		this.listTelescopes.add(telescope);
-		telescope.updateStation(this);
+		// telescope.updateStation(this);
 	}
 	
 	public List<TelescopeAzEl> getListTelescope(){
