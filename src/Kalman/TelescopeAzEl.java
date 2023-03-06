@@ -47,21 +47,28 @@ public class TelescopeAzEl {
 	public double[] azimuthField;
 	public double[] elevationField;
 
-	public double angularFoV; // cote du carre du FoV
+	/** taille angulaire fov */
+	public double angularFoV; 
 
+	/** nombre de secondes entre deux mesures */
 	public double stepMeasure;
 	
+	/** Durée de fixation sur un FOV */
 	public int breakTime;
+
+	/** Programmation satellite LEO/GEO */
+	public boolean GEO;
 	
 	LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
 	/** Constructor */
-    public TelescopeAzEl(double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, int breakTime) {
+    public TelescopeAzEl(double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, int breakTime, boolean GEO) {
 
 		this.sigma = angularIncertitude;
 		this.baseWeight = new double[]{1., 1.};
+		this.GEO = GEO; 
 
-		// ATTENTION, ne marche pas si angularFoV>180-2*limitElevation
+		// Mise en place field of view 
 		this.angularFoV = angularFoV;
 		this.azimuthField = new double[]{0., Math.PI};
 		this.elevationField = new double[]{0. + elevationLimit, Math.PI - elevationLimit};
@@ -82,7 +89,25 @@ public class TelescopeAzEl {
 	}
     
     public void updateStation(Station station) {
-    	this.station = station;
+    	
+		this.station = station;
+		double latitude = station.getLatitude();
+		int cpt = 0;
+
+		if (this.GEO == true) {
+			if (latitude < 5*Math.PI/180) {
+				if (latitude > -5*Math.PI/180) {
+					
+					this.azimuthField = new double[]{0., 10*Math.PI/180};
+					this.elevationField = new double[]{75*Math.PI/180, 105*Math.PI/180};
+					cpt = cpt+1;
+
+				}
+			}
+			if (cpt ==0) {
+				System.out.println("Erreur : la station n'est pas au niveau de l'équateur, telescope reste en mode LEO");
+			}
+		}
     }
 
     public BooleanDetector createDetector(LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {

@@ -168,12 +168,12 @@ public class simu {
     	
     	// STATIONS ET TELESCOPES
     	Station station_Paris = new Station("PARIS", 48.866667*Math.PI/180, 2.333333*Math.PI/180, 0.);
-		TelescopeAzEl telescope1 = new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10);
+		TelescopeAzEl telescope1 = new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, false);
     	station_Paris.addTelescope(telescope1);
 
     	
 		Station stationGuyanne = new Station("GUYANNE", 3.933889*Math.PI/180, -53.125782*Math.PI/180, 0.);
-		TelescopeAzEl telescope2 = new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10);
+		TelescopeAzEl telescope2 = new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, false);
 		stationGuyanne.addTelescope(telescope2);
 
 		List<TelescopeAzEl> telescopesList = new ArrayList<>();
