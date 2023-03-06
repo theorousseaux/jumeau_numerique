@@ -1,4 +1,4 @@
-package src.Data;
+package src.Data.GS;
 import src.Kalman.Station;
 import src.Kalman.constants;
 

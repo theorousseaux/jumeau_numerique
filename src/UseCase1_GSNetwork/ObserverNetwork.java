@@ -1,5 +1,6 @@
 package src.UseCase1_GSNetwork;
 
+import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,20 +39,30 @@ public class ObserverNetwork {
         return this.name;
     }
 
-    public List<TelescopeAzEl> getNetwork() {
+    public List<TelescopeAzEl> getTelescopes() {
         return this.telescopesNetworkList;
     }
+    
+    public void display(){
+        System.out.println("Network name: " + this.getName());
+        System.out.println("Network telescopes: ");
+        for (TelescopeAzEl telescope : this.getTelescopes()){
+            System.out.println("    - " + telescope.getID());
+        }
+    }
 
+    /*
     public int countObservations(List<SortedSet<ObservedMeasurement<?>>> observations){
         int i = 0;
         for (SortedSet<ObservedMeasurement<?>> object : observations){
             for (ObservedMeasurement<?> obs : object){
-                if (this.getNetwork().contains(((AngularAzEl) obs).getStation())){
+                if (this.getTelescopes().contains(((AngularAzEl) obs).getStation())){
                     i+=1;
                 }
             }
         }
         return i;
     }
+    */
 
 }

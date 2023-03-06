@@ -16,7 +16,7 @@ import org.orekit.estimation.measurements.AngularAzEl;
 
 import org.orekit.estimation.measurements.ObservedMeasurement;
 
-import src.Data.ReadGSFile;
+import src.Data.GS.ReadGSFile;
 
 
 public class GSNetwork {
@@ -30,7 +30,7 @@ public class GSNetwork {
 
 
         // creation of list of available stations
-        BufferedReader br = new BufferedReader(new FileReader("src/Data/GS.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("src/Data/GS/GS.csv"));
         String line;
         while ((line = br.readLine()) != null)
         {
@@ -85,7 +85,7 @@ public class GSNetwork {
         System.out.println("Stations saved!");
         
         ReadGSFile networkBuilder = new ReadGSFile();
-        this.Network = networkBuilder.readStation("src/Data/GS.csv", GSList);
+        this.Network = networkBuilder.readStation("src/Data/GS/GS.csv", GSList);
         
     }
 
@@ -95,7 +95,7 @@ public class GSNetwork {
 
 
         // creation of list of available stations
-        BufferedReader br = new BufferedReader(new FileReader("src/Data/GS.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("src/Data/GS/GS.csv"));
         String line;
         while ((line = br.readLine()) != null)
         {
@@ -111,7 +111,7 @@ public class GSNetwork {
 
         this.Name = name;
         ReadGSFile networkBuilder = new ReadGSFile();
-        this.Network = networkBuilder.readStation("src/Data/GS.csv", stations);
+        this.Network = networkBuilder.readStation("src/Data/GS/GS.csv", stations);
         this.addTelescopes();
     }
 
@@ -145,7 +145,11 @@ public class GSNetwork {
 
     public void addTelescopes(){
         for (Station station : this.Network){
+<<<<<<< HEAD
             station.addTelescope(new TelescopeAzEl("default",new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+=======
+            //station.addTelescope(new TelescopeAzEl("ID", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+>>>>>>> 5f198c49edd676a57dc7150a638948d4be78fe20
         }
     }
 

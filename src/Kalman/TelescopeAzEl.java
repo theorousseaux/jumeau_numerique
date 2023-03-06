@@ -65,7 +65,7 @@ public class TelescopeAzEl {
 	LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
 	/** Constructor */
-    public TelescopeAzEl(String ID, double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, double breakTime) {
+    public TelescopeAzEl(String ID, double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, double breakTime, Station station) {
 
     	this.ID  = ID;
 
@@ -87,7 +87,10 @@ public class TelescopeAzEl {
     	CorrelatedRandomVectorGenerator noiseSource = new CorrelatedRandomVectorGenerator(mean, covariance, 1.0e-10, gaussianRandomGenerator);//mesures parfaites:null
 		this.noiseSource = noiseSource;
 
-		this.station = null;
+		this.station = station;
+		station.addTelescope(this);
+
+		
 		this.stepMeasure = stepMeasure;
 		this.breakTime = breakTime;
 		
@@ -124,10 +127,6 @@ public class TelescopeAzEl {
     
     public double getElevationLimit() {
     	return this.elevationField[0];
-    }
-    
-    public void updateStation(Station station) {
-    	this.station = station;
     }
 
     public BooleanDetector createDetector(LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {
