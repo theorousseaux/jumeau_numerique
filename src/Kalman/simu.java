@@ -61,17 +61,10 @@ public class simu {
     	final KeplerianPropagator truePropagator = new KeplerianPropagator(trueOrbit);
     	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-<<<<<<< HEAD
-    /* 	SpacecraftState state1 = new SpacecraftState(initialOrbit);
-    	Vector3D VInInertialFrame = state1.getPVCoordinates().getVelocity();
-    	Vector3D PInInertialFrame = state1.getPVCoordinates().getPosition();
-    	double[] mean = {PInInertialFrame.getX(), PInInertialFrame.getY(), PInInertialFrame.getZ(), VInInertialFrame.getX(), VInInertialFrame.getY(), VInInertialFrame.getZ()};
-=======
     	SpacecraftState trueState = new SpacecraftState(trueOrbit);
     	Vector3D V_InertialFrame = trueState.getPVCoordinates().getVelocity();
     	Vector3D P_InertialFrame = trueState.getPVCoordinates().getPosition();
     	double[] mean = {P_InertialFrame.getX(), P_InertialFrame.getY(), P_InertialFrame.getZ(), V_InertialFrame.getX(), V_InertialFrame.getY(), V_InertialFrame.getZ()};
->>>>>>> UI
     	//double[] variance = {Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2)};
     	double[] variance = {Math.pow(100,2),Math.pow(100,2),Math.pow(100 ,2),Math.pow(0.01,2),Math.pow(0.01,2),Math.pow(0.01,2)};
     	//double[] variance = {.1e-4, 4.e-3, 1.e-3, 5.e-3, 6.e-5, 1.e-4};
@@ -117,10 +110,10 @@ public class simu {
     	//double[] q = {1, 1, 1, 1, 1, 1};
     	//double[] q = {0, 0, 0, 0, 0, 0};
     	RealMatrix Q = MatrixUtils.createRealDiagonalMatrix(q);
-		*/
+		
 
-    	/*
-    	final RealMatrix measurementP = MatrixUtils.createRealDiagonalMatrix(new double [] {
+    	
+    	/*final RealMatrix measurementP = MatrixUtils.createRealDiagonalMatrix(new double [] {
     		1., 1.
     		});
     	final RealMatrix measurementQ = MatrixUtils.createRealDiagonalMatrix(new double [] {
@@ -136,9 +129,9 @@ public class simu {
                     estimatedMeasurementsParameters.add(driver);
                 }
             }
-        }
+        } */
         
-    	ConstantProcessNoise processNoise = new ConstantProcessNoise(initialP, Q); */
+    	ConstantProcessNoise processNoise = new ConstantProcessNoise(initialP, Q); 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -169,33 +162,12 @@ public class simu {
     	List<Propagator> propagatorsList = new ArrayList<Propagator>();
 
     	objectsList.add(satellite_ISS);
-<<<<<<< HEAD
-    	propagatorsList.add(propagator_ISS);
-		objectsList.add(satelliteTest);
-		propagatorsList.add(propagatorTest);
-=======
     	propagatorsList.add(truePropagator);
->>>>>>> UI
     	
     	
     	// STATIONS ET TELESCOPES
     	// PARIS
     	Station station_Paris = new Station("PARIS", 48.866667*Math.PI/180, 2.333333*Math.PI/180, 0.);
-<<<<<<< HEAD
-		TelescopeAzEl telescope1 = new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, false);
-    	station_Paris.addTelescope(telescope1);
-
-    	
-		Station stationGuyanne = new Station("GUYANNE", 3.933889*Math.PI/180, -53.125782*Math.PI/180, 0.);
-		TelescopeAzEl telescope2 = new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, false);
-		stationGuyanne.addTelescope(telescope2);
-
-		List<TelescopeAzEl> telescopesList = new ArrayList<>();
-		telescopesList.add(telescope1);
-		telescopesList.add(telescope2);
-
-		System.out.println("OBSERVATIONS C'EST PARTI :");
-=======
     	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
     	station_Paris.addTelescope(new TelescopeAzEl("ID", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
     	// NANTES
@@ -209,7 +181,6 @@ public class simu {
     	
        	
        	// OBSERVATIONS
->>>>>>> UI
     	Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
 		System.out.println("ça va plot");
     	List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = observation.measure(true);
