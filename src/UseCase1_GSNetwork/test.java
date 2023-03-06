@@ -19,7 +19,7 @@ import org.orekit.estimation.measurements.ObservedMeasurement;
 import org.orekit.propagation.Propagator;
 import org.orekit.time.AbsoluteDate;
 
-import src.Data.ReadGSFile;
+import src.Data.GS.ReadGSFile;
 
 import src.Kalman.TelescopeAzEl;
 

@@ -8,6 +8,8 @@ import src.App.AnalysisTab.AnalysisPannel;
 import src.App.GSTab.GSController;
 import src.App.GSTab.GSpannel;
 import src.App.HomeTab.HomePannel;
+import src.App.ObserverTab.ObserverController;
+import src.App.ObserverTab.ObserverPannel;
 import src.App.ParametersTab.ParametersController;
 import src.App.ParametersTab.ParametersView;
 import src.App.UpdateSatelliteDBTab.UpdateSatelliteDBPanel;
@@ -23,6 +25,8 @@ public class MainFrame extends JFrame {
 
     public GSController gsController;
 
+    public ObserverController obserController;
+
     public ParametersController paramController;
 
     public SimulationController simuController;
@@ -31,6 +35,8 @@ public class MainFrame extends JFrame {
 
         // Initialisation du controller des stations sol
         gsController = new GSController();
+
+        obserController = new ObserverController(gsController);
 
         paramController = new ParametersController();
 
@@ -43,6 +49,7 @@ public class MainFrame extends JFrame {
         JPanel homePanel = new HomePannel();
         JPanel updateSatelliteDBPanel = new UpdateSatelliteDBPanel(this);
         JPanel groundStationPanel = new GSpannel(this);
+        JPanel observerPanel = new ObserverPannel(this);
         // JPanel analysisPanel = new AnalysisPannel();
         JPanel parametersPanel = new ParametersView(this);
         JPanel simulationPanel = new SimulationView(this);
@@ -52,6 +59,7 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("Home", homePanel);
         tabbedPane.addTab("Update DB", updateSatelliteDBPanel);
         tabbedPane.addTab("Ground Station", groundStationPanel);
+        tabbedPane.addTab("Observer", observerPanel);
         // tabbedPane.addTab("Analysis", analysisPanel);
         tabbedPane.addTab("Simulation parameters", parametersPanel);
         tabbedPane.addTab("Run Simulation", simulationPanel);

@@ -8,7 +8,7 @@ import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.propagation.Propagator;
 
 import src.App.MainFrame;
-import src.Data.ReadGSFile;
+import src.Data.GS.ReadGSFile;
 import src.Kalman.Observation;
 
 public class SimulationController {
