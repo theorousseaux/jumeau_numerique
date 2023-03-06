@@ -27,7 +27,7 @@ public class GSController {
 
         // Ajou d'un télescope standard à chaque station sol
         for (Station station : groundStationList) {
-            station.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+            station.addTelescope(new TelescopeAzEl("def",new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
         }
     }
 

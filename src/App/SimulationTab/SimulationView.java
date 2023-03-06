@@ -5,6 +5,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+
+import org.orekit.estimation.measurements.ObservableSatellite;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -20,63 +23,36 @@ public class SimulationView extends JPanel{
     public SimulationView(MainFrame parent) {
 
         this.parent = parent;
+        DisplaySimPannel displaySetup = new DisplaySimPannel(parent);
+        LoadSimulationPannel loadSimulation = new LoadSimulationPannel(parent, displaySetup);
+        DisplayObsPannel displayObs = new DisplayObsPannel(parent);
+        RunSimulationPannel runSimulation = new RunSimulationPannel(parent, displayObs);
 
         setLayout(new GridBagLayout());
 
-        // Création du bouton pour récupérer les données pour la simulation
-        JButton loadSimulationButton = new JButton("Load Simulation");
-
-        // Ajout des boutons au panneau Satellite
-        gc.gridy = 0;
         gc.gridx = 0;
-        add(loadSimulationButton, gc);
+        gc.gridy = 0;
+        gc.anchor = GridBagConstraints.PAGE_START;
 
-    
+        add(loadSimulation,gc);
 
-
-        // Gestion des évènements
-        loadSimulationButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                controller = parent.simuController;
-                try {
-                    controller.loadSimulation(parent);
-                } catch (IllegalArgumentException | IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            }
-        });
-        // Création des boutons pour lancer la simulation
-        JButton runSimulationButton = new JButton("Run Simulation");
-
-        // Ajout des boutons au panneau Satellite
         gc.gridy ++;
-        add(runSimulationButton, gc);
+        gc.anchor = GridBagConstraints.PAGE_START;
+
+        add(displaySetup, gc);
+
+        gc.gridx = 1;
+        gc.gridy = 0;
+        gc.anchor = GridBagConstraints.PAGE_START;
+
+        add(runSimulation,gc);
+
+        gc.gridy ++;
+        gc.anchor = GridBagConstraints.PAGE_START;
+
+        add(displayObs, gc);
 
         
-
-        // Ajout de la barre de progression
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setMinimum(0);
-        progressBar.setMaximum(100);
-        progressBar.setStringPainted(true);
-        gc.gridy ++;
-        gc.gridwidth = 2;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        add(progressBar, gc);
-
-        // Gestion des évènements
-        runSimulationButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                controller = parent.simuController;
-
-                controller.runSimulation(parent);
-            }
-        });
     }
     
 }

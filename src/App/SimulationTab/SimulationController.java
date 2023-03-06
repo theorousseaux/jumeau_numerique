@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hipparchus.complex.Quaternion;
 import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.propagation.Propagator;
 
@@ -55,7 +56,7 @@ public class SimulationController {
     
     public void runSimulation(MainFrame parent){
         model.setObservations(new Observation(model.getGroundStationNetwork().getTelescopes(), model.getSatellitesNames(), model.getSatellites(), model.getSimulationParameters().getStartDate(), model.getSimulationParameters().getEndDate()));
-        model.setMeasurementsSetsList(model.getObservations().measure(true));
+        model.setMeasurementsSetsList(model.getObservations().measure(false));
         System.out.println("Simulation done");
     }
 

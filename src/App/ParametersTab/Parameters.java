@@ -2,16 +2,21 @@ package src.App.ParametersTab;
 
 import org.orekit.time.AbsoluteDate;
 
+
+/*
+ * 
+ */
 public class Parameters {
 
     private double noiseLevel;
+    private AbsoluteDate startDate;
+    private AbsoluteDate endDate;
+
+
     @Override
     public String toString() {
         return "Parameters [noiseLevel=" + noiseLevel + ", startDate=" + startDate + ", endDate=" + endDate + "]";
     }
-
-    private AbsoluteDate startDate;
-    private AbsoluteDate endDate;
 
     public double getNoiseLevel() {
         return noiseLevel;
