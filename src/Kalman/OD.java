@@ -1,7 +1,9 @@
 package src.Kalman;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.SortedSet;
 
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -18,6 +20,8 @@ import org.orekit.estimation.sequential.AbstractKalmanEstimator;
 import org.orekit.estimation.sequential.ConstantProcessNoise;
 import org.orekit.estimation.sequential.KalmanEstimator;
 import org.orekit.estimation.sequential.KalmanEstimatorBuilder;
+import org.orekit.forces.drag.DragSensitive;
+import org.orekit.forces.drag.IsotropicDrag;
 import org.orekit.frames.LOFType;
 import org.orekit.frames.LocalOrbitalFrame;
 import org.orekit.frames.Transform;
@@ -28,6 +32,8 @@ import org.orekit.propagation.SpacecraftState;
 import org.orekit.propagation.conversion.OrbitDeterminationPropagatorBuilder;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.utils.CartesianDerivativesFilter;
+import org.orekit.utils.ParameterDriver;
+import org.orekit.utils.ParameterDriversList;
 import org.orekit.utils.TimeStampedPVCoordinates;
 
 public class OD {
@@ -69,6 +75,19 @@ public class OD {
 
     	Propagator[] propagatorEstimated = BLSEstimator.estimate();
     	
+    	
+    	
+    	ParameterDriversList propagatorParameters = BLSEstimator.getPropagatorParametersDrivers(true);
+		final List<ParameterDriver> list = new ArrayList<>(propagatorParameters.getDrivers());
+		for(ParameterDriver driver : list) {
+			//if(driver.getName().equals("CSMcustom")) {
+			if (driver.getName().equals("drag coefficient")) {
+			//if(driver.getName().equals("Sun attraction coefficient")) {
+				System.out.println("youhou");
+				System.out.println(driver.getValue());
+			}
+		}
+    	
     	//RESULTAT
     	results(propagator, propagatorEstimated);
     	
@@ -79,7 +98,6 @@ public class OD {
     	System.out.println("KALMAN");
 
     	KalmanEstimatorBuilder estimatorBuilder = new KalmanEstimatorBuilder();
-
     	estimatorBuilder.addPropagationConfiguration(estimatedPropagatorBuilder, processNoise);
     	KalmanEstimator kalmanEstimator = estimatorBuilder.build();
     	
@@ -91,7 +109,30 @@ public class OD {
     		//RESULTAT
     		//covarianceAnalysis(propagatorEstimated[0], kalmanEstimator);
         	results(propagator, propagatorEstimated);
+    		ParameterDriversList propagatorParameters = kalmanEstimator.getPropagationParametersDrivers(true);
+    		final List<ParameterDriver> list = new ArrayList<>(propagatorParameters.getDrivers());
+    		for(ParameterDriver driver : list) {
+    			//if(driver.getName().equals("CSMcustom")) {
+    			if (driver.getName().equals("drag coefficient")) {
+    			//if(driver.getName().equals("Sun attraction coefficient")) {
+    				System.out.println("youhou");
+    				System.out.println(driver.getValue());
+    			}
+    		}
     	}
+    	/*
+    	Propagator[] propagatorEstimated = kalmanEstimator.processMeasurements(measurementsSet);
+    	//covarianceAnalysis(propagatorEstimated[0], kalmanEstimator);
+    	results(propagator, propagatorEstimated);
+		ParameterDriversList propagatorParameters   = kalmanEstimator.getPropagationParametersDrivers(true);
+		final List<ParameterDriver> list = new ArrayList<>(propagatorParameters.getDrivers());
+		for(ParameterDriver driver : list) {
+			if(driver.getName().equals("CSMcustom")) {
+				System.out.println("youhou");
+				System.out.println(driver.getValue());
+			}
+		}
+		*/
     	
     	return mapMeasurePropagator;
     }

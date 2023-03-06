@@ -28,9 +28,9 @@ public class constants {
 	final static PVCoordinatesProvider Sun = CelestialBodyFactory.getSun();
 	final static AtmosphericRefractionModel refractionModel = null;
 
-	final static double refAlt = 400e3;
-	final static double density = 2e-12; // 1430.
-	final static double hScale = .05;
+	final static double refAlt = 0.;
+	final static double density = 1.225;
+	final static double hScale = 8500;
 	final static SimpleExponentialAtmosphere atmosphere = new SimpleExponentialAtmosphere(constants.earthShape, refAlt, density, hScale);
 
 }
