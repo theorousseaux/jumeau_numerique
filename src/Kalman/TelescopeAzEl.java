@@ -30,6 +30,8 @@ import org.orekit.time.TimeComponents;
 import org.orekit.utils.PVCoordinatesProvider;
 
 public class TelescopeAzEl {
+	
+	public String ID;
 
 	/** noiseSource */
 	public CorrelatedRandomVectorGenerator noiseSource;
@@ -56,7 +58,9 @@ public class TelescopeAzEl {
 	LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
 	/** Constructor */
-    public TelescopeAzEl(double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, int breakTime) {
+    public TelescopeAzEl(String ID, double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, int breakTime) {
+
+    	this.ID  = ID;
 
 		this.sigma = angularIncertitude;
 		this.baseWeight = new double[]{1., 1.};
