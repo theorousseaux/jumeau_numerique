@@ -90,6 +90,7 @@ public class TelescopeAzEl {
 		this.station = station;
 		station.addTelescope(this);
 
+		
 		this.stepMeasure = stepMeasure;
 		this.breakTime = breakTime;
 		
@@ -126,10 +127,6 @@ public class TelescopeAzEl {
     
     public double getElevationLimit() {
     	return this.elevationField[0];
-    }
-    
-    public void updateStation(Station station) {
-    	this.station = station;
     }
 
     public BooleanDetector createDetector(LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {
