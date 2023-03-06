@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 import src.App.MainFrame;
 
 public class SimulationView extends JPanel{
@@ -38,8 +40,12 @@ public class SimulationView extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 
                 controller = parent.simuController;
-
-                controller.loadSimulation(parent);
+                try {
+                    controller.loadSimulation(parent);
+                } catch (IllegalArgumentException | IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         });
         // Création des boutons pour lancer la simulation
@@ -47,7 +53,6 @@ public class SimulationView extends JPanel{
 
         // Ajout des boutons au panneau Satellite
         gc.gridy ++;
-        gc.gridx ++;
         add(runSimulationButton, gc);
 
         

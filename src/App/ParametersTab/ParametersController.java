@@ -4,12 +4,16 @@ import org.orekit.time.AbsoluteDate;
 import org.orekit.time.TimeScalesFactory;
 
 public class ParametersController {
-    private Parameters model;
+    public Parameters model;
+
     public Parameters getModel() {
         return model;
     }
 
-    private ParametersView view;
+    @Override
+    public String toString() {
+        return "ParametersController [model=" + model + "]";
+    }
 
     public ParametersController() {
         this.model = new Parameters();

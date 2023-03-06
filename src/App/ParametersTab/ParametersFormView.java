@@ -15,13 +15,14 @@ import java.awt.*;
 
 public class ParametersFormView extends JPanel{
 
-    private ParametersController controller = new ParametersController();
+    private ParametersController controller;
     GridBagConstraints gc = new GridBagConstraints();
     MainFrame parent;
 
     
 
     public void parametersForm(MainFrame parent){
+        controller = parent.paramController;
         JLabel paramLabel = new JLabel("Set simulation parameters");
         paramLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Définit la police d'écriture en Arial, en gras et en taille 18
         paramLabel.setForeground(Color.BLUE); // Définit la couleur du texte en bleu
@@ -123,7 +124,7 @@ public class ParametersFormView extends JPanel{
                 int endMonth = Integer.parseInt(endMonthField.getText());
                 int endYear = Integer.parseInt(endYearField.getText());
 
-                
+            
                 // Création du modèle
                 System.out.println("Noise level: " + String.valueOf(noiseLevel));
                 controller.setNoiseLevel(noiseLevel);
@@ -138,6 +139,7 @@ public class ParametersFormView extends JPanel{
                 System.out.println("Noise level: " + controller.getNoiseLevel());
                 System.out.println("Start date: " + controller.getStartDate());
                 System.out.println("Start date: " + controller.getEndDate());
+                System.out.println(parent.paramController.getStartDate().toString());
             
             }
                 

@@ -5,6 +5,11 @@ import org.orekit.time.AbsoluteDate;
 public class Parameters {
 
     private double noiseLevel;
+    @Override
+    public String toString() {
+        return "Parameters [noiseLevel=" + noiseLevel + ", startDate=" + startDate + ", endDate=" + endDate + "]";
+    }
+
     private AbsoluteDate startDate;
     private AbsoluteDate endDate;
 
