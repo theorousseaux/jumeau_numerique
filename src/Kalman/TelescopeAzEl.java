@@ -63,7 +63,9 @@ public class TelescopeAzEl {
 	
 	private double breakTime;
 
-	private Boolean GEO;
+	public Boolean GEO;
+
+	public double alphaGEO;
 	
 	LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
@@ -76,15 +78,15 @@ public class TelescopeAzEl {
 		this.sigma = angularIncertitude;
 		this.baseWeight = new double[]{1., 1.};
 		this.GEO = GEO; 
+		this.alphaGEO = 0.;
 
 		// Mise en place field of view
-		if (GEO == false) { 
-			this.angularFoV = angularFoV;
-			this.azimuthField = new double[]{0., Math.PI};
-			this.elevationField = new double[]{0. + elevationLimit, Math.PI - elevationLimit};
-			this.skyCoveringMap = createSkyCoveringMap();
-		}
-		else {
+	
+		this.angularFoV = angularFoV;
+		this.azimuthField = new double[]{0., Math.PI};
+		this.elevationField = new double[]{0. + elevationLimit, Math.PI - elevationLimit};
+
+		if (this.GEO == true) {
 
 			//calcul de l'élévation de pointage telescope pour les GEO
 			double latitude = station.getLatitude();
@@ -97,9 +99,7 @@ public class TelescopeAzEl {
 			double beta = Math.atan(D/c);
 			double alpha = Math.PI/2 - (beta+latitude);
 
-			this.angularFoV = angularFoV;
-			this.azimuthField = new double[]{0., 0.};
-			this.elevationField = new double[]{alpha, alpha};
+			alphaGEO = alpha;
 
 		}
 		// bruit de mesures
@@ -114,9 +114,9 @@ public class TelescopeAzEl {
 
 		this.stepMeasure = stepMeasure;
 		this.breakTime = breakTime;
-		
 		this.skyCoveringMap = createSkyCoveringMap();
 		
+		//this.skyCoveringMap = createSkyCoveringMap();
 		station.listTelescopes.add(this);
 	}
     
@@ -152,11 +152,6 @@ public class TelescopeAzEl {
     	return this.elevationField[0];
     }
     
-    public void updateStation(Station station) {
-    	
-		this.station = station;
-		
-    }
 
     public BooleanDetector createDetector(LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {
     	//EventDetector, conditions for the observations
@@ -207,7 +202,7 @@ public class TelescopeAzEl {
     	        });
 
 		//GEO Field of View Detector
-		double alpha = elevationField[0];
+		double alpha = alphaGEO;
 		Vector3D vectorCenter = new Vector3D(0, alpha);
         Vector3D axis1 = new Vector3D(1,0,0);
         Vector3D axis2 = new Vector3D(0, Math.sqrt(2)/2, Math.sqrt(2)/2);
