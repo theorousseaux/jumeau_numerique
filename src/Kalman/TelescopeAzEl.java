@@ -30,39 +30,44 @@ import org.orekit.time.TimeComponents;
 import org.orekit.utils.PVCoordinatesProvider;
 
 public class TelescopeAzEl {
+	
+	/** ID (station:type:id) */	
+	private String ID;
 
 	/** noiseSource */
-	public CorrelatedRandomVectorGenerator noiseSource;
+	private CorrelatedRandomVectorGenerator noiseSource;
+	
+	/** noiseSource mean */
+	private double[] mean;
+	
+	/** noiseSource variance */
+	private double[] angularIncertitude;
 
 	/** sigma */
-	public double[] sigma;
+	private double[] sigma;
 
 	/** Measures weight */
-	public double[] baseWeight;
+	private double[] baseWeight;
 
 	/** GroundStation */
-	public Station station;
+	private Station station;
 
 	/** Limites de Field of View */
-	public double[] azimuthField;
-	public double[] elevationField;
+	private double[] azimuthField;
+	private double[] elevationField;
 
-	/** taille angulaire fov */
-	public double angularFoV; 
+	private double angularFoV; // cote du carre du FoV
 
-	/** nombre de secondes entre deux mesures */
-	public double stepMeasure;
+	private double stepMeasure;
 	
-	/** Durée de fixation sur un FOV */
-	public int breakTime;
-
-	/** Programmation satellite LEO/GEO */
-	public boolean GEO;
+	private double breakTime;
 	
 	LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
 	/** Constructor */
-    public TelescopeAzEl(double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, int breakTime, boolean GEO) {
+    public TelescopeAzEl(String ID, double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, double breakTime) {
+
+    	this.ID  = ID;
 
 		this.sigma = angularIncertitude;
 		this.baseWeight = new double[]{1., 1.};
@@ -74,6 +79,8 @@ public class TelescopeAzEl {
 		this.elevationField = new double[]{0. + elevationLimit, Math.PI - elevationLimit};
 
 		// bruit de mesures
+		this.mean = mean;
+		this.angularIncertitude = angularIncertitude;
 		double[] covarianceDiag = {Math.pow(angularIncertitude[0],2), Math.pow(angularIncertitude[1],2)};
     	RealMatrix covariance = MatrixUtils.createRealDiagonalMatrix(covarianceDiag);
     	RandomGenerator randomGenerator = new RandomDataGenerator();
@@ -87,6 +94,38 @@ public class TelescopeAzEl {
 		
 		this.skyCoveringMap = createSkyCoveringMap();
 	}
+    
+    public String getID() {
+    	return this.ID;
+    }
+    
+    public double[] getMean() {
+    	return this.mean;
+    }
+    
+    public double[] getAngularIncertitude() {
+    	return this.angularIncertitude;
+    }
+    
+    public Station getStation() {
+    	return this.station;
+    }
+    
+    public double getBreakTime() {
+    	return this.breakTime;
+    }
+    
+    public double getStepMeasure() {
+    	return this.stepMeasure;
+    }
+    
+    public double getAngularFoV() {
+    	return this.angularFoV;
+    }
+    
+    public double getElevationLimit() {
+    	return this.elevationField[0];
+    }
     
     public void updateStation(Station station) {
     	
@@ -172,8 +211,8 @@ public class TelescopeAzEl {
         }
         
         for(List<Double> aePosition : azElSkyCovering) {
-        	System.out.println(aePosition.get(0));
-        	System.out.println(aePosition.get(1));        	
+        	//System.out.println(aePosition.get(0));
+        	//System.out.println(aePosition.get(1));        	
         }
         return azElSkyCovering;
     }
@@ -199,7 +238,7 @@ public class TelescopeAzEl {
         }
 
         LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap = new LinkedHashMap<TimeComponents, FieldOfView>();
-        int sc = 0;
+        double sc = 0;
         int cpt = 0;
         //quid de la dernière seconde ?
         while(sc <=3600*24 - breakTime) {

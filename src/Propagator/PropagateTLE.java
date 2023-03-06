@@ -44,7 +44,7 @@ public class PropagateTLE {
     public static List<String[]> readPvCSV() throws Exception {
         List<String[]> tleList = new ArrayList<>();
 
-        BufferedReader br = new BufferedReader(new FileReader("src/TLE/pv.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("src/TLE/pv"));
         String line;
         while ((line = br.readLine()) != null)
         {
@@ -147,29 +147,15 @@ public class PropagateTLE {
 
         PropagateTLE propagateTLE = new PropagateTLE();
 
-        AbsolutePVCoordinates initialAbsPV = propagateTLE.absoluteCoordinatesFromStringPV(propagateTLE.absCoordinatesStringList.get(0));
-        AbsoluteDate initialDate = initialAbsPV.getDate();
-
-        System.out.println(propagateTLE.absCoordinatesStringList.size());
-        System.out.println(initialAbsPV);
-
-        KeplerianPropagator kepler1 = propagateTLE.keplerianPropagatorFromAbsPVC(initialAbsPV);
-
         double duration = 600.;
-        AbsoluteDate finalDate = initialDate.shiftedBy(duration);
         double stepT = 60.;
-        int cpt = 1;
-        for (AbsoluteDate extrapDate = initialDate; extrapDate.compareTo(finalDate) <= 0; extrapDate = extrapDate.shiftedBy(stepT)) {
-            SpacecraftState currentState = kepler1.propagate(extrapDate);
-            System.out.format(Locale.US, "step %2d %s %s%n", cpt++, currentState.getDate(), currentState.getOrbit());
-        }
 
-        KeplerianPropagator kepler2 = propagateTLE.propagatorsList.get(0);
-        AbsoluteDate initialDate2 = propagateTLE.absCoordinatesList.get(0).getDate();
-        AbsoluteDate finalDate2 = initialDate2.shiftedBy(duration);
-        cpt = 1;
-        for (AbsoluteDate extrapDate = initialDate2; extrapDate.compareTo(finalDate2) <= 0; extrapDate = extrapDate.shiftedBy(stepT)) {
-            SpacecraftState currentState = kepler2.propagate(extrapDate);
+        KeplerianPropagator kepler = propagateTLE.propagatorsList.get(0);
+        AbsoluteDate initialDate = propagateTLE.absCoordinatesList.get(0).getDate();
+        AbsoluteDate finalDate2 = initialDate.shiftedBy(duration);
+        int cpt = 1;
+        for (AbsoluteDate extrapDate = initialDate; extrapDate.compareTo(finalDate2) <= 0; extrapDate = extrapDate.shiftedBy(stepT)) {
+            SpacecraftState currentState = kepler.propagate(extrapDate);
             System.out.format(Locale.US, "step %2d %s %s%n", cpt++, currentState.getDate(), currentState.getOrbit());
         }
 

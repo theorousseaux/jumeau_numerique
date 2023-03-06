@@ -100,7 +100,13 @@ public class Radar {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
     	elevationDetector = elevationDetector.withConstantElevation(30*Math.PI/180);
+<<<<<<< HEAD
     
+=======
+
+        //AltitudeDetector
+        
+>>>>>>> UI
     
     	//FOV detector
     	GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(station.getBaseFrame(), fov); // positif quand c'est visible
@@ -121,7 +127,11 @@ public class Radar {
     	return dateSelector;
     }
     
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> UI
     /* Creation des mesureBuilder */
     public AngularAzElBuilder createAzElBuilder(ObservableSatellite satellite) {
     	AngularAzElBuilder azElBuilder = new AngularAzElBuilder(this.noiseSource, this.station, this.sigma, this.baseWeight, satellite);
