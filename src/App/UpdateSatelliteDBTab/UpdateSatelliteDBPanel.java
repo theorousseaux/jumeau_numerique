@@ -2,13 +2,13 @@ package src.App.UpdateSatelliteDBTab;
 
 import src.App.MainFrame;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class UpdateSatelliteDBPanel extends JPanel{
 
@@ -31,45 +31,61 @@ public class UpdateSatelliteDBPanel extends JPanel{
         gc.gridx = 1;
         add(addSatelliteButton, gc);
 
-        // Ajout de la barre de progression
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setMinimum(0);
-        progressBar.setMaximum(100);
-        progressBar.setStringPainted(true);
-        gc.gridx = 0;
+        // Création du JTextArea et d'un JScrollPane pour pouvoir faire défiler le texte
+        JTextArea outputTextArea = new JTextArea(30, 40);
+        JScrollPane scrollPane = new JScrollPane(outputTextArea);
+
+        // Ajout du JScrollPane au panneau
         gc.gridy = 1;
+        gc.gridx = 0;
         gc.gridwidth = 2;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        add(progressBar, gc);
+        add(scrollPane, gc);
 
-        // Gestion des évènements
+        // Ajout d'un ActionListener pour le bouton "Update database"
         updateDatabseButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    // Chemin vers le script shell à exécuter
-                    String scriptPath = "/path/to/your/script.sh";
+                // Désactiver le bouton pendant l'exécution du script
+                updateDatabseButton.setEnabled(false);
+                addSatelliteButton.setEnabled(false);
 
-                    // Création du ProcessBuilder pour exécuter le script shell
-                    ProcessBuilder processBuilder = new ProcessBuilder(scriptPath);
-                    processBuilder.redirectErrorStream(true);
+                // Exécuter le script dans un Thread séparé pour ne pas bloquer l'interface graphique
+                Thread thread = new Thread(new Runnable() {
+                    public void run() {
+                        try {
+                            // Exécution du script sh
+                            Process p = Runtime.getRuntime().exec("sh src/TLE/updatedb.sh");
 
-                    // Lancement du processus
-                    Process process = processBuilder.start();
+                            // Redirection de la sortie d'erreur du processus vers le JTextArea en temps réel
+                            BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                            String errorLine = "";
+                            while ((errorLine = errorReader.readLine()) != null) {
+                                String finalErrorLine = errorLine;
+                                SwingUtilities.invokeLater(new Runnable() {
+                                    public void run() {
+                                        outputTextArea.append(finalErrorLine + "\n");
+                                    }
+                                });
+                            }
 
-                    // Attente de la fin de l'exécution du script shell
-                    int exitCode = process.waitFor();
-                    if (exitCode == 0) {
-                        // Le script s'est exécuté avec succès
-                        System.out.println("Script executed successfully.");
-                    } else {
-                        // Le script a rencontré une erreur
-                        System.out.println("Script execution failed.");
+                            // Attendre que le script sh soit terminé
+                            int exitCode = p.waitFor();
+
+                            SwingUtilities.invokeLater(new Runnable() {
+                                public void run() {
+                                    outputTextArea.append("Script sh terminé avec le code de sortie " + exitCode + "\n");
+                                    // Réactiver les boutons lorsque le script est terminé
+                                    updateDatabseButton.setEnabled(true);
+                                    addSatelliteButton.setEnabled(true);
+                                }
+                            });
+                        } catch (IOException | InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                     }
-                } catch (IOException | InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+                });
+                thread.start();
             }
         });
     }
 }
+
