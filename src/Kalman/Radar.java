@@ -1,7 +1,6 @@
 package src.Kalman;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -26,7 +25,7 @@ import org.orekit.propagation.events.BooleanDetector;
 import org.orekit.propagation.events.ElevationDetector;
 import org.orekit.propagation.events.GroundFieldOfViewDetector;
 import org.orekit.time.FixedStepSelector;
-import org.orekit.time.TimeComponents;
+
 
 public class Radar {
     
@@ -59,9 +58,10 @@ public class Radar {
     public double sigmaRadar;
 
     /** Constructor */
-    public Radar(String ID, double[] mean, double[] angularIncertitude, double angularFoV, double stepMeasure) {
+    public Radar(String ID, double[] mean, double[] angularIncertitude, double angularFoV, double stepMeasure, Station station) {
 
         this.ID = ID;
+        this.station = station;
 
         this.sigma = angularIncertitude;
         this.baseWeight = new double[]{1., 1.};
@@ -90,10 +90,8 @@ public class Radar {
         
     }
 
-    /* Associer radar à une station */
-    public void updateStation(Station station) {
-    	
-		this.station = station;
+    public String getID() {
+    	return this.ID;
     }
 
     /* Création Final Detector */
