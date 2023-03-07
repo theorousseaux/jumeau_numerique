@@ -153,7 +153,7 @@ public class simu {
 		final KeplerianPropagator propagatorTest = new KeplerianPropagator(initialOrbit2);
 
 		//////////////////////////////////////////////////////////////////////////////////////////
-    	AbsoluteDate finalDate = initialDate.shiftedBy(t*450);
+    	AbsoluteDate finalDate = initialDate.shiftedBy(t*800);
     	
 
 
@@ -167,21 +167,32 @@ public class simu {
     	
     	// STATIONS ET TELESCOPES
     	// PARIS
-    	Station station_Paris = new Station("PARIS", 48.866667*Math.PI/180, 2.333333*Math.PI/180, 0.);
+    	Station station_Paris = new Station("PARIS", 0., 2.333333*Math.PI/180, 0.);
     	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
-    	station_Paris.addTelescope(new TelescopeAzEl("ID", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, station_Paris, false));
-    	// NANTES
+		System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
+    	//station_Paris.addTelescope(new TelescopeAzEl("IDT", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, station_Paris, false));
+		System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
+		station_Paris.addRadar(new Radar("IDR", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 110*Math.PI/180,  10, station_Paris));
+    	System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
+		// NANTES
     	//Station station_Nantes = new Station("NANTES", 48.766667*Math.PI/180, 2.333333*Math.PI/180, 0.);
     	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
     	//station_Nantes.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
     	//List<TelescopeAzEl> telescopesList_Nantes = station_Nantes.getListTelescope();
     	// LISTE DE TELESCOPES
        	List<TelescopeAzEl> telescopesList = station_Paris.getListTelescope();
+		List<Radar> radarList = station_Paris.getListRadar();
+		System.out.println("taille liste radars : " + radarList.size());
+		System.out.println("taille liste telescopes : " + telescopesList.size());
     	//telescopesList.add(telescopesList_Nantes.get(0));
     	
        	
        	// OBSERVATIONS
-    	Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
+    	//Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
+		//System.out.println("ça va plot");
+    	//List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = observation.measure(true);
+
+		ObservationPlus observation = new ObservationPlus(telescopesList, radarList, objectsList, propagatorsList, initialDate, finalDate);
 		System.out.println("ça va plot");
     	List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = observation.measure(true);
     	

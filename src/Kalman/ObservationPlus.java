@@ -44,7 +44,6 @@ public class ObservationPlus {
 				System.out.println("considering object : " + i);
 	    		EventBasedScheduler scheduler = telescope.createEventBasedScheduler(this.objectsList.get(i), this.propagatorsList.get(i));
 	        	generator.addScheduler(scheduler);
-	        	//generator.addPropagator(propagatorsList.get(i));
 	        }
 	    }
         for(Radar radar : this.radarsList) {
@@ -52,7 +51,6 @@ public class ObservationPlus {
 				System.out.println("considering object : " + i);
 	    		
                 List<EventBasedScheduler> schedulerList = radar.createEventBasedScheduler(this.objectsList.get(i), this.propagatorsList.get(i));
-	        	
                 EventBasedScheduler schedulerAzEl = schedulerList.get(0);
                 EventBasedScheduler schedulerRange = schedulerList.get(1);
                 EventBasedScheduler schedulerRangeRate = schedulerList.get(2);

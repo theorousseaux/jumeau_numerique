@@ -85,7 +85,6 @@ public class Radar {
         CorrelatedRandomVectorGenerator noiseSource = new CorrelatedRandomVectorGenerator(mean, covariance, 1.0e-10, gaussianRandomGenerator);//mesures parfaites:null
         this.noiseSource = noiseSource;
 
-        this.station = null;
         this.stepMeasure = stepMeasure;
         
     }
@@ -98,14 +97,13 @@ public class Radar {
     public BooleanDetector createRadarDetector() {
         
         //Elevation Detector
-        System.out.println("on essaye elevation");
+        System.out.println(station.getBaseFrame());
     	ElevationDetector elevationDetector = new ElevationDetector(station.getBaseFrame()); //visible quand positif
-        System.out.println("elevation ok");
     	elevationDetector = elevationDetector.withHandler(
     			(s, detector, increasing) -> {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
-        elevationDetector = elevationDetector.withConstantElevation(30*Math.PI/180);
+        //elevationDetector = elevationDetector.withConstantElevation(30*Math.PI/180);
     	
         //AltitudeDetector
         AltitudeDetector altitudeDetector = new AltitudeDetector(2000000, constants.earthShape);
@@ -113,7 +111,7 @@ public class Radar {
             (s, detector, increasing) -> {
                 return increasing ? Action.CONTINUE : Action.CONTINUE;
             });
-            System.out.println("altitude ok");
+
     
     	//FOV detector
     	GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(station.getBaseFrame(), fov); // positif quand c'est visible
