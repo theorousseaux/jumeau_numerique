@@ -95,14 +95,17 @@ public class Radar {
     }
 
     /* Création Final Detector */
-    public BooleanDetector createDetector() {
+    public BooleanDetector createRadarDetector() {
         
         //Elevation Detector
+        System.out.println("on essaye elevation");
     	ElevationDetector elevationDetector = new ElevationDetector(station.getBaseFrame()); //visible quand positif
+        System.out.println("elevation ok");
     	elevationDetector = elevationDetector.withHandler(
     			(s, detector, increasing) -> {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
+        elevationDetector = elevationDetector.withConstantElevation(30*Math.PI/180);
     	
         //AltitudeDetector
         AltitudeDetector altitudeDetector = new AltitudeDetector(2000000, constants.earthShape);
@@ -110,6 +113,7 @@ public class Radar {
             (s, detector, increasing) -> {
                 return increasing ? Action.CONTINUE : Action.CONTINUE;
             });
+            System.out.println("altitude ok");
     
     	//FOV detector
     	GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(station.getBaseFrame(), fov); // positif quand c'est visible
@@ -117,10 +121,9 @@ public class Radar {
     			(s, detector, increasing) -> {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
-            
-        //Final
-    	BooleanDetector intermediateDetector = BooleanDetector.andCombine(elevationDetector, fovDetector);
-        BooleanDetector finalDetector = BooleanDetector.andCombine(intermediateDetector, altitudeDetector);
+           
+        //Final Detector
+        BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, altitudeDetector, fovDetector);
     	return finalDetector;
     }
     
@@ -150,8 +153,8 @@ public class Radar {
     /*Création de l'EventBasedScheduler final */
     public List<EventBasedScheduler> createEventBasedScheduler(ObservableSatellite satellite, Propagator propagator) {
     	
-        BooleanDetector detector = createDetector();
-    	FixedStepSelector selector = createDateSelector();
+        BooleanDetector detector = this.createRadarDetector();
+    	FixedStepSelector selector = this.createDateSelector();
 
     	AngularAzElBuilder azElbuilder  = createAzElBuilder(satellite);
         RangeBuilder rangeBuilder = createRangeBuilder(satellite);
