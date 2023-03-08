@@ -26,7 +26,6 @@ public class GSpannel extends JPanel {
 
         // Choix des stations sol pour le réseau
         CreateNetworkPannel createNetworkPannel = new CreateNetworkPannel(parent, displayNetworkPannel, worldMapPanel);
-
         // Affichage du formulaire d'ajout d'une station sol
         NewGSPannel newGSPannel = new NewGSPannel(parent, displayGSPannel, createNetworkPannel, worldMapPanel);
 
