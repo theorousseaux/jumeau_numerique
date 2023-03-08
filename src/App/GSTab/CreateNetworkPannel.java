@@ -1,6 +1,7 @@
 package src.App.GSTab;
 
 import src.App.MainFrame;
+import src.App.WorldMapTab.WorldMapPanel;
 import src.Kalman.Station;
 import src.UseCase1_GSNetwork.GSNetwork;
 
@@ -17,7 +18,7 @@ public class CreateNetworkPannel extends JPanel {
     MainFrame parent;
     DisplayNetworkPannel displayNetworkPannel;
 
-    public CreateNetworkPannel(MainFrame parent, DisplayNetworkPannel displayNetworkPannel) {
+    public CreateNetworkPannel(MainFrame parent, DisplayNetworkPannel displayNetworkPannel, WorldMapPanel worldMapPanel) {
 
         this.parent = parent;
         this.displayNetworkPannel = displayNetworkPannel;
@@ -83,6 +84,10 @@ public class CreateNetworkPannel extends JPanel {
                     displayNetworkPannel.update();
                     displayNetworkPannel.repaint();
                     displayNetworkPannel.revalidate();
+
+                    worldMapPanel.displayNewGS(parent);
+                    worldMapPanel.repaint();
+                    worldMapPanel.revalidate();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

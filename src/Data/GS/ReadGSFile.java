@@ -26,7 +26,7 @@ public class ReadGSFile {
             // Retourner la ligne dans un tableau
             String[] data = line.split(",");
             if (!data[0].equals("name")){
-                GSList.add(new Station(data[0], Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3])));
+                GSList.add(new Station(data[0], Double.parseDouble(data[1])*Math.PI/180, Double.parseDouble(data[2])*Math.PI/180, Double.parseDouble(data[3])));
             }
         }
         br.close();
@@ -44,7 +44,7 @@ public class ReadGSFile {
             String[] data = line.split(",");
             if (!data[0].equals("name")){
                 if (reqStations.contains(data[0])){
-                    GSList.add(new Station(data[0], Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3])));
+                    GSList.add(new Station(data[0], Double.parseDouble(data[1])*Math.PI/180, Double.parseDouble(data[2])*Math.PI/180, Double.parseDouble(data[3])));
                 }
             }
         }

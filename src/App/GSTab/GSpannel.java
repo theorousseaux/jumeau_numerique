@@ -3,6 +3,7 @@ package src.App.GSTab;
 import javax.swing.JPanel;
 
 import src.App.MainFrame;
+import src.App.WorldMapTab.WorldMapPanel;
 
 import java.awt.*;
 
@@ -14,7 +15,7 @@ public class GSpannel extends JPanel {
     public GSpannel(MainFrame parent) {
 
         this.parent = parent;
-
+        WorldMapPanel worldMapPanel = (WorldMapPanel) parent.globePanel;
         setLayout(new GridBagLayout());
 
         // Affichage des stations sol
@@ -24,10 +25,10 @@ public class GSpannel extends JPanel {
         DisplayNetworkPannel displayNetworkPannel = new DisplayNetworkPannel(parent);
 
         // Choix des stations sol pour le réseau
-        CreateNetworkPannel createNetworkPannel = new CreateNetworkPannel(parent, displayNetworkPannel);
+        CreateNetworkPannel createNetworkPannel = new CreateNetworkPannel(parent, displayNetworkPannel, worldMapPanel);
 
         // Affichage du formulaire d'ajout d'une station sol
-        NewGSPannel newGSPannel = new NewGSPannel(parent, displayGSPannel, createNetworkPannel);
+        NewGSPannel newGSPannel = new NewGSPannel(parent, displayGSPannel, createNetworkPannel, worldMapPanel);
 
         // Ajout des éléments au panel
         gc.gridx = 0;

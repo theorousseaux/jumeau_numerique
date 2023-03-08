@@ -23,7 +23,7 @@ public class WriteGSFile {
             FileWriter fw = new FileWriter("src/Data/GS/GS.csv", true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.newLine();
-            bw.write(station.getName() + ", " + station.getLatitude() + ", " + station.getLongitude() + ", " + station.getAltitude());
+            bw.write(station.getName() + ", " + station.getLatitude()*180/Math.PI + ", " + station.getLongitude()*180/Math.PI + ", " + station.getAltitude());
             bw.close();
             System.out.println("Successfully wrote to the file.");
           } catch (IOException e) {

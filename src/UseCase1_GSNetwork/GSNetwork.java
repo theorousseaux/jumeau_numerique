@@ -145,11 +145,11 @@ public class GSNetwork {
 
     public void addTelescopes(){
         for (Station station : this.Network){
-<<<<<<< HEAD
-            station.addTelescope(new TelescopeAzEl("default",new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
-=======
+
+            station.addTelescope(new TelescopeAzEl("default",new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, station));
+
             //station.addTelescope(new TelescopeAzEl("ID", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
->>>>>>> 5f198c49edd676a57dc7150a638948d4be78fe20
+
         }
     }
 
@@ -174,6 +174,14 @@ public class GSNetwork {
             }
         }
         return i;
+    }
+
+    public List<String> getNames(){
+        List<String> list = new ArrayList<String>();
+        for (Station station : this.getNetwork()){
+            list.add(station.getName());
+        }
+        return list;
     }
 
 }

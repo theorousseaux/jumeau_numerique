@@ -1,5 +1,6 @@
 package src.App;
 
+import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import org.orekit.data.DataContext;
 import org.orekit.data.DataProvidersManager;
 import org.orekit.data.DirectoryCrawler;
@@ -13,16 +14,18 @@ import src.App.ObserverTab.ObserverPannel;
 import src.App.ParametersTab.ParametersController;
 import src.App.ParametersTab.ParametersView;
 import src.App.UpdateSatelliteDBTab.UpdateSatelliteDBPanel;
+import src.App.WorldMapTab.WorldMapPanel;
 import src.App.SimulationTab.SimulationController;
 import src.App.SimulationTab.SimulationView;
 
 import javax.swing.*;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
 public class MainFrame extends JFrame {
-
+    public JPanel globePanel;
     public GSController gsController;
 
     public ObserverController obserController;
@@ -43,6 +46,7 @@ public class MainFrame extends JFrame {
         simuController = new SimulationController();
 
         JFrame frame = new JFrame("Space Observation Digital Twin");
+        globePanel = new WorldMapPanel(this);
 
         // Création des onglets
         JTabbedPane tabbedPane=new JTabbedPane(); 
@@ -55,20 +59,23 @@ public class MainFrame extends JFrame {
         JPanel simulationPanel = new SimulationView(this);
 
 
+        // Build the custom BuildJPanel object - it contains
+        // the specified JPanel.  This JPanel will contain the Earth model.
+
         // Ajout des onglets au panneau d'onglets
         tabbedPane.addTab("Home", homePanel);
         tabbedPane.addTab("Update DB", updateSatelliteDBPanel);
         tabbedPane.addTab("Ground Station", groundStationPanel);
         tabbedPane.addTab("Observer", observerPanel);
+        tabbedPane.addTab("globe",globePanel);
+        //tabbedPane.addTab("Station visualization", worldMapPanel);
         // tabbedPane.addTab("Analysis", analysisPanel);
         tabbedPane.addTab("Simulation parameters", parametersPanel);
         tabbedPane.addTab("Run Simulation", simulationPanel);
 
-
-
         // Configuration de la fenêtre
         frame.add(tabbedPane);
-        frame.setTitle("Main Window");
+        frame.setTitle("Digital twin");
         frame.setSize(1200, 800);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

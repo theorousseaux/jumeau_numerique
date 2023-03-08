@@ -41,11 +41,11 @@ public class DisplayGSPannel extends JPanel{
             StringBuilder sb = new StringBuilder();
             sb.append(groundStation.getName());
             sb.append(" : ");
-            sb.append("Longitude = ");
-            sb.append(Precision.round(groundStation.getLongitude()*180/Math.PI, 2));
-            sb.append(", ");
             sb.append("Latitude = ");
             sb.append(Precision.round(groundStation.getLatitude()*180/Math.PI, 2));
+            sb.append(", ");
+            sb.append("Longitude = ");
+            sb.append(Precision.round(groundStation.getLongitude()*180/Math.PI, 2));
             sb.append(", ");
             sb.append("Altitude = ");
             sb.append(groundStation.getAltitude());

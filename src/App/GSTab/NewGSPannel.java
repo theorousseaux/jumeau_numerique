@@ -1,6 +1,7 @@
 package src.App.GSTab;
 
 import src.App.MainFrame;
+import src.App.WorldMapTab.WorldMapPanel;
 import src.Kalman.TelescopeAzEl;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ import java.io.IOException;
 
 public class NewGSPannel extends JPanel {
 
-    public NewGSPannel(MainFrame parent, DisplayGSPannel displayGSPannel, CreateNetworkPannel createNetworkPannel) {
+    public NewGSPannel(MainFrame parent, DisplayGSPannel displayGSPannel, CreateNetworkPannel createNetworkPannel, WorldMapPanel worldMapPanel) {
 
         // Titre
         JLabel addGSLabel = new JLabel("Add a new ground station");
@@ -122,6 +123,11 @@ public class NewGSPannel extends JPanel {
                     createNetworkPannel.displayNewGS(groundStation);
                     createNetworkPannel.repaint();
                     createNetworkPannel.revalidate();
+
+                    worldMapPanel.displayNewGS(parent);
+                    worldMapPanel.repaint();
+                    worldMapPanel.revalidate();
+
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

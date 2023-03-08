@@ -23,16 +23,15 @@ public class GSController {
         this.GSReader = new ReadGSFile();
         this.GSWriter = new WriteGSFile();
 
-<<<<<<< HEAD
-        this.groundStationList = GSReader.readStation("src/Data/GS.csv");
+        this.groundStationList = GSReader.readStation("src/Data/GS/GS.csv");
 
         // Ajou d'un télescope standard à chaque station sol
         for (Station station : groundStationList) {
-            station.addTelescope(new TelescopeAzEl("def",new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
+            station.addTelescope(new TelescopeAzEl("def",new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10,station));
         }
-=======
+
         this.groundStationList = GSReader.readStation("src/Data/GS/GS.csv");
->>>>>>> 5f198c49edd676a57dc7150a638948d4be78fe20
+
     }
 
     // Méthode pour ajouter une station sol à la liste
