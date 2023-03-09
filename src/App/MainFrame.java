@@ -6,6 +6,8 @@ import org.orekit.data.DataProvidersManager;
 import org.orekit.data.DirectoryCrawler;
 
 import src.App.AnalysisTab.AnalysisPannel;
+import src.App.EstimationTab.EstimationController;
+import src.App.EstimationTab.EstimationPanel;
 import src.App.GSTab.GSController;
 import src.App.GSTab.GSpannel;
 import src.App.HomeTab.HomePannel;
@@ -34,6 +36,8 @@ public class MainFrame extends JFrame {
 
     public SimulationController simuController;
 
+    public EstimationController estimationController;
+
     public MainFrame() throws NumberFormatException, IOException {
 
         // Initialisation du controller des stations sol
@@ -57,7 +61,7 @@ public class MainFrame extends JFrame {
         // JPanel analysisPanel = new AnalysisPannel();
         JPanel parametersPanel = new ParametersView(this);
         JPanel simulationPanel = new SimulationView(this);
-
+        JPanel estimationPanel = new EstimationPanel ( this );
 
         // Build the custom BuildJPanel object - it contains
         // the specified JPanel.  This JPanel will contain the Earth model.
@@ -72,6 +76,7 @@ public class MainFrame extends JFrame {
         // tabbedPane.addTab("Analysis", analysisPanel);
         tabbedPane.addTab("Simulation parameters", parametersPanel);
         tabbedPane.addTab("Run Simulation", simulationPanel);
+        tabbedPane.addTab("OD", estimationPanel);
 
         // Configuration de la fenêtre
         frame.add(tabbedPane);

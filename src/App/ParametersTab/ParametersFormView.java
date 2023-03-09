@@ -134,37 +134,41 @@ public class ParametersFormView extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Fetching input data
-                double noiseLevel = Double.parseDouble(noiseLevField.getText());
+                try {
+                    double noiseLevel = Double.parseDouble ( noiseLevField.getText ( ) );
 
-                int startDay = Integer.parseInt(startDayField.getText());
-                int startMonth = Integer.parseInt(startMonthField.getText());
-                int startYear = Integer.parseInt(startYearField.getText());
+                    int startDay = Integer.parseInt ( startDayField.getText ( ) );
+                    int startMonth = Integer.parseInt ( startMonthField.getText ( ) );
+                    int startYear = Integer.parseInt ( startYearField.getText ( ) );
 
-                int endDay = Integer.parseInt(endDayField.getText());
-                int endMonth = Integer.parseInt(endMonthField.getText());
-                int endYear = Integer.parseInt(endYearField.getText());
+                    int endDay = Integer.parseInt ( endDayField.getText ( ) );
+                    int endMonth = Integer.parseInt ( endMonthField.getText ( ) );
+                    int endYear = Integer.parseInt ( endYearField.getText ( ) );
 
-                // Checking their validity
+                    // Checking their validity
 
-                if (endDay > 31 || endDay < 1 ||
-                        startDay > 31 || startDay < 1 ||
-                        endMonth > 12 || endMonth < 1 ||
-                        startMonth > 12 || startMonth < 1){
-                    JOptionPane.showMessageDialog(parent, "Invalid dates", "Error",JOptionPane.ERROR_MESSAGE);
-                }else {
-                    // Creating the model
-                    System.out.println ( "Noise level: " + String.valueOf ( noiseLevel ) );
-                    controller.setNoiseLevel ( noiseLevel );
+                    if (endDay > 31 || endDay < 1 ||
+                            startDay > 31 || startDay < 1 ||
+                            endMonth > 12 || endMonth < 1 ||
+                            startMonth > 12 || startMonth < 1) {
+                        JOptionPane.showMessageDialog ( parent , "Invalid dates" , "Error" , JOptionPane.ERROR_MESSAGE );
+                    } else {
+                        // Creating the model
+                        System.out.println ( "Noise level: " + String.valueOf ( noiseLevel ) );
+                        controller.setNoiseLevel ( noiseLevel );
 
-                    controller.setStartDate ( startYear , startMonth , startDay );
+                        controller.setStartDate ( startYear , startMonth , startDay );
 
-                    controller.setEndDate ( endYear , endMonth , endDay );
+                        controller.setEndDate ( endYear , endMonth , endDay );
 
-                    System.out.println ( "Simulation saved" );
-                    System.out.println ( "Noise level: " + controller.getNoiseLevel ( ) );
-                    System.out.println ( "Start date: " + controller.getStartDate ( ) );
-                    System.out.println ( "Start date: " + controller.getEndDate ( ) );
-                    System.out.println ( parent.paramController.getStartDate ( ).toString ( ) );
+                        System.out.println ( "Simulation saved" );
+                        System.out.println ( "Noise level: " + controller.getNoiseLevel ( ) );
+                        System.out.println ( "Start date: " + controller.getStartDate ( ) );
+                        System.out.println ( "Start date: " + controller.getEndDate ( ) );
+                        System.out.println ( parent.paramController.getStartDate ( ).toString ( ) );
+                    }
+                }catch (Exception ex){
+                    JOptionPane.showMessageDialog ( parent , "Invalid dates" , "Error" , JOptionPane.ERROR_MESSAGE );
                 }
             
             }

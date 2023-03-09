@@ -1,7 +1,6 @@
 package src.App.SimulationTab;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import src.App.MainFrame;
 
@@ -39,9 +38,8 @@ public class LoadSimulationPannel extends JPanel{
                     displaySimPanel.revalidate();
                     }
 
-                catch (IllegalArgumentException | IOException e1) {
-                    // TODO Auto-generated catch block
-                    ((Throwable) e1).printStackTrace();
+                catch (Exception e2) {
+                    JOptionPane.showMessageDialog(parent, "Input simulation parameters, ground stations and satellites first.", "Error",JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
