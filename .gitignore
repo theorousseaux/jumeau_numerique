@@ -20,6 +20,7 @@ lib/Cesium-1/
 .mtj.tmp/
 
 # Package Files #
+*.jar
 *.war
 *.nar
 *.ear
