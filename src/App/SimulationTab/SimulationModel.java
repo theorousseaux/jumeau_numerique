@@ -11,6 +11,9 @@ import src.App.ParametersTab.Parameters;
 import src.Kalman.Observation;
 import src.UseCase1_GSNetwork.GSNetwork;
 
+/**
+ * This class regroups all the elements needed to run a simulation
+ */
 public class SimulationModel {
     GSNetwork groundStationNetwork;
     Parameters simulationParameters;
@@ -67,8 +70,4 @@ public class SimulationModel {
     public void setMeasurementsSetsList(List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList) {
         this.measurementsSetsList = measurementsSetsList;
     }
-
-
-  
-
 }

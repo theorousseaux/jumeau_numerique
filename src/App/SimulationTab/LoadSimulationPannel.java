@@ -1,10 +1,7 @@
 package src.App.SimulationTab;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.orekit.estimation.measurements.ObservableSatellite;
 
 import src.App.MainFrame;
 
@@ -13,21 +10,23 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 
+/**
+ * Panel to load simulation settings
+ */
 public class LoadSimulationPannel extends JPanel{
 
+    public LoadSimulationPannel(MainFrame parent, DisplaySimPanel displaySimPanel ){
 
-    public LoadSimulationPannel(MainFrame parent, DisplaySimPannel displaySimPannel){
         GridBagConstraints gc = new GridBagConstraints();
 
-        // Création du bouton pour récupérer les données pour la simulation
+        // Creation of button for fetching simulation data
         JButton loadSimulationButton = new JButton("Load Simulation");
 
-        // Ajout des boutons au panneau Satellite
         gc.gridy = 0;
         gc.gridx = 0;
         add(loadSimulationButton, gc);
 
-        // Gestion des évènements
+        // Event manager
         loadSimulationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -35,9 +34,9 @@ public class LoadSimulationPannel extends JPanel{
                 SimulationController controller = parent.simuController;
                 try {
                     controller.loadSimulation(parent);
-                    displaySimPannel.update();
-                    displaySimPannel.repaint();
-                    displaySimPannel.revalidate();
+                    displaySimPanel.update();
+                    displaySimPanel.repaint();
+                    displaySimPanel.revalidate();
                     }
 
                 catch (IllegalArgumentException | IOException e1) {

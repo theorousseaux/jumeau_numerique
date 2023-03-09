@@ -1,16 +1,7 @@
 package src.App.SimulationTab;
 import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-
-import org.orekit.estimation.measurements.ObservableSatellite;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import src.App.MainFrame;
 
@@ -23,10 +14,10 @@ public class SimulationView extends JPanel{
     public SimulationView(MainFrame parent) {
 
         this.parent = parent;
-        DisplaySimPannel displaySetup = new DisplaySimPannel(parent);
+        DisplaySimPanel displaySetup = new DisplaySimPanel (parent);
         LoadSimulationPannel loadSimulation = new LoadSimulationPannel(parent, displaySetup);
-        DisplayObsPannel displayObs = new DisplayObsPannel(parent);
-        RunSimulationPannel runSimulation = new RunSimulationPannel(parent, displayObs);
+        DisplayObsPanel displayObs = new DisplayObsPanel (parent);
+        RunSimulationPanel runSimulation = new RunSimulationPanel (parent, displayObs);
 
         setLayout(new GridBagLayout());
 

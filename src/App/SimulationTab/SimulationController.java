@@ -23,12 +23,12 @@ public class SimulationController {
     public SimulationView view;
 
     public void loadSimulation(MainFrame parent) throws NumberFormatException, IllegalArgumentException, IOException{
+
         model.setSimulationParameters(parent.paramController.model);
 
         model.setGroundStationNetwork(parent.gsController.gsNetwork);
         // model.setSatellites(parent.satController.propagators);
         // model.setSatellites(parent.satController.satellites);
-
 
         List<String> satNames = new ArrayList<>();
         List<ObservableSatellite> objectsList = new ArrayList<ObservableSatellite>();

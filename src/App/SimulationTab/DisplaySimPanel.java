@@ -10,33 +10,39 @@ import src.UseCase1_GSNetwork.GSNetwork;
 import java.util.List;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
 
 
-public class DisplaySimPannel extends JPanel{
+/**
+ * This class display a reminder of the current simulation set up
+ */
+public class DisplaySimPanel extends JPanel{
+
     MainFrame parent;
     GridBagConstraints gc = new GridBagConstraints();;
 
-    public DisplaySimPannel(MainFrame parent) {
+    /**
+     * Default constructor
+     * @param parent the main frame
+     */
+    public DisplaySimPanel ( MainFrame parent) {
 
         this.parent = parent;
 
         setLayout(new GridBagLayout());
 
-        // Titre
-        JLabel tittle = new JLabel("Simulation set up");
-        tittle.setFont(new Font("Arial", Font.BOLD, 18)); // Définit la police d'écriture en Arial, en gras et en taille 18
-        tittle.setForeground(Color.BLUE); // Définit la couleur du texte en bleu
+        // Title
+        JLabel title = new JLabel("Simulation set up");
+        title.setFont(new Font("Arial", Font.BOLD, 18));
+        title.setForeground(Color.BLUE);
 
         gc.gridx = 0;
         gc.gridy = 0;
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.insets = new Insets(0, 0, 20, 0); // Ajoute 5 pixels de padding en bas
-        this.add(tittle, gc);
+        gc.insets = new Insets(20, 10, 20, 10);
+        this.add(title, gc);
+
     }
 
     public void removeAllExceptTop() {
@@ -47,24 +53,27 @@ public class DisplaySimPannel extends JPanel{
     }
 
 
+    /**
+     * Updates the display
+     */
     public void update() {
 
-        // Suppression des éléments sauf le titre
         removeAllExceptTop();
-        // Affichage du réseau
-        GridBagConstraints gc = new GridBagConstraints(); // Réinitialisation de gc pour chaque nouvel élément
+
+        GridBagConstraints gc = new GridBagConstraints();
+
+        // Selected satellites display
         gc.gridx = 0;
         gc.gridy = 1;
         gc.anchor = GridBagConstraints.WEST;
         JLabel satellitesLabel = new JLabel("Satellites:");
         this.add(satellitesLabel, gc);
 
-        
 
+        // Scroll through selected satellites
         gc.gridx = 1;
-
         gc.gridy = 1;
-        gc.anchor = GridBagConstraints.PAGE_START;
+        gc.anchor = GridBagConstraints.WEST;
         List<ObservableSatellite> satelliteList = this.parent.simuController.model.getSatellitesNames();
         ArrayList<String> elements = new ArrayList<String>();
         for (ObservableSatellite sat : satelliteList){
@@ -76,13 +85,16 @@ public class DisplaySimPannel extends JPanel{
         JScrollPane satellites = new JScrollPane(liste);
         this.add(satellites, gc);
 
+
+        // Network stations display
         gc.gridx = 0;
         gc.gridy ++;
         gc.anchor = GridBagConstraints.WEST;
         JLabel networkLabel = new JLabel("Network stations:");
         this.add(networkLabel, gc);
 
-        gc.gridx ++;
+        // Scroll through selected stations
+        gc.gridx  = 1 ;
         GSNetwork stationsList = this.parent.simuController.model.getGroundStationNetwork();
         ArrayList<String> stations = new ArrayList<String>();
         for (Station station : stationsList.getNetwork()){
@@ -95,19 +107,21 @@ public class DisplaySimPannel extends JPanel{
         this.add(affichagetations, gc);
 
 
+        // Simulation dates display
+
         gc.gridx = 0;
         gc.gridy ++;
         gc.anchor = GridBagConstraints.WEST;
+
         JLabel datesLabel = new JLabel("Simulation dates:");
         this.add(datesLabel, gc);
+
         gc.gridx = 1;
-        gc.gridy ++;
         JLabel startDate = new JLabel("Start date: " + this.parent.simuController.model.getSimulationParameters().getStartDate().toString());
         JLabel endDate = new JLabel("End date: " + this.parent.simuController.model.getSimulationParameters().getEndDate().toString());
         this.add(startDate, gc);
         gc.gridy ++;
         this.add(endDate, gc);
-
     }
 
 }
