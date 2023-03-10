@@ -58,6 +58,7 @@ public class Observation {
 	    		System.out.println(((AngularAzEl) measure).getSatellites().get(0).getPropagatorIndex());
  
 	    	}
+			System.out.println("Nombre total de mesures : " + measurementsList.size());
 	    	System.out.println("END MESURES");
 	    }
 	    
