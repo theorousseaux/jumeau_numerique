@@ -80,9 +80,8 @@ public class DisplayGSPannel extends JPanel{
             this.remove(components[i]);
         }
     }
-    public void displayNewStation(Station station) {
+    public void displayNewStation() {
         removeAllExceptTop();
-        this.parent = parent;
         setLayout(new GridBagLayout());
 
         // Titre

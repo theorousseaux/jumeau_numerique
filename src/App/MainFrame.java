@@ -11,6 +11,7 @@ import src.App.EstimationTab.EstimationPanel;
 import src.App.GSTab.GSController;
 import src.App.GSTab.GSpannel;
 import src.App.HomeTab.HomePannel;
+import src.App.ObserverTab.NewObserverPannel;
 import src.App.ObserverTab.ObserverController;
 import src.App.ObserverTab.ObserverPannel;
 import src.App.ParametersTab.ParametersController;
@@ -37,6 +38,7 @@ public class MainFrame extends JFrame {
     public SimulationController simuController;
 
     public EstimationController estimationController;
+    public JTabbedPane tabbedPane;
 
     public MainFrame() throws NumberFormatException, IOException {
 
@@ -53,7 +55,7 @@ public class MainFrame extends JFrame {
         globePanel = new WorldMapPanel(this);
 
         // Création des onglets
-        JTabbedPane tabbedPane=new JTabbedPane(); 
+        this.tabbedPane=new JTabbedPane();
         JPanel homePanel = new HomePannel();
         JPanel updateSatelliteDBPanel = new UpdateSatelliteDBPanel(this);
         JPanel groundStationPanel = new GSpannel(this);
@@ -93,6 +95,6 @@ public class MainFrame extends JFrame {
         DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();
         manager.addProvider(new DirectoryCrawler(orekitData));
 
-        new MainFrame();
+        MainFrame frame = new MainFrame();
     }
 }

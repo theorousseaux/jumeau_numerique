@@ -18,8 +18,6 @@ public class ObserverController {
     public int numberOfTelescope = 0;
     public int numberOfRadar = 0;
 
-    public GSController gsController;
-
     public ObserverController(GSController gsController) throws IOException {
 
         this.telescopeAzElList = new ArrayList<>();
@@ -29,7 +27,10 @@ public class ObserverController {
         this.telescopeAzElList = readObserverFile.readTelescopesFromCSV("src/Data/Observer/Observer.csv", gsController.groundStationList);
 
         this.numberOfTelescope = telescopeAzElList.size();
-        this.gsController = gsController;
 
+    }
+
+    public void addTelescope(TelescopeAzEl newTelescope) {
+        telescopeAzElList.add(newTelescope);
     }
 }

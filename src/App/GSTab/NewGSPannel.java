@@ -1,7 +1,9 @@
 package src.App.GSTab;
 
 import src.App.MainFrame;
+import src.App.ObserverTab.NewObserverPannel;
 import src.App.WorldMapTab.WorldMapPanel;
+import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
 
 import javax.swing.*;
@@ -115,7 +117,7 @@ public class NewGSPannel extends JPanel {
                     parent.gsController.GSWriter.writeStation(groundStation);
 
                     // Mise à jour du panneau d'affichage des stations sol
-                    displayGSPannel.displayNewStation(groundStation);
+                    displayGSPannel.displayNewStation();
                     displayGSPannel.repaint();
                     displayGSPannel.revalidate();
 
@@ -123,6 +125,11 @@ public class NewGSPannel extends JPanel {
                     createNetworkPannel.displayNewGS(groundStation);
                     createNetworkPannel.repaint();
                     createNetworkPannel.revalidate();
+
+                    // Mise à jour des choix dans l'onglet Observer
+                    JPanel tabPanel = (JPanel) parent.tabbedPane.getComponentAt(3);
+                    NewObserverPannel newObserverPannel = (NewObserverPannel) tabPanel.getComponent(1);
+                    newObserverPannel.updateStationComboBox();
 
                     worldMapPanel.displayNewGS(parent);
                     worldMapPanel.repaint();

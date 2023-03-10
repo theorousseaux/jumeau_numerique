@@ -3,23 +3,24 @@ package src.App.ObserverTab;
 import src.App.GSTab.GSController;
 import src.App.MainFrame;
 import src.Kalman.Station;
+import src.Kalman.TelescopeAzEl;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class NewObserverPannel extends JPanel {
 
     MainFrame parent;
-    GSController gsController;
+    public JComboBox<Station> stationComboBox;
     private JComboBox<String> cbType;
     private JPanel formPanel;
 
-    public NewObserverPannel(MainFrame parent, GSController gsController) {
+    public NewObserverPannel(MainFrame parent, DisplayObserverPannel displayObserverPannel) {
 
         this.parent = parent;
-        this.gsController = gsController;
 
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
@@ -50,7 +51,7 @@ public class NewObserverPannel extends JPanel {
         cbType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateFormPanel();
+                updateFormPanel(displayObserverPannel);
             }
         });
         add(cbType, gc);
@@ -61,16 +62,16 @@ public class NewObserverPannel extends JPanel {
         gc.insets = new Insets(10, 0, 0, 0);
 
         formPanel = new JPanel();
-        updateFormPanel();
+        updateFormPanel(displayObserverPannel);
         add(formPanel, gc);
     }
 
-    private void updateFormPanel() {
+    private void updateFormPanel(DisplayObserverPannel displayObserverPannel) {
         String selectedType = (String) cbType.getSelectedItem();
         assert selectedType != null;
         if (selectedType.equals("Telescope")) {
             formPanel.removeAll();
-            formPanel.setLayout(new GridLayout(9, 2));
+            formPanel.setLayout(new GridLayout(10, 2));
 
             JLabel mean1Label = new JLabel("Mean 1 :");
             formPanel.add(mean1Label);
@@ -114,11 +115,50 @@ public class NewObserverPannel extends JPanel {
 
             JLabel stationLabel = new JLabel("Station :");
             formPanel.add(stationLabel);
-            JComboBox<Station> stationComboBox = new JComboBox<>();
-            for(Station s : gsController.groundStationList){
+            this.stationComboBox = new JComboBox<>();
+            for(Station s : parent.gsController.groundStationList){
                 stationComboBox.addItem(s);
             }
             formPanel.add(stationComboBox);
+
+            JButton addTelescopeButton = new JButton("Add telescope");
+            formPanel.add(addTelescopeButton);
+
+            addTelescopeButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String mean1 = mean1Field.getText();
+                    String mean2 = mean2Field.getText();
+                    double[] mean = {Double.parseDouble(mean1), Double.parseDouble(mean2)};
+
+                    String angularIncertitude1 = angularIncertitude1Field.getText();
+                    String angularIncertitude2 = angularIncertitude2Field.getText();
+                    double[] angularIncertitude = {Double.parseDouble(angularIncertitude1), Double.parseDouble(angularIncertitude2)};
+
+                    String elevation = elevationField.getText();
+                    String angularoV = angularoVField.getText();
+                    String stepMeasure = stepMeasureField.getText();
+                    String breakTime = breakTimeField.getText();
+                    Station station = (Station) stationComboBox.getSelectedItem();
+                    assert station != null;
+                    String ID = station.getName() + "Telescope";
+                    TelescopeAzEl newTelescope = new TelescopeAzEl(ID, mean, angularIncertitude, Double.parseDouble(elevation), Double.parseDouble(angularoV), Double.parseDouble(stepMeasure), Double.parseDouble(breakTime), station);
+
+                    // Ajout du telescope au controller
+                    parent.obserController.addTelescope(newTelescope);
+
+                    // update
+                    parent.obserController.writeObserverFile.writeObserverTelescope(newTelescope);
+
+                    // Mise à jour du panneau d'affichage des stations sol
+                    displayObserverPannel.displayNewTelescope();
+                    displayObserverPannel.repaint();
+                    displayObserverPannel.revalidate();
+
+                    // Mise à jour du panneau de choix des telescopes
+
+                }
+            });
 
             formPanel.revalidate();
             formPanel.repaint();
@@ -138,6 +178,13 @@ public class NewObserverPannel extends JPanel {
 
             formPanel.revalidate();
             formPanel.repaint();
+        }
+    }
+
+    public void updateStationComboBox() {
+        stationComboBox.removeAllItems();
+        for (Station s : parent.gsController.groundStationList) {
+            stationComboBox.addItem(s);
         }
     }
 }

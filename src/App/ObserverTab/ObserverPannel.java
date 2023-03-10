@@ -27,7 +27,7 @@ public class ObserverPannel extends JPanel {
         //CreateNetworkPannel createNetworkPannel = new CreateNetworkPannel(parent, displayNetworkPannel);
 
         // Affichage du formulaire d'ajout d'une station sol
-        NewObserverPannel newObserverPannel = new NewObserverPannel(parent, parent.gsController);
+        NewObserverPannel newObserverPannel = new NewObserverPannel(parent, displayObserverPannel);
 
         // Ajout des éléments au panel
         gc.gridx = 0;
