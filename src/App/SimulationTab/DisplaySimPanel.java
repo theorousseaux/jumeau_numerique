@@ -5,6 +5,7 @@ import org.orekit.estimation.measurements.ObservableSatellite;
 import src.Kalman.Station;
 
 import src.App.MainFrame;
+import src.Kalman.TelescopeAzEl;
 import src.UseCase1_GSNetwork.GSNetwork;
 
 import java.util.List;
@@ -95,6 +96,7 @@ public class DisplaySimPanel extends JPanel{
 
         // Scroll through selected stations
         gc.gridx  = 1 ;
+        /*
         GSNetwork stationsList = this.parent.simuController.model.getGroundStationNetwork();
         ArrayList<String> stations = new ArrayList<String>();
         for (Station station : stationsList.getNetwork()){
@@ -106,6 +108,20 @@ public class DisplaySimPanel extends JPanel{
         JScrollPane affichagetations = new JScrollPane(listestations);
         this.add(affichagetations, gc);
 
+
+         */
+
+
+        List<TelescopeAzEl> observersList = this.parent.simuController.model.getObserverNetwork ( ).getTelescopes ( );
+        ArrayList<String> stations = new ArrayList<String>();
+        for (TelescopeAzEl telescope : observersList){
+            stations.add(String.valueOf(telescope.getID ()));
+        }
+        String[] arrStations = {};
+        arrStations = stations.toArray(arrStations);
+        JList<String> listestations = new JList<>(arrStations);
+        JScrollPane affichagetations = new JScrollPane(listestations);
+        this.add(affichagetations, gc);
 
         // Simulation dates display
 

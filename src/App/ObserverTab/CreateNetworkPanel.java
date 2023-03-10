@@ -1,11 +1,11 @@
-package src.App.Observer;
+package src.App.ObserverTab;
 
 import src.App.MainFrame;
-import src.App.ObserverTab.DisplayNetworkPanel;
 import src.App.WorldMapTab.WorldMapPanel;
 import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
 import src.UseCase1_GSNetwork.GSNetwork;
+import src.UseCase1_GSNetwork.ObserverNetwork;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -35,7 +35,7 @@ public class CreateNetworkPanel extends JPanel {
         setLayout(new GridBagLayout());
 
         // Titre
-        JLabel tittle = new JLabel("Choose ground stations to create the network");
+        JLabel tittle = new JLabel("Choose observers to create the network");
         tittle.setFont(new Font("Arial", Font.BOLD, 18)); // Définit la police d'écriture en Arial, en gras et en taille 18
         tittle.setForeground(Color.BLUE); // Définit la couleur du texte en bleu
 
@@ -57,13 +57,16 @@ public class CreateNetworkPanel extends JPanel {
         scrollPane.setPreferredSize(new Dimension(200, 200));
         gc.insets = new Insets ( 15, 10, 15, 10 );
         gc.anchor = GridBagConstraints.WEST;
-
-        gc.gridy = 2;
+        gc.gridx = 0;
+        gc.gridy = 1;
+        gc.gridwidth = 1;
+        gc.gridheight = GridBagConstraints.REMAINDER;
         this.add(scrollPane,gc);
 
         JLabel label = new JLabel("Network name : ");
         gc.gridx = 1;
         gc.gridy = 1;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.SOUTH;
         this.add(label, gc);
@@ -92,43 +95,21 @@ public class CreateNetworkPanel extends JPanel {
                     selectedStations.add(name.toString ());
                 }
 
-                try {
-                    System.out.println ( selectedStations );
-                    parent.gsController.gsNetwork = new GSNetwork(textField.getText(), new ArrayList<> ( selectedStations ));
-                    displayNetworkPannel.update();
-                    displayNetworkPannel.repaint();
-                    displayNetworkPannel.revalidate();
 
-                    worldMapPanel.displayNewGS(parent);
-                    worldMapPanel.repaint();
-                    worldMapPanel.revalidate();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                System.out.println ( selectedStations );
+                parent.obserController.observerNetwork = new ObserverNetwork (textField.getText(),new ArrayList<>(selectedStations),parent.obserController.telescopeAzElList);
+                displayNetworkPannel.update();
+                displayNetworkPannel.repaint();
+                displayNetworkPannel.revalidate();
+
+                /*
+                worldMapPanel.displayNewObs(parent);
+                worldMapPanel.repaint();
+                worldMapPanel.revalidate();
+
+                 */
+
             }
         });
     }
-
-    public void displayNewGS(Station groundStation) {
-        /*
-        GridBagConstraints newGC = new GridBagConstraints();
-        newGC.gridx = 0;
-        newGC.gridy = parent.gsController.numberOfGS+1;
-
-        JCheckBox checkBox = new JCheckBox(groundStation.getName());
-        newGC.gridy ++;
-        newGC.anchor = GridBagConstraints.WEST;
-        newGC.insets = new Insets(5, 0, 0, 0); // Ajoute 5 pixels de padding en bas
-        this.add(checkBox, newGC);
-
-
-         */
-
-        String name = groundStation.getName ();
-
-        listModel.addElement(name);
-
-    }
-
-
 }

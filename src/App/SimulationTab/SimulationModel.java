@@ -9,13 +9,10 @@ import org.orekit.propagation.Propagator;
 
 import src.App.ParametersTab.Parameters;
 import src.Kalman.Observation;
-import src.UseCase1_GSNetwork.GSNetwork;
+import src.UseCase1_GSNetwork.ObserverNetwork;
 
-/**
- * This class regroups all the elements needed to run a simulation
- */
 public class SimulationModel {
-    GSNetwork groundStationNetwork;
+    ObserverNetwork observerNetwork;
     Parameters simulationParameters;
     List<Propagator> satellites;
     Observation observations;
@@ -34,17 +31,18 @@ public class SimulationModel {
 
     @Override
     public String toString() {
-        return "simulationModel [groundStationNetwork=" + groundStationNetwork + ", simulationParameters="
+        return "simulationModel [observerNetwork=" + observerNetwork + ", simulationParameters="
                 + simulationParameters + ", satellites=" + satellites + ", observations=" + observations
                 + ", measurementsSetsList=" + measurementsSetsList + "]";
     }
     
     
-    public GSNetwork getGroundStationNetwork() {
-        return groundStationNetwork;
+    public ObserverNetwork getObserverNetwork() {
+        return observerNetwork;
     }
-    public void setGroundStationNetwork(GSNetwork groundStationNetwork) {
-        this.groundStationNetwork = groundStationNetwork;
+    
+    public void setObserverNetwork(ObserverNetwork observerNetwork) {
+        this.observerNetwork = observerNetwork;
     }
     public Parameters getSimulationParameters() {
         return simulationParameters;
