@@ -1,7 +1,6 @@
 package src.App.ObserverTab;
 
 import src.App.MainFrame;
-import src.App.ObserverTab.DisplayNetworkPanel;
 import src.App.WorldMapTab.WorldMapPanel;
 import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
@@ -36,7 +35,7 @@ public class CreateNetworkPanel extends JPanel {
         setLayout(new GridBagLayout());
 
         // Titre
-        JLabel tittle = new JLabel("Choose ground stations to create the network");
+        JLabel tittle = new JLabel("Choose observers to create the network");
         tittle.setFont(new Font("Arial", Font.BOLD, 18)); // Définit la police d'écriture en Arial, en gras et en taille 18
         tittle.setForeground(Color.BLUE); // Définit la couleur du texte en bleu
 
@@ -58,13 +57,16 @@ public class CreateNetworkPanel extends JPanel {
         scrollPane.setPreferredSize(new Dimension(200, 200));
         gc.insets = new Insets ( 15, 10, 15, 10 );
         gc.anchor = GridBagConstraints.WEST;
-
-        gc.gridy = 2;
+        gc.gridx = 0;
+        gc.gridy = 1;
+        gc.gridwidth = 1;
+        gc.gridheight = GridBagConstraints.REMAINDER;
         this.add(scrollPane,gc);
 
         JLabel label = new JLabel("Network name : ");
         gc.gridx = 1;
         gc.gridy = 1;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.SOUTH;
         this.add(label, gc);
