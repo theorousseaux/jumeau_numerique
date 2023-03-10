@@ -2,11 +2,11 @@ package src.UseCase1_GSNetwork;
 
 import src.Kalman.TelescopeAzEl;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedSet;
 import org.orekit.estimation.measurements.AngularAzEl;
-
-
+import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.estimation.measurements.ObservedMeasurement;
 
 
@@ -53,5 +53,16 @@ public class ObserverNetwork {
         }
         return i;
     }
+
+/*     public LinkedHashMap<ObservableSatellite, Double> getFrequencies(List<SortedSet<ObservedMeasurement<?>>> observations) {
+
+        for (SortedSet<ObservedMeasurement<?>> object : observations){
+            for (ObservedMeasurement<?> obs : object){
+                if (this.getNetwork().contains(((AngularAzEl) obs).getStation())){
+                    i+=1;
+                }
+            }
+        }
+    } */
 
 }
