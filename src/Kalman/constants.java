@@ -24,7 +24,7 @@ public class constants {
 	//Corps celestes
 	final static double r = Constants.WGS84_EARTH_EQUATORIAL_RADIUS;
 	final static OneAxisEllipsoid earthShape = new OneAxisEllipsoid(r, 0, itrf);
-	final static double mu =  Constants.EGM96_EARTH_MU; //=M*G
+	public final static double mu =  Constants.EGM96_EARTH_MU; //=M*G
 	final static PVCoordinatesProvider Sun = CelestialBodyFactory.getSun();
 	final static AtmosphericRefractionModel refractionModel = null;
 

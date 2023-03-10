@@ -166,7 +166,7 @@ public class simu {
     	LinkedHashMap<ObservedMeasurement<?>,Propagator> newEstimatedKalman = od.Kalman(processNoise);
 	}
 	
-    static double[][] createDiagonalMatrix(double[] diagonal) {
+    public static double[][] createDiagonalMatrix ( double[] diagonal ) {
         int size = diagonal.length;
         double[][] matrix = new double[size][size];
         for (int i = 0; i < size; i++) {

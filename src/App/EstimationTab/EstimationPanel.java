@@ -31,19 +31,37 @@ public class EstimationPanel extends JPanel{
         gc.gridy =1;
         add(runEstimationButton, gc);
 
+        DisplayEstPanel disp = new DisplayEstPanel ( parent );
 
+        gc.gridx = 0;
+        gc.gridy =2;
 
+        add(disp, gc);
         // Event manager
         runEstimationButton.addActionListener(new ActionListener () {
             @Override
             public void actionPerformed( ActionEvent e) {
-                try {
+                //try {
                    EstimationController controller = parent.estimationController;
-                   controller.runEstimation( parent );
-
+                try {
+                    controller.loadEstimation ( parent );
+                } catch (IOException ex) {
+                    throw new RuntimeException ( ex );
+                }
+                try {
+                    controller.runEstimation( parent );
+                } catch (IOException ex) {
+                    throw new RuntimeException ( ex );
+                }
+                disp.update ( );
+                    disp.repaint ( );
+                    disp.revalidate ( );
+                    /*
                 }catch (NullPointerException | IOException npe) {
                     JOptionPane.showMessageDialog(parent, "Run your simulation first", "Error",JOptionPane.ERROR_MESSAGE);
                 }
+
+                     */
             }
         });
     }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.SortedSet;
 
+import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.QRDecomposer;
@@ -21,32 +22,68 @@ import org.orekit.estimation.sequential.KalmanEstimatorBuilder;
 import org.orekit.frames.LOFType;
 import org.orekit.frames.LocalOrbitalFrame;
 import org.orekit.frames.Transform;
+import org.orekit.orbits.CartesianOrbit;
 import org.orekit.orbits.KeplerianOrbit;
 import org.orekit.orbits.Orbit;
 import org.orekit.propagation.Propagator;
 import org.orekit.propagation.SpacecraftState;
+import org.orekit.propagation.analytical.KeplerianPropagator;
+import org.orekit.propagation.conversion.DormandPrince853IntegratorBuilder;
+import org.orekit.propagation.conversion.NumericalPropagatorBuilder;
 import org.orekit.propagation.conversion.OrbitDeterminationPropagatorBuilder;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.utils.CartesianDerivativesFilter;
+import org.orekit.utils.Constants;
+import org.orekit.utils.PVCoordinates;
 import org.orekit.utils.TimeStampedPVCoordinates;
+
+import static src.Kalman.simu.createDiagonalMatrix;
 
 public class OD {
 	public ObservableSatellite object;
 	public Propagator propagator;
+
+	public void setEstimatedPropagatorBuilder ( Propagator propagator, double stdPos, double stdV ) {
+		this.estimatedPropagatorBuilder = createPrior (propagator,stdPos,stdV );
+	}
+
 	public OrbitDeterminationPropagatorBuilder estimatedPropagatorBuilder;
 	public SortedSet<ObservedMeasurement<?>> measurementsSet;
 	AbsoluteDate initialDate;
 	AbsoluteDate finalDate;
+
+	public double[] variance;
 	
 
-    public OD(ObservableSatellite object, Propagator propagator, OrbitDeterminationPropagatorBuilder estimatedPropagatorBuilder, SortedSet<ObservedMeasurement<?>> measurementsSet, AbsoluteDate initialDate, AbsoluteDate finalDate){
+    public OD(ObservableSatellite object, Propagator propagator, OrbitDeterminationPropagatorBuilder estimatedPropagatorBuilder, SortedSet<ObservedMeasurement<?>> measurementsSet, AbsoluteDate initialDate, AbsoluteDate finalDate, double stdPos, double stdV ){
     	this.object = object;
     	this.propagator = propagator;
     	this.estimatedPropagatorBuilder = estimatedPropagatorBuilder; // MUST BE NUMERICAL ?
     	this.measurementsSet = measurementsSet;
     	this.initialDate = initialDate;
+		double[] mat = {Math.pow(stdPos,2),Math.pow(stdPos,2),Math.pow(stdPos ,2),Math.pow(stdV,2),Math.pow(stdV,2),Math.pow(stdV,2)};
+		this.variance = mat;
     	this.finalDate = finalDate;
     }
+
+	public OD(ObservableSatellite object, Propagator propagator, SortedSet<ObservedMeasurement<?>> measurementsSet, AbsoluteDate initialDate, AbsoluteDate finalDate, double stdPos, double stdV ){
+		this.object = object;
+		this.propagator = propagator;
+		this.setEstimatedPropagatorBuilder ( propagator, stdPos, stdV );
+		double[] mat = {Math.pow(stdPos,2),Math.pow(stdPos,2),Math.pow(stdPos ,2),Math.pow(stdV,2),Math.pow(stdV,2),Math.pow(stdV,2)};
+		this.variance = mat;
+		this.measurementsSet = measurementsSet;
+		this.initialDate = initialDate;
+		this.finalDate = finalDate;
+	}
+
+	public OD(ObservableSatellite object, Propagator propagator, OrbitDeterminationPropagatorBuilder estimatedPropagatorBuilder, SortedSet<ObservedMeasurement<?>> measurementsSet, AbsoluteDate initialDate, AbsoluteDate finalDate){
+		this.object = object;
+		this.propagator = propagator;
+		this.measurementsSet = measurementsSet;
+		this.initialDate = initialDate;
+		this.finalDate = finalDate;
+	}
     
     public Propagator BLS(){
     	System.out.println("BLS METHOD");
@@ -75,7 +112,7 @@ public class OD {
     	return propagatorEstimated[0];
     }
     
-    public LinkedHashMap<ObservedMeasurement<?>, Propagator> Kalman(ConstantProcessNoise processNoise) { //en vrai, ça peut marcher pour plein de propagateurs à la fois
+    public LinkedHashMap<ObservedMeasurement<?>, Propagator> Kalman ( ConstantProcessNoise processNoise) { //en vrai, ça peut marcher pour plein de propagateurs à la fois
     	System.out.println("KALMAN");
 
     	KalmanEstimatorBuilder estimatorBuilder = new KalmanEstimatorBuilder();
@@ -84,14 +121,18 @@ public class OD {
     	KalmanEstimator kalmanEstimator = estimatorBuilder.build();
     	
     	LinkedHashMap<ObservedMeasurement<?>, Propagator> mapMeasurePropagator = new LinkedHashMap<ObservedMeasurement<?>, Propagator>();
-    	
-    	for(ObservedMeasurement<?> measure : measurementsSet) {
-    		Propagator[] propagatorEstimated = kalmanEstimator.estimationStep(measure);
-    		mapMeasurePropagator.put(measure, propagatorEstimated[0]);
-    		//RESULTAT
-    		//covarianceAnalysis(propagatorEstimated[0], kalmanEstimator);
-        	results(propagator, propagatorEstimated);
-    	}
+    	if (measurementsSet.size() > 1 ){
+			for (ObservedMeasurement<?> measure : measurementsSet) {
+				System.out.println(measure.getSatellites ().get(0));
+				System.out.println("Nb satellite ds la mesure " + measure.getSatellites ().size());
+
+				Propagator[] propagatorEstimated = kalmanEstimator.estimationStep ( measure );
+				mapMeasurePropagator.put ( measure , propagatorEstimated[0] );
+				//RESULTAT
+				//covarianceAnalysis(propagatorEstimated[0], kalmanEstimator);
+				results ( propagator , propagatorEstimated );
+			}
+		}
     	
     	return mapMeasurePropagator;
     }
@@ -132,7 +173,7 @@ public class OD {
 		return param;
     }
     
-    static void incertitudes(Propagator propagator , Propagator estimatedPropagator) {
+    public static double[] incertitudes ( Propagator propagator , Propagator estimatedPropagator ) {
     	LocalOrbitalFrame LOFrame = new LocalOrbitalFrame(constants.gcrf, LOFType.LVLH, propagator, "LOF");
     	AbsoluteDate date = estimatedPropagator.getInitialState().getDate();
     	SpacecraftState estimatedState = estimatedPropagator.propagate(date);
@@ -142,8 +183,11 @@ public class OD {
     	Vector3D dP_eci = estimatedState.getPVCoordinates().getPosition().subtract(trueState.getPVCoordinates().getPosition());
     	Vector3D dV_lof = eci2lof_frozen.transformVector(dV_eci);
     	Vector3D dP_lof = eci2lof_frozen.transformVector(dP_eci);
-  	  	System.out.println("norm of deltaV(m/s) : " + dV_lof.getNorm());
-  	  	System.out.println("norm of deltaP(m) : " + dP_lof.getNorm());
+		System.out.println("norm of deltaV(m/s) : " + dV_lof.getNorm());
+		System.out.println("norm of deltaP(m) : " + dP_lof.getNorm());
+		double[] errors = {dP_lof.getNorm(),dV_lof.getNorm()};
+		return errors;
+
     }
     
     static void incertitudes2(Propagator propagator , Propagator estimatedPropagator) {
@@ -173,4 +217,44 @@ public class OD {
   	  	System.out.println("norm of deltaV(m/s) : " + dV_lof.getNorm());
   	  	System.out.println("norm of deltaP(m) : " + dP_lof.getNorm());
     }
+
+	public NumericalPropagatorBuilder createPrior(Propagator propagator, double stdPos, double stdV){
+
+
+		KeplerianOrbit trueOrbit = new KeplerianOrbit(propagator.getInitialState ().getOrbit ());
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+		SpacecraftState trueState = new SpacecraftState(trueOrbit);
+		Vector3D V_InertialFrame = trueState.getPVCoordinates().getVelocity();
+		Vector3D P_InertialFrame = trueState.getPVCoordinates().getPosition();
+		double[] mean = {P_InertialFrame.getX(), P_InertialFrame.getY(), P_InertialFrame.getZ(), V_InertialFrame.getX(), V_InertialFrame.getY(), V_InertialFrame.getZ()};
+		double[] variance = {Math.pow(stdPos,2),Math.pow(stdPos,2),Math.pow(stdPos ,2),Math.pow(stdV,2),Math.pow(stdV,2),Math.pow(stdV,2)};
+
+		double[][] covariance = createDiagonalMatrix(variance);
+		MultivariateNormalDistribution distribution = new MultivariateNormalDistribution(mean, covariance);
+		double[] estimatedParameters = distribution.sample(); // Générez un nombre aléatoire selon la loi gaussienne
+		Vector3D estimatedV_InertialFrame = new Vector3D(Arrays.copyOfRange(estimatedParameters,3,6));
+		Vector3D estimatedP_InertialFrame = new Vector3D(Arrays.copyOfRange(estimatedParameters,0,3));
+		PVCoordinates estimatedPV = new PVCoordinates(estimatedP_InertialFrame, estimatedV_InertialFrame);
+		TimeStampedPVCoordinates estimatedTSPV = new TimeStampedPVCoordinates(initialDate, 1., estimatedPV);
+		KeplerianOrbit estimatedOrbit = new KeplerianOrbit(estimatedTSPV, constants.gcrf, constants.mu);
+		double[] estimatedParamOrbitaux = {estimatedOrbit.getA(), estimatedOrbit.getE(), Math.IEEEremainder(estimatedOrbit.getI(), 2 * Math.PI), Math.IEEEremainder(estimatedOrbit.getRightAscensionOfAscendingNode(), 2 * Math.PI), Math.IEEEremainder(estimatedOrbit.getPerigeeArgument(), 2 * Math.PI), Math.IEEEremainder(estimatedOrbit.getAnomaly(constants.type), 2 * Math.PI)};
+		double estimatedA = estimatedParamOrbitaux[0];
+		double estimatedE = estimatedParamOrbitaux[1];
+		double estimatedI = estimatedParamOrbitaux[2];
+		double estimatedRaan = estimatedParamOrbitaux[3];
+		double estimatedPa = estimatedParamOrbitaux[4];
+		double estimatedAnomaly = estimatedParamOrbitaux[5];
+		KeplerianOrbit estimatedOrbit__ = new KeplerianOrbit(estimatedA, estimatedE, estimatedI, estimatedPa, estimatedRaan, estimatedAnomaly, constants.type, constants.gcrf, initialDate, Constants.EGM96_EARTH_MU);
+		CartesianOrbit estimatedOrbit_ =new CartesianOrbit(estimatedOrbit__);
+
+
+		double prop_min_step = 0.001;// # s
+		double prop_max_step = 300.0;// # s
+		double prop_position_error = 10.0;// # m
+		double estimator_position_scale = 1.0;// # m
+		DormandPrince853IntegratorBuilder integratorBuilder = new DormandPrince853IntegratorBuilder(prop_min_step, prop_max_step, prop_position_error);
+		NumericalPropagatorBuilder numericalPropagatorBuilder = new NumericalPropagatorBuilder(estimatedOrbit_, integratorBuilder, constants.type, estimator_position_scale);
+		return numericalPropagatorBuilder;
+	}
 }

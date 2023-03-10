@@ -48,7 +48,7 @@ public class MainFrame extends JFrame {
         obserController = new ObserverController(gsController);
 
         paramController = new ParametersController();
-
+        estimationController = new EstimationController ();
         simuController = new SimulationController();
 
         JFrame frame = new JFrame("Space Observation Digital Twin");

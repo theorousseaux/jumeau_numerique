@@ -6,6 +6,7 @@ import org.orekit.propagation.Propagator;
 import org.orekit.propagation.conversion.OrbitDeterminationPropagatorBuilder;
 import org.orekit.time.AbsoluteDate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -21,6 +22,8 @@ public class EstimationModel {
     AbsoluteDate initialDate;
 
     AbsoluteDate finalDate;
+
+    List<String> estimationsList = new ArrayList<> (  );
 
     public List<ObservableSatellite> getSatellites ( ) {
         return satellites;
