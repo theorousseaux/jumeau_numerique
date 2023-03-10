@@ -42,7 +42,7 @@ public class ReadObserverFile {
                 double elevationLimit = Double.parseDouble(values[5].trim());
                 double angularFoV = Double.parseDouble(values[6].trim());
                 double stepMeasure = Double.parseDouble(values[7].trim());
-                int breakTime = Integer.parseInt(values[8].trim());
+                double breakTime = Double.parseDouble(values[8].trim());
 
                 // On associe le TelescopeAzEl à un GroundStation
                 for (Station groundStation : stationList) {

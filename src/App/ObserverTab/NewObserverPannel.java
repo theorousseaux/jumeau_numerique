@@ -141,7 +141,7 @@ public class NewObserverPannel extends JPanel {
                     String breakTime = breakTimeField.getText();
                     Station station = (Station) stationComboBox.getSelectedItem();
                     assert station != null;
-                    String ID = station.getName() + "Telescope";
+                    String ID = station.getName() + ":telescope:" + parent.obserController.getNumberOfTelescopePerStation(station);
                     TelescopeAzEl newTelescope = new TelescopeAzEl(ID, mean, angularIncertitude, Double.parseDouble(elevation), Double.parseDouble(angularoV), Double.parseDouble(stepMeasure), Double.parseDouble(breakTime), station);
 
                     // Ajout du telescope au controller

@@ -33,4 +33,14 @@ public class ObserverController {
     public void addTelescope(TelescopeAzEl newTelescope) {
         telescopeAzElList.add(newTelescope);
     }
+
+    public int getNumberOfTelescopePerStation(Station station) {
+        int numberOfTelescope = 0;
+        for (TelescopeAzEl telescopeAzEl : telescopeAzElList) {
+            if (telescopeAzEl.getStation().equals(station)) {
+                numberOfTelescope++;
+            }
+        }
+        return numberOfTelescope;
+    }
 }
