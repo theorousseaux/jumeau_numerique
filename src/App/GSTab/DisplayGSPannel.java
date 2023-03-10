@@ -60,19 +60,6 @@ public class DisplayGSPannel extends JPanel{
         JList<String> liste = new JList<>(arr);
         stations = new JScrollPane(liste);
         this.add(stations, gc,1);
-        ImageIcon imageIcon = new ImageIcon("src/App/img/station_sol_icon.png"); // load the image to a imageIcon
-        Image image = imageIcon.getImage(); // transform it
-        Image newimg = image.getScaledInstance(60, 80,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-        imageIcon = new ImageIcon(newimg);  // transform it back
-
-        // Ajout de l'image
-        gc.gridheight = gc.gridy;
-        gc.gridx = 1;
-        gc.gridy = 0;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.anchor = GridBagConstraints.CENTER;
-        //this.add(new JButton("Oui"), gc);
-        this.add(new JLabel(imageIcon), gc);
     }
     public void removeAllExceptTop() {
         Component[] components = this.getComponents();
@@ -124,18 +111,5 @@ public class DisplayGSPannel extends JPanel{
         JList<String> liste = new JList<>(arr);
         stations = new JScrollPane(liste);
         this.add(stations, gc,1);
-        ImageIcon imageIcon = new ImageIcon("src/App/img/station_sol_icon.png"); // load the image to a imageIcon
-        Image image = imageIcon.getImage(); // transform it
-        Image newimg = image.getScaledInstance(60, 80,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-        imageIcon = new ImageIcon(newimg);  // transform it back
-
-        // Ajout de l'image
-        gc.gridheight = gc.gridy;
-        gc.gridx = 1;
-        gc.gridy = 0;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.anchor = GridBagConstraints.CENTER;
-        //this.add(new JButton("Oui"), gc);
-        this.add(new JLabel(imageIcon), gc);
     }
 }
