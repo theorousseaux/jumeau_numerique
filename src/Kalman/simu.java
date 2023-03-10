@@ -153,7 +153,7 @@ public class simu {
 		final KeplerianPropagator propagatorTest = new KeplerianPropagator(initialOrbit2);
 
 		//////////////////////////////////////////////////////////////////////////////////////////
-    	AbsoluteDate finalDate = initialDate.shiftedBy(t*800);
+    	AbsoluteDate finalDate = initialDate.shiftedBy(t*1500);
     	
 
 
@@ -172,7 +172,7 @@ public class simu {
 		System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
     	//station_Paris.addTelescope(new TelescopeAzEl("IDT", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, station_Paris, false));
 		System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
-		station_Paris.addRadar(new Radar("IDR", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 110*Math.PI/180,  10, station_Paris));
+		station_Paris.addRadar(new Radar("IDR", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 40*Math.PI/180,  10, station_Paris));
     	System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
 		// NANTES
     	//Station station_Nantes = new Station("NANTES", 48.766667*Math.PI/180, 2.333333*Math.PI/180, 0.);
