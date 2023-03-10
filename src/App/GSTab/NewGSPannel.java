@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class NewGSPannel extends JPanel {
 
-    public NewGSPannel(MainFrame parent, DisplayGSPannel displayGSPannel, CreateNetworkPannel createNetworkPannel, WorldMapPanel worldMapPanel) {
+    public NewGSPannel(MainFrame parent, DisplayGSPannel displayGSPannel, WorldMapPanel worldMapPanel) {
 
         // Titre
         JLabel addGSLabel = new JLabel("Add a new ground station");
@@ -120,11 +120,6 @@ public class NewGSPannel extends JPanel {
                     displayGSPannel.displayNewStation();
                     displayGSPannel.repaint();
                     displayGSPannel.revalidate();
-
-                    // Mise à jour du panneau de choix des stations sol
-                    createNetworkPannel.displayNewGS(groundStation);
-                    createNetworkPannel.repaint();
-                    createNetworkPannel.revalidate();
 
                     // Mise à jour des choix dans l'onglet Observer
                     JPanel tabPanel = (JPanel) parent.tabbedPane.getComponentAt(3);

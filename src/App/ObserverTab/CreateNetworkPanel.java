@@ -112,27 +112,4 @@ public class CreateNetworkPanel extends JPanel {
             }
         });
     }
-
-    public void displayNewGS(Station groundStation) {
-        /*
-        GridBagConstraints newGC = new GridBagConstraints();
-        newGC.gridx = 0;
-        newGC.gridy = parent.gsController.numberOfGS+1;
-
-        JCheckBox checkBox = new JCheckBox(groundStation.getName());
-        newGC.gridy ++;
-        newGC.anchor = GridBagConstraints.WEST;
-        newGC.insets = new Insets(5, 0, 0, 0); // Ajoute 5 pixels de padding en bas
-        this.add(checkBox, newGC);
-
-
-         */
-
-        String name = groundStation.getName ();
-
-        listModel.addElement(name);
-
-    }
-
-
 }
