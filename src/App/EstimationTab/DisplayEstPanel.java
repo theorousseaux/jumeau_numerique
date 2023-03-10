@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
-public class DisplayEstPanel {
+public class DisplayEstPanel extends JPanel {
 
-
+    MainFrame parent;
     public DisplayEstPanel( MainFrame parent ){
+        this.parent = parent;
+        GridBagConstraints gc = new GridBagConstraints (  );
         gc.gridx = 0;
         gc.gridy = 2;
         gc.anchor = GridBagConstraints.WEST;
