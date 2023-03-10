@@ -24,6 +24,7 @@ import org.orekit.propagation.events.AltitudeDetector;
 import org.orekit.propagation.events.BooleanDetector;
 import org.orekit.propagation.events.ElevationDetector;
 import org.orekit.propagation.events.GroundFieldOfViewDetector;
+import org.orekit.propagation.events.NegateDetector;
 import org.orekit.time.FixedStepSelector;
 
 
@@ -111,6 +112,7 @@ public class Radar {
             (s, detector, increasing) -> {
                 return increasing ? Action.CONTINUE : Action.CONTINUE;
             });
+        NegateDetector newAltitudeDetector = new NegateDetector(altitudeDetector); 
 
     
     	//FOV detector
@@ -119,9 +121,10 @@ public class Radar {
     			(s, detector, increasing) -> {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
+        NegateDetector newFovDetector = new NegateDetector(fovDetector); 
            
         //Final Detector
-        BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, altitudeDetector, fovDetector);
+        BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, newAltitudeDetector, newFovDetector);
     	return finalDetector;
     }
     
@@ -138,12 +141,12 @@ public class Radar {
     	return azElBuilder;
     }
     public RangeBuilder createRangeBuilder(ObservableSatellite satellite){
-        RangeBuilder rangeBuilder = new RangeBuilder(noiseSource, station, false, sigmaRadar, baseWeightRadar, satellite);
+        RangeBuilder rangeBuilder = new RangeBuilder(noiseSource, station, true, sigmaRadar, baseWeightRadar, satellite);
         return rangeBuilder;
     }
 
     public RangeRateBuilder createRangeRateBuilder(ObservableSatellite satellite){
-        RangeRateBuilder rangeRateBuilder = new RangeRateBuilder(noiseSource, station, false, sigmaRadar, baseWeightRadar, satellite);
+        RangeRateBuilder rangeRateBuilder = new RangeRateBuilder(noiseSource, station, true, sigmaRadar, baseWeightRadar, satellite);
         return rangeRateBuilder;
     }
 
