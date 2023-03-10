@@ -1,4 +1,4 @@
-package src.App.Observer;
+package src.App.ObserverTab;
 
 import src.App.MainFrame;
 import src.App.ObserverTab.DisplayNetworkPanel;
@@ -6,6 +6,7 @@ import src.App.WorldMapTab.WorldMapPanel;
 import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
 import src.UseCase1_GSNetwork.GSNetwork;
+import src.UseCase1_GSNetwork.ObserverNetwork;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -92,19 +93,20 @@ public class CreateNetworkPanel extends JPanel {
                     selectedStations.add(name.toString ());
                 }
 
-                try {
-                    System.out.println ( selectedStations );
-                    parent.gsController.gsNetwork = new GSNetwork(textField.getText(), new ArrayList<> ( selectedStations ));
-                    displayNetworkPannel.update();
-                    displayNetworkPannel.repaint();
-                    displayNetworkPannel.revalidate();
 
-                    worldMapPanel.displayNewGS(parent);
-                    worldMapPanel.repaint();
-                    worldMapPanel.revalidate();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                System.out.println ( selectedStations );
+                parent.obserController.observerNetwork = new ObserverNetwork (textField.getText(),new ArrayList<>(selectedStations),parent.obserController.telescopeAzElList);
+                displayNetworkPannel.update();
+                displayNetworkPannel.repaint();
+                displayNetworkPannel.revalidate();
+
+                /*
+                worldMapPanel.displayNewObs(parent);
+                worldMapPanel.repaint();
+                worldMapPanel.revalidate();
+
+                 */
+
             }
         });
     }

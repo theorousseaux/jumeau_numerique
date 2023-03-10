@@ -6,6 +6,7 @@ import src.Data.Observer.WriteObserverFile;
 import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
 import src.UseCase1_GSNetwork.GSNetwork;
+import src.UseCase1_GSNetwork.ObserverNetwork;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class ObserverController {
     public int numberOfTelescope = 0;
     public int numberOfRadar = 0;
 
+    public ObserverNetwork observerNetwork;
     public ObserverController(GSController gsController) throws IOException {
 
         this.telescopeAzElList = new ArrayList<>();

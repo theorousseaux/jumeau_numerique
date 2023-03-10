@@ -34,6 +34,8 @@ public class DisplayObserverPannel extends JPanel{
         gc.gridy = 1;
         gc.weightx = 0;
         gc.gridwidth = 1;
+        ArrayList<String> elements = new ArrayList<String>();
+
         for (src.Kalman.TelescopeAzEl telescopeAzEl: parent.obserController.telescopeAzElList) {
             // Affichage de la liste des telescopes
             StringBuilder sb = new StringBuilder();
@@ -56,12 +58,14 @@ public class DisplayObserverPannel extends JPanel{
             sb.append(", ");
             sb.append("breakTime :");
             sb.append(telescopeAzEl.getBreakTime());
-
-            gc.anchor = GridBagConstraints.LINE_START;
-            this.add(new JLabel(sb.toString()), gc);
-            gc.gridy++;
-            parent.gsController.numberOfGS++;
+            elements.add(sb.toString ());
         }
+
+        String[] arr = {};
+        arr = elements.toArray(arr);
+        JList<String> liste = new JList<>(arr);
+        JScrollPane scrollPane = new JScrollPane(liste);
+        this.add(scrollPane, gc,1);
     }
 
     public void removeAllExceptTop() {
@@ -91,7 +95,9 @@ public class DisplayObserverPannel extends JPanel{
         gc.gridy = 1;
         gc.weightx = 0;
         gc.gridwidth = 1;
-        for (src.Kalman.TelescopeAzEl telescopeAzEl : parent.obserController.telescopeAzElList) {
+        ArrayList<String> elements = new ArrayList<String>();
+
+        for (src.Kalman.TelescopeAzEl telescopeAzEl: parent.obserController.telescopeAzElList) {
             // Affichage de la liste des telescopes
             StringBuilder sb = new StringBuilder();
             sb.append(telescopeAzEl.getID());
@@ -113,11 +119,13 @@ public class DisplayObserverPannel extends JPanel{
             sb.append(", ");
             sb.append("breakTime :");
             sb.append(telescopeAzEl.getBreakTime());
-
-            gc.anchor = GridBagConstraints.LINE_START;
-            this.add(new JLabel(sb.toString()), gc);
-            gc.gridy++;
-            parent.gsController.numberOfGS++;
+            elements.add(sb.toString ());
         }
+
+        String[] arr = {};
+        arr = elements.toArray(arr);
+        JList<String> liste = new JList<>(arr);
+        JScrollPane scrollPane = new JScrollPane(liste);
+        this.add(scrollPane, gc,1);
     }
 }

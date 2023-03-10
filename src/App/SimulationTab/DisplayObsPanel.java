@@ -88,9 +88,12 @@ public class DisplayObsPanel extends JPanel{
         this.add(satellites, gc);
 
         // Display the number of observation
-        JLabel nObs = new JLabel("Number of observations: " + String.valueOf ( this.parent.gsController.gsNetwork.countObservations(this.parent.simuController.model.getMeasurementsSetsList())));
+        /*
+        JLabel nObs = new JLabel("Number of observations: " + String.valueOf ( this.parent.obserController.observerNetwork.countObservations(this.parent.simuController.model.getMeasurementsSetsList())));
         gc.gridy ++;
         gc.insets = new Insets(20, 10, 20, 10);
         this.add(nObs,gc);
+
+         */
     }
 }

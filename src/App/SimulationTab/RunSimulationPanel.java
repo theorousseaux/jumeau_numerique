@@ -43,9 +43,12 @@ public class RunSimulationPanel extends JPanel{
                     disp.update ( );
                     disp.repaint ( );
                     disp.revalidate ( );
+
                 }catch (NullPointerException npe) {
                     JOptionPane.showMessageDialog(parent, "Load your simulation first", "Error",JOptionPane.ERROR_MESSAGE);
                 }
+
+
             }
         });
     }

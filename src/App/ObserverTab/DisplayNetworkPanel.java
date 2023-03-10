@@ -53,7 +53,7 @@ public class DisplayNetworkPanel extends JPanel {
         gc.gridx = 1;
         gc.gridy = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
-        JLabel networkName = new JLabel(parent.gsController.gsNetwork.getName());
+        JLabel networkName = new JLabel(parent.obserController.observerNetwork.getName());
         this.add(networkName, gc);
 
         gc = new GridBagConstraints(); // Réinitialisation de gc pour chaque nouvel élément
@@ -67,7 +67,7 @@ public class DisplayNetworkPanel extends JPanel {
         gc.gridx = 1;
         gc.gridy = 2;
         gc.anchor = GridBagConstraints.PAGE_START;
-        JLabel numberOfStation = new JLabel(String.valueOf(parent.gsController.gsNetwork.getNetwork().size()));
+        JLabel numberOfStation = new JLabel(String.valueOf(parent.obserController.observerNetwork.getTelescopes ().size()));
         this.add(numberOfStation, gc);
     }
 

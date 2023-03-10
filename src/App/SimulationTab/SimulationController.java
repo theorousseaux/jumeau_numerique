@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.complex.Quaternion;
 import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.propagation.Propagator;
 
@@ -23,12 +22,12 @@ public class SimulationController {
     public SimulationView view;
 
     public void loadSimulation(MainFrame parent) throws NumberFormatException, IllegalArgumentException, IOException{
-
         model.setSimulationParameters(parent.paramController.model);
 
-        model.setGroundStationNetwork(parent.gsController.gsNetwork);
+        model.setObserverNetwork(parent.obserController.observerNetwork);
         // model.setSatellites(parent.satController.propagators);
         // model.setSatellites(parent.satController.satellites);
+
 
         List<String> satNames = new ArrayList<>();
         List<ObservableSatellite> objectsList = new ArrayList<ObservableSatellite>();
@@ -47,16 +46,16 @@ public class SimulationController {
         model.setSatellitesNames(objectsList);
         System.out.println("Parameters : ");
         System.out.println(parent.paramController.model.toString());
-        System.out.println("Stations sol : ");
-        model.getGroundStationNetwork().display();
+        System.out.println("Telescopes : ");
+        model.getObserverNetwork().display();
         System.out.println("Satellites : ");
         System.out.println(model.getSatellitesNames().toString());
 
     }
     
     public void runSimulation(MainFrame parent){
-        model.setObservations(new Observation(model.getGroundStationNetwork().getTelescopes(), model.getSatellitesNames(), model.getSatellites(), model.getSimulationParameters().getStartDate(), model.getSimulationParameters().getEndDate()));
-        model.setMeasurementsSetsList(model.getObservations().measure(false));
+        model.setObservations(new Observation(model.getObserverNetwork().getTelescopes(), model.getSatellitesNames(), model.getSatellites(), model.getSimulationParameters().getStartDate(), model.getSimulationParameters().getEndDate()));
+        model.setMeasurementsSetsList(model.getObservations().measure(true));
         System.out.println("Simulation done");
     }
 

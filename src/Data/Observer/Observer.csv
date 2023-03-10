@@ -1,25 +1,21 @@
 ID (station:type:id), mean1, mean2, angularIncertitude1, angularIncertitude2, elevationLimit, angularFoV, stepMeasure, breakTime
 Toulouse:telescope:0, 0.0, 0.0, 0.00524, 0.00524, 0.5236, 2.07694, 10, 10
 Paris:telescope:0, 0.0, 0.0, 0.00524, 0.00524, 0.5236, 2.07694, 10, 10
-Toulouse:telescope:1,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-Toulouse:telescope:2,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-Toulouse:telescope:3,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-Paris:telescope:1,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-Paris:telescope:2,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:0,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:1,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:2,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:3,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:4,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:5,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:6,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:7,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:8,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:9,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:10,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:11,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:12,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:13,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:14,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:15,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
-BuenosAires:telescope:16,0.0,0.0,0.005,0.005,0.52,2.07,10.0,10.0
+Toulouse:telescope:1,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:2,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:3,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:4,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:5,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:6,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:7,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:8,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:9,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:10,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:11,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:12,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:13,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:14,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:15,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:16,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:17,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0
+Toulouse:telescope:18,10.0,10.0,0.5,0.5,0.5,0.5,10.0,10.0

@@ -35,6 +35,7 @@ public class ObserverNetwork {
     }
 
 
+
     public String getName() {
         return this.name;
     }
@@ -51,7 +52,7 @@ public class ObserverNetwork {
         }
     }
 
-    /*
+
     public int countObservations(List<SortedSet<ObservedMeasurement<?>>> observations){
         int i = 0;
         for (SortedSet<ObservedMeasurement<?>> object : observations){
@@ -63,6 +64,8 @@ public class ObserverNetwork {
         }
         return i;
     }
-    */
+
+
+
 
 }
