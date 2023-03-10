@@ -1,10 +1,8 @@
 package src.Kalman;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.linear.MatrixUtils;
@@ -23,12 +21,10 @@ import org.orekit.geometry.fov.FieldOfView;
 import org.orekit.propagation.Propagator;
 import org.orekit.propagation.events.BooleanDetector;
 import org.orekit.propagation.events.ElevationDetector;
-import org.orekit.propagation.events.EventDetector;
 import org.orekit.propagation.events.GroundAtNightDetector;
 import org.orekit.propagation.events.GroundFieldOfViewDetector;
 import org.orekit.time.FixedStepSelector;
 import org.orekit.time.TimeComponents;
-import org.orekit.utils.PVCoordinatesProvider;
 
 public class TelescopeAzEl {
 	
@@ -63,9 +59,9 @@ public class TelescopeAzEl {
 	
 	private double breakTime;
 
-	public Boolean GEO;
+	private Boolean GEO;
 
-	public double alphaGEO;
+	private double alphaGEO;
 	
 	LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
@@ -116,7 +112,6 @@ public class TelescopeAzEl {
 		this.breakTime = breakTime;
 		this.skyCoveringMap = createSkyCoveringMap();
 		
-		//this.skyCoveringMap = createSkyCoveringMap();
 		station.listTelescopes.add(this);
 	}
     
@@ -151,6 +146,14 @@ public class TelescopeAzEl {
     public double getElevationLimit() {
     	return this.elevationField[0];
     }
+
+	public Boolean getGEO() {
+		return this.GEO;
+	}
+
+	public double getAlphaGEO() {
+		return this.alphaGEO;
+	}
     
 
     public BooleanDetector createDetector(LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {
@@ -202,7 +205,7 @@ public class TelescopeAzEl {
     	        });
 
 		//GEO Field of View Detector
-		double alpha = alphaGEO;
+		double alpha = this.alphaGEO;
 		Vector3D vectorCenter = new Vector3D(0, alpha);
         Vector3D axis1 = new Vector3D(1,0,0);
         Vector3D axis2 = new Vector3D(0, Math.sqrt(2)/2, Math.sqrt(2)/2);
@@ -254,10 +257,6 @@ public class TelescopeAzEl {
             }
         }
         
-        for(List<Double> aePosition : azElSkyCovering) {
-        	//System.out.println(aePosition.get(0));
-        	//System.out.println(aePosition.get(1));        	
-        }
         return azElSkyCovering;
     }
 

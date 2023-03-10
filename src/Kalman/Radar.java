@@ -69,7 +69,7 @@ public class Radar {
         this.sigmaRadar = 30.;
         this.baseWeightRadar = 1.;
 
-        // Mise en place field of view 
+        // Mise en place du field of view du radar
         this.angularFoV = angularFoV;
         Vector3D vectorCenter = new Vector3D(0, Math.PI/2);
         Vector3D axis1 = new Vector3D(1,0,0);
@@ -90,9 +90,47 @@ public class Radar {
         
     }
 
+    /* Récupération des attributs */
     public String getID() {
     	return this.ID;
     }
+
+    public CorrelatedRandomVectorGenerator getNoiseSource(){
+        return this.noiseSource;
+    }
+
+	public double[] getSigma(){
+        return this.sigma;
+    }
+
+	public double[] getBaseWeight(){
+        return this.baseWeight;
+    }
+
+	public Station getStation(){
+        return this.station;
+    }
+
+	public double getAngularFoV(){
+        return this.angularFoV;
+    }
+
+	public double getStepMeasure() {
+        return this.stepMeasure;
+    }
+	
+	public FieldOfView getFov(){
+        return this.fov;
+    }
+
+    public double getBaseWeightRadar(){
+        return this.baseWeightRadar;
+    }
+
+    public double getSigmaRadar(){
+        return this.sigmaRadar;
+    }
+
 
     /* Création Final Detector */
     public BooleanDetector createRadarDetector() {
@@ -104,7 +142,6 @@ public class Radar {
     			(s, detector, increasing) -> {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
-        //elevationDetector = elevationDetector.withConstantElevation(30*Math.PI/180);
     	
         //AltitudeDetector
         AltitudeDetector altitudeDetector = new AltitudeDetector(2000000, constants.earthShape);
