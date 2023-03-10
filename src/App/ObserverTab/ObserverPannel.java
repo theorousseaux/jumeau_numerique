@@ -2,7 +2,11 @@ package src.App.ObserverTab;
 
 import javax.swing.JPanel;
 
+import src.App.GSTab.CreateNetworkPannel;
+import src.App.GSTab.DisplayNetworkPannel;
 import src.App.MainFrame;
+import src.App.Observer.CreateNetworkPanel;
+import src.App.WorldMapTab.WorldMapPanel;
 
 import java.awt.*;
 
@@ -38,7 +42,7 @@ public class ObserverPannel extends JPanel {
         this.add(displayObserverPannel, gc);
 
         gc.gridy ++;
-        gc.anchor = GridBagConstraints.PAGE_START;
+        gc.anchor = GridBagConstraints.WEST;
         this.add(newObserverPannel, gc);
 
         gc.gridy++;
@@ -47,10 +51,16 @@ public class ObserverPannel extends JPanel {
         //this.add(createNetworkPannel, gc);
 
         // Affichage du réseau
-        gc.gridx = 1;
+        gc.gridx = 0;
         gc.gridy = 1;
-        gc.anchor = GridBagConstraints.PAGE_START;
+        gc.anchor = GridBagConstraints.EAST;
         //this.add(displayNetworkPannel, gc);
+        DisplayNetworkPanel displayNetworkPannel = new DisplayNetworkPanel(parent);
+        WorldMapPanel worldMapPanel = (WorldMapPanel) parent.globePanel;
 
+        // Choix des stations sol pour le réseau
+        CreateNetworkPanel createNetworkPannel = new CreateNetworkPanel(parent, displayNetworkPannel, worldMapPanel);
+
+        this.add(createNetworkPannel,gc);
     }
 }
