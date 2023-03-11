@@ -58,6 +58,9 @@ public class DisplayObserverPannel extends JPanel{
             sb.append(", ");
             sb.append("breakTime :");
             sb.append(telescopeAzEl.getBreakTime());
+            sb.append(", ");
+            sb.append("GEO :");
+            sb.append(telescopeAzEl.getGEO());
             elements.add(sb.toString ());
         }
 
@@ -119,6 +122,9 @@ public class DisplayObserverPannel extends JPanel{
             sb.append(", ");
             sb.append("breakTime :");
             sb.append(telescopeAzEl.getBreakTime());
+            sb.append(", ");
+            sb.append("GEO :");
+            sb.append(telescopeAzEl.getGEO());
             elements.add(sb.toString ());
         }
 

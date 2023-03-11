@@ -71,7 +71,7 @@ public class NewObserverPannel extends JPanel {
         assert selectedType != null;
         if (selectedType.equals("Telescope")) {
             formPanel.removeAll();
-            formPanel.setLayout(new GridLayout(10, 2));
+            formPanel.setLayout(new GridLayout(11, 2));
 
             JLabel mean1Label = new JLabel("Mean 1 :");
             formPanel.add(mean1Label);
@@ -113,6 +113,11 @@ public class NewObserverPannel extends JPanel {
             JTextField breakTimeField = new JTextField();
             formPanel.add(breakTimeField);
 
+            JLabel geoLabel = new JLabel("GEO :");
+            formPanel.add(geoLabel);
+            JCheckBox geoCheckBox = new JCheckBox();
+            formPanel.add(geoCheckBox);
+
             JLabel stationLabel = new JLabel("Station :");
             formPanel.add(stationLabel);
             this.stationComboBox = new JComboBox<>();
@@ -141,8 +146,11 @@ public class NewObserverPannel extends JPanel {
                     String breakTime = breakTimeField.getText();
                     Station station = (Station) stationComboBox.getSelectedItem();
                     assert station != null;
+
+                    boolean geo = geoCheckBox.isSelected();
+
                     String ID = station.getName() + ":telescope:" + parent.obserController.getNumberOfTelescopePerStation(station);
-                    TelescopeAzEl newTelescope = new TelescopeAzEl(ID, mean, angularIncertitude, Double.parseDouble(elevation), Double.parseDouble(angularoV), Double.parseDouble(stepMeasure), Double.parseDouble(breakTime), station);
+                    TelescopeAzEl newTelescope = new TelescopeAzEl(ID, mean, angularIncertitude, Double.parseDouble(elevation), Double.parseDouble(angularoV), Double.parseDouble(stepMeasure), Double.parseDouble(breakTime), station, geo);
 
                     // Ajout du telescope au controller
                     parent.obserController.addTelescope(newTelescope);

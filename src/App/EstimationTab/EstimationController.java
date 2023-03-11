@@ -27,8 +27,6 @@ import src.Kalman.constants;
 import java.io.IOException;
 import java.util.*;
 
-import static src.Kalman.simu.createDiagonalMatrix;
-
 public class EstimationController {
 
     public EstimationModel model = new EstimationModel();
@@ -62,7 +60,7 @@ public class EstimationController {
                 Vector3D P_InertialFrame = trueState.getPVCoordinates ( ).getPosition ( );
                 double[] mean = {P_InertialFrame.getX ( ) , P_InertialFrame.getY ( ) , P_InertialFrame.getZ ( ) , V_InertialFrame.getX ( ) , V_InertialFrame.getY ( ) , V_InertialFrame.getZ ( )};
                 double[] variance = {Math.pow ( stdPos , 2 ) , Math.pow ( stdPos , 2 ) , Math.pow ( stdPos , 2 ) , Math.pow ( stdV , 2 ) , Math.pow ( stdV , 2 ) , Math.pow ( stdV , 2 )};
-                double[][] covariance = createDiagonalMatrix ( variance );
+                double[][] covariance = src.Kalman.simu.createDiagonalMatrix ( variance );
                 MultivariateNormalDistribution distribution = new MultivariateNormalDistribution ( mean , covariance );
                 double[] estimatedParameters = distribution.sample ( ); // Générez un nombre aléatoire selon la loi gaussienne
                 Vector3D estimatedV_InertialFrame = new Vector3D ( Arrays.copyOfRange ( estimatedParameters , 3 , 6 ) );

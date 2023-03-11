@@ -43,11 +43,12 @@ public class ReadObserverFile {
                 double angularFoV = Double.parseDouble(values[6].trim());
                 double stepMeasure = Double.parseDouble(values[7].trim());
                 double breakTime = Double.parseDouble(values[8].trim());
+                boolean geo = Boolean.parseBoolean(values[9].trim());
 
                 // On associe le TelescopeAzEl à un GroundStation
                 for (Station groundStation : stationList) {
                     if (groundStation.getName().equals(station)) {
-                        TelescopeAzEl telescope = new TelescopeAzEl(values[0], mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, groundStation);
+                        TelescopeAzEl telescope = new TelescopeAzEl(values[0], mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, groundStation, geo);
                         telescopes.add(telescope);
                     }
                 }

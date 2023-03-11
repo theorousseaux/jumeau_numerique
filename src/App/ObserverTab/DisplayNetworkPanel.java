@@ -60,7 +60,7 @@ public class DisplayNetworkPanel extends JPanel {
         gc.gridx = 0;
         gc.gridy = 2;
         gc.anchor = GridBagConstraints.WEST;
-        JLabel numberOfStationLabel = new JLabel("Number of ground stations :");
+        JLabel numberOfStationLabel = new JLabel("Number of observers :");
         this.add(numberOfStationLabel, gc);
 
         gc = new GridBagConstraints(); // Réinitialisation de gc pour chaque nouvel élément

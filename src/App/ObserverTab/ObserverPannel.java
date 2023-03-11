@@ -57,10 +57,10 @@ public class ObserverPannel extends JPanel {
 
 
         // Affichage du réseau
-//        gc.gridx = 0;
-//        gc.gridy ++;
-//        gc.gridheight = GridBagConstraints.REMAINDER;
-//        gc.anchor = GridBagConstraints.EAST;
-        //this.add(displayNetworkPannel, gc);
+        gc.gridx = 0;
+        gc.gridy ++;
+        gc.gridheight = GridBagConstraints.REMAINDER;
+        gc.anchor = GridBagConstraints.CENTER;
+        this.add(displayNetworkPannel, gc);
     }
 }

@@ -17,6 +17,7 @@ public class GSController {
     public int numberOfGS = 0;
 
     public GSNetwork gsNetwork;
+
     public GSController() throws IOException {
 
         this.groundStationList = new ArrayList<>();
@@ -27,10 +28,8 @@ public class GSController {
 
         // Ajou d'un télescope standard à chaque station sol
         for (Station station : groundStationList) {
-            station.addTelescope(new TelescopeAzEl("def",new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10,station));
+            station.addTelescope(new TelescopeAzEl("def",new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10,station, true));
         }
-
-        this.groundStationList = GSReader.readStation("src/Data/GS/GS.csv");
 
     }
 
