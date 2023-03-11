@@ -110,9 +110,10 @@ public class simu {
     	//double[] q = {1, 1, 1, 1, 1, 1};
     	//double[] q = {0, 0, 0, 0, 0, 0};
     	RealMatrix Q = MatrixUtils.createRealDiagonalMatrix(q);
+		
 
-    	/*
-    	final RealMatrix measurementP = MatrixUtils.createRealDiagonalMatrix(new double [] {
+    	
+    	/*final RealMatrix measurementP = MatrixUtils.createRealDiagonalMatrix(new double [] {
     		1., 1.
     		});
     	final RealMatrix measurementQ = MatrixUtils.createRealDiagonalMatrix(new double [] {
@@ -128,45 +129,80 @@ public class simu {
                     estimatedMeasurementsParameters.add(driver);
                 }
             }
-        }
-        */
-    	ConstantProcessNoise processNoise = new ConstantProcessNoise(initialP, Q);
+        } */
+        
+    	ConstantProcessNoise processNoise = new ConstantProcessNoise(initialP, Q); 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    	AbsoluteDate finalDate = initialDate.shiftedBy(t * 450.); // on propagera sur 450 orbites
+
+		// ORBITE SIMULEE (TEST)
+		ObservableSatellite satelliteTest = new ObservableSatellite(1);
     	
-     	List<ObservableSatellite> objectsList = new ArrayList<ObservableSatellite>();
+		double i2 = 60.6416*Math.PI/180;
+		double raan2 = 247.4627*Math.PI/180;
+		double e2 = 0.0006703;
+		double pa2 = 130.5360*Math.PI/180;
+		double anomaly2 = 200.6196828895407;
+		double rev_day2 = 15.72125391;
+		double T2 = 3600*24/rev_day2;
+		double a2 = Math.cbrt(Math.pow(T2, 2)*constants.mu/(4*Math.pow(Math.PI,2))); //6730.960 km, soit h=352.823 km
+		double[] listParamOrbitaux2 = {a2,e2,Math.IEEEremainder(i2, 2*Math.PI),Math.IEEEremainder(raan2, 2*Math.PI),Math.IEEEremainder(pa2, 2*Math.PI),Math.IEEEremainder(anomaly2, 2*Math.PI)};
+		//AbsoluteDate initialDate = new AbsoluteDate(2014, 6, 27, 15, 28, 10, constants.utc);
+		KeplerianOrbit initialOrbit2 = new KeplerianOrbit(a2, e2, i2, pa2, raan2, anomaly2, constants.type, constants.gcrf, initialDate, Constants.EGM96_EARTH_MU);
+		//double t = initialOrbit.getKeplerianPeriod();
+		final KeplerianPropagator propagatorTest = new KeplerianPropagator(initialOrbit2);
+
+		//////////////////////////////////////////////////////////////////////////////////////////
+    	AbsoluteDate finalDate = initialDate.shiftedBy(t*1500);
+    	
+
+
+		/* Creating lists of observables satellites */
+		List<ObservableSatellite> objectsList = new ArrayList<ObservableSatellite>();
     	List<Propagator> propagatorsList = new ArrayList<Propagator>();
+
     	objectsList.add(satellite_ISS);
     	propagatorsList.add(truePropagator);
     	
     	
     	// STATIONS ET TELESCOPES
     	// PARIS
-    	Station station_Paris = new Station("PARIS", 48.866667*Math.PI/180, 2.333333*Math.PI/180, 0.);
+    	Station station_Paris = new Station("PARIS", 0., 2.333333*Math.PI/180, 0.);
     	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
-    	TelescopeAzEl tele = new TelescopeAzEl("ID", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, station_Paris);
-    	// NANTES
+		System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
+    	//station_Paris.addTelescope(new TelescopeAzEl("IDT", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10, station_Paris, false));
+		System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
+		station_Paris.addRadar(new Radar("IDR", new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 40*Math.PI/180,  10, station_Paris));
+    	System.out.println("taille liste telescopes : " + station_Paris.getListTelescope().size());
+		// NANTES
     	//Station station_Nantes = new Station("NANTES", 48.766667*Math.PI/180, 2.333333*Math.PI/180, 0.);
     	//TelescopeAzEl(mean, angularIncertitude, elevationLimit, angularFoV, stepMeasure, breakTime, station)
     	//station_Nantes.addTelescope(new TelescopeAzEl(new double[]{0.,0.}, new double[]{0.3*Math.PI/180, 0.3*Math.PI/180}, 30*Math.PI/180, 119*Math.PI/180, 10, 10));
     	//List<TelescopeAzEl> telescopesList_Nantes = station_Nantes.getListTelescope();
     	// LISTE DE TELESCOPES
        	List<TelescopeAzEl> telescopesList = station_Paris.getListTelescope();
+		List<Radar> radarList = station_Paris.getListRadar();
+		System.out.println("taille liste radars : " + radarList.size());
+		System.out.println("taille liste telescopes : " + telescopesList.size());
     	//telescopesList.add(telescopesList_Nantes.get(0));
     	
        	
        	// OBSERVATIONS
-    	Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
+    	//Observation observation = new Observation(telescopesList, objectsList, propagatorsList, initialDate, finalDate);
+		//System.out.println("ça va plot");
+    	//List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = observation.measure(true);
+
+		ObservationPlus observation = new ObservationPlus(telescopesList, radarList, objectsList, propagatorsList, initialDate, finalDate);
+		System.out.println("ça va plot");
     	List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = observation.measure(true);
     	
     	
     	// OD
-    	OD od = new OD(satellite_ISS, truePropagator, numericalPropagatorBuilder, measurementsSetsList.get(0), initialDate, finalDate);
-    	LinkedHashMap<ObservedMeasurement<?>,Propagator> newEstimatedKalman = od.Kalman(processNoise);
+    	//OD od = new OD(satellite_ISS, truePropagator, numericalPropagatorBuilder, measurementsSetsList.get(0), initialDate, finalDate);
+    	//LinkedHashMap<ObservedMeasurement<?>,Propagator> newEstimatedKalman = od.Kalman(processNoise);
 	}
 	
-    public static double[][] createDiagonalMatrix ( double[] diagonal ) {
+    static double[][] createDiagonalMatrix(double[] diagonal) {
         int size = diagonal.length;
         double[][] matrix = new double[size][size];
         for (int i = 0; i < size; i++) {

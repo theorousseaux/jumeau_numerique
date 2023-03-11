@@ -15,16 +15,19 @@ import org.orekit.estimation.measurements.generation.Generator;
 import org.orekit.propagation.Propagator;
 import org.orekit.time.AbsoluteDate;
 
-public class Observation {
-	
+public class ObservationPlus {
+
 	public List<TelescopeAzEl> telescopesList;
+    public List<Radar> radarsList;
 	public List<ObservableSatellite> objectsList;
 	public List<Propagator> propagatorsList;
 	public AbsoluteDate initialDate;
 	public AbsoluteDate finalDate;
 
-	public Observation(List<TelescopeAzEl> telescopesList, List<ObservableSatellite> objectsList, List<Propagator> propagatorsList, AbsoluteDate initialDate, AbsoluteDate finalDate){
-		this.telescopesList = telescopesList;
+	public ObservationPlus(List<TelescopeAzEl> telescopesList, List<Radar> radarsList, List<ObservableSatellite> objectsList, List<Propagator> propagatorsList, AbsoluteDate initialDate, AbsoluteDate finalDate){
+		
+        this.telescopesList = telescopesList;
+        this.radarsList =  radarsList;
 		this.objectsList = objectsList;
 		this.propagatorsList = propagatorsList;
 		this.initialDate = initialDate;
@@ -41,9 +44,25 @@ public class Observation {
 				System.out.println("considering object : " + i);
 	    		EventBasedScheduler scheduler = telescope.createEventBasedScheduler(this.objectsList.get(i), this.propagatorsList.get(i));
 	        	generator.addScheduler(scheduler);
+	        }
+	    }
+        for(Radar radar : this.radarsList) {
+	    	for(int i = 0; i < this.objectsList.size(); i++) {
+				System.out.println("considering object : " + i);
+	    		
+                List<EventBasedScheduler> schedulerList = radar.createEventBasedScheduler(this.objectsList.get(i), this.propagatorsList.get(i));
+                EventBasedScheduler schedulerAzEl = schedulerList.get(0);
+                EventBasedScheduler schedulerRange = schedulerList.get(1);
+                EventBasedScheduler schedulerRangeRate = schedulerList.get(2);
+                
+                generator.addScheduler(schedulerAzEl);
+                generator.addScheduler(schedulerRange);
+                generator.addScheduler(schedulerRangeRate);
+
 	        	//generator.addPropagator(propagatorsList.get(i));
 	        }
 	    }
+
 		System.out.println("generating measurements : ");
 	    SortedSet<ObservedMeasurement<?>> measurementsList = generator.generate(this.initialDate, this.finalDate);
 		System.out.println("done");
@@ -73,5 +92,5 @@ public class Observation {
 	    
 	    return measurementsSetsList;
 	}
-
+    
 }

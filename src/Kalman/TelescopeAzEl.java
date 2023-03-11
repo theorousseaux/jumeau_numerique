@@ -1,10 +1,8 @@
 package src.Kalman;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.linear.MatrixUtils;
@@ -27,7 +25,6 @@ import org.orekit.propagation.events.GroundAtNightDetector;
 import org.orekit.propagation.events.GroundFieldOfViewDetector;
 import org.orekit.time.FixedStepSelector;
 import org.orekit.time.TimeComponents;
-import org.orekit.utils.PVCoordinatesProvider;
 
 public class TelescopeAzEl {
 	
@@ -61,22 +58,46 @@ public class TelescopeAzEl {
 	private double stepMeasure;
 	
 	private double breakTime;
-	
+
+	private Boolean GEO;
+
+	private double alphaGEO;
+
 	LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
 	/** Constructor */
-    public TelescopeAzEl(String ID, double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, double breakTime, Station station) {
+    public TelescopeAzEl(String ID, double[] mean, double[] angularIncertitude, double elevationLimit, double angularFoV, double stepMeasure, double breakTime, Station station, Boolean GEO) {
 
     	this.ID  = ID;
+		this.station = station;
 
 		this.sigma = angularIncertitude;
 		this.baseWeight = new double[]{1., 1.};
+		this.GEO = GEO;
+		this.alphaGEO = 0.;
 
-		// ATTENTION, ne marche pas si angularFoV>180-2*limitElevation
+		// Mise en place field of view
+
 		this.angularFoV = angularFoV;
 		this.azimuthField = new double[]{0., Math.PI};
 		this.elevationField = new double[]{0. + elevationLimit, Math.PI - elevationLimit};
 
+		if (this.GEO == true) {
+
+			//calcul de l'élévation de pointage telescope pour les GEO
+			double latitude = station.getLatitude();
+
+			double Rt = 6400*1000;
+			double D = Rt*Math.sin(latitude);
+			double b = Rt*Math.cos(latitude);
+			double a = 35786 + 6378;
+			double c = a - b;
+			double beta = Math.atan(D/c);
+			double alpha = Math.PI/2 - (beta+latitude);
+
+			alphaGEO = alpha;
+
+		}
 		// bruit de mesures
 		this.mean = mean;
 		this.angularIncertitude = angularIncertitude;
@@ -87,14 +108,11 @@ public class TelescopeAzEl {
     	CorrelatedRandomVectorGenerator noiseSource = new CorrelatedRandomVectorGenerator(mean, covariance, 1.0e-10, gaussianRandomGenerator);//mesures parfaites:null
 		this.noiseSource = noiseSource;
 
-		this.station = station;
-		station.addTelescope(this);
-
-		
 		this.stepMeasure = stepMeasure;
 		this.breakTime = breakTime;
-		
 		this.skyCoveringMap = createSkyCoveringMap();
+
+		station.listTelescopes.add(this);
 	}
     
     public String getID() {
@@ -129,6 +147,15 @@ public class TelescopeAzEl {
     	return this.elevationField[0];
     }
 
+	public Boolean getGEO() {
+		return this.GEO;
+	}
+
+	public double getAlphaGEO() {
+		return this.alphaGEO;
+	}
+
+
     public BooleanDetector createDetector(LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {
     	//EventDetector, conditions for the observations
     	//elevation detector
@@ -145,16 +172,56 @@ public class TelescopeAzEl {
     			(s, detector, increasing) -> {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
-    	//FOV detector
-    	CustomGroundFieldOfViewDetector fovDetector = new CustomGroundFieldOfViewDetector(station.getBaseFrame(), skyCoveringMap); // positif quand c'est visible
+
+		//FOV detector
+		CustomGroundFieldOfViewDetector fovDetector = new CustomGroundFieldOfViewDetector(station.getBaseFrame(), skyCoveringMap); // positif quand c'est visible
+		fovDetector = fovDetector.withHandler(
+				(s, detector, increasing) -> {
+					return increasing ? Action.CONTINUE : Action.CONTINUE;
+				});
+
+		//FinalDetector
+		BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, nightDetector, fovDetector);
+
+
+    	return finalDetector;
+    }
+
+	public BooleanDetector createDetectorGEO(){
+
+		//ElevationDetector
+		ElevationDetector elevationDetector = new ElevationDetector(station.getBaseFrame()); //visible quand positif
+    	elevationDetector = elevationDetector.withHandler(
+    			(s, detector, increasing) -> {
+    				return increasing ? Action.CONTINUE : Action.CONTINUE;
+    	        });
+    	elevationDetector = elevationDetector.withConstantElevation(elevationField[0]);
+
+		//Night detector
+    	GroundAtNightDetector nightDetector = new GroundAtNightDetector(station.getBaseFrame(), constants.Sun, GroundAtNightDetector.ASTRONOMICAL_DAWN_DUSK_ELEVATION, constants.refractionModel); // nuit quand positif
+    	nightDetector = nightDetector.withHandler(
+    			(s, detector, increasing) -> {
+    				return increasing ? Action.CONTINUE : Action.CONTINUE;
+    	        });
+
+		//GEO Field of View Detector
+		double alpha = this.alphaGEO;
+		Vector3D vectorCenter = new Vector3D(0, alpha);
+        Vector3D axis1 = new Vector3D(1,0,0);
+        Vector3D axis2 = new Vector3D(0, Math.sqrt(2)/2, Math.sqrt(2)/2);
+        DoubleDihedraFieldOfView fov = new DoubleDihedraFieldOfView(vectorCenter, axis1, angularFoV/2, axis2, angularFoV/2, 0.);
+
+		GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(station.getBaseFrame(), fov); // positif quand c'est visible
     	fovDetector = fovDetector.withHandler(
     			(s, detector, increasing) -> {
     				return increasing ? Action.CONTINUE : Action.CONTINUE;
     	        });
 
-    	BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, nightDetector, fovDetector);
-    	return finalDetector;
-    }
+		BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, nightDetector, fovDetector);
+
+		return finalDetector;
+
+	}
     
     public FixedStepSelector createDateSelector() {
     	FixedStepSelector dateSelector = new FixedStepSelector(this.stepMeasure, constants.utc);
@@ -189,11 +256,7 @@ public class TelescopeAzEl {
                 }	
             }
         }
-        
-        for(List<Double> aePosition : azElSkyCovering) {
-        	//System.out.println(aePosition.get(0));
-        	//System.out.println(aePosition.get(1));        	
-        }
+
         return azElSkyCovering;
     }
 
@@ -238,6 +301,9 @@ public class TelescopeAzEl {
 
     public EventBasedScheduler createEventBasedScheduler(ObservableSatellite satellite, Propagator propagator) {
     	BooleanDetector detector = createDetector(this.skyCoveringMap);
+		if (this.GEO == true) {
+			detector = createDetectorGEO();
+		}
     	FixedStepSelector selector = createDateSelector();
     	AngularAzElBuilder builder  = createAzElBuilder(satellite);
        	EventBasedScheduler scheduler = new EventBasedScheduler(builder, selector, propagator, detector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
