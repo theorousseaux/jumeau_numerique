@@ -1,16 +1,5 @@
 ID (station:type:id), mean1, mean2, angularIncertitude1, angularIncertitude2, elevationLimit, angularFoV, stepMeasure, breakTime
 Toulouse:telescope:0, 0.0, 0.0, 0.00524, 0.00524, 0.5236, 2.07694, 10, 10, true
 Paris:telescope:0, 0.0, 0.0, 0.00524, 0.00524, 0.5236, 2.07694, 10, 10, true
-BuenosAires:telescope:0,0.0,0.0,0.1,0.1,1.0,1.0,10.0,10.0, false
-Cotonou:telescope:0,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,false
-Kiruna:telescope:0,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,false
-McMurdo:telescope:0,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,false
-Le Désert:telescope:0,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,true
-Le Désert:telescope:1,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,true
-Le Désert:telescope:2,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,true
-Le Désert:telescope:3,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,true
-Le Désert:telescope:4,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,true
-Le Désert:telescope:5,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,true
-Le Désert:telescope:6,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,true
-Le Désert:telescope:7,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,true
-Tokyo:telescope:0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,false
+Toulouse:radar:0,0.0,0.0,0.00524,0.00524,2.07694,10.0
+Paris:radar:0,0.0,0.0,0.00524,0.00524,2.07694,10.0

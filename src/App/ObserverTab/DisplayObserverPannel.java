@@ -169,6 +169,6 @@ public class DisplayObserverPannel extends JPanel{
         arr = elements.toArray(arr);
         JList<String> liste = new JList<>(arr);
         JScrollPane scrollPane = new JScrollPane(liste);
-        this.add(scrollPane, gc);
+        this.add(scrollPane, gc,1);
     }
 }

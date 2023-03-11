@@ -55,14 +55,12 @@ public class ObserverPannel extends JPanel {
         gc.anchor = GridBagConstraints.CENTER;
         this.add(createNetworkPannel, gc);
 
-        /*
         // Affichage du réseau
         gc.gridx = 0;
         gc.gridy ++;
         gc.gridheight = GridBagConstraints.REMAINDER;
         gc.anchor = GridBagConstraints.CENTER;
         this.add(displayNetworkPannel, gc);
-        */
 
     }
 }
