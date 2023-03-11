@@ -29,30 +29,34 @@ import org.orekit.time.FixedStepSelector;
 
 
 public class Radar {
-    
-    /** ID (station:type:id) */	
-	private String ID;
+
+    /** ID (station:type:id) */
+    private String ID;
 
     /** noiseSource */
-	public CorrelatedRandomVectorGenerator noiseSource;
+    public CorrelatedRandomVectorGenerator noiseSource;
 
-	/** sigma */
-	public double[] sigma;
+    private double[] mean;
 
-	/** Measures weight */
-	public double[] baseWeight;
+    private double[] angularIncertitude;
 
-	/** GroundStation */
-	public Station station;
+    /** sigma */
+    public double[] sigma;
 
-	/** taille angulaire fov */
-	public double angularFoV; 
+    /** Measures weight */
+    public double[] baseWeight;
 
-	/** nombre de secondes entre deux mesures */
-	public double stepMeasure;
-	
-	/** Programmation satellite LEO/GEO */
-	public FieldOfView fov;
+    /** GroundStation */
+    public Station station;
+
+    /** taille angulaire fov */
+    public double angularFoV;
+
+    /** nombre de secondes entre deux mesures */
+    public double stepMeasure;
+
+    /** Programmation satellite LEO/GEO */
+    public FieldOfView fov;
 
     public double baseWeightRadar;
 
@@ -69,6 +73,9 @@ public class Radar {
         this.sigmaRadar = 30.;
         this.baseWeightRadar = 1.;
 
+        this.mean = mean;
+        this.angularIncertitude = angularIncertitude;
+
         // Mise en place du field of view du radar
         this.angularFoV = angularFoV;
         Vector3D vectorCenter = new Vector3D(0, Math.PI/2);
@@ -76,8 +83,8 @@ public class Radar {
         Vector3D axis2 = new Vector3D(0, Math.sqrt(2)/2, Math.sqrt(2)/2);
         DoubleDihedraFieldOfView fov = new DoubleDihedraFieldOfView(vectorCenter, axis1, angularFoV/2, axis2, angularFoV/2, 0.);
         this.fov = fov;
-        
- 
+
+
         // bruit de mesures
         double[] covarianceDiag = {Math.pow(angularIncertitude[0],2), Math.pow(angularIncertitude[1],2)};
         RealMatrix covariance = MatrixUtils.createRealDiagonalMatrix(covarianceDiag);
@@ -87,39 +94,47 @@ public class Radar {
         this.noiseSource = noiseSource;
 
         this.stepMeasure = stepMeasure;
-        
+
     }
 
     /* Récupération des attributs */
     public String getID() {
-    	return this.ID;
+        return this.ID;
+    }
+
+    public double[] getMean() {
+        return this.mean;
+    }
+
+    public double[] getAngularIncertitude() {
+        return this.angularIncertitude;
     }
 
     public CorrelatedRandomVectorGenerator getNoiseSource(){
         return this.noiseSource;
     }
 
-	public double[] getSigma(){
+    public double[] getSigma(){
         return this.sigma;
     }
 
-	public double[] getBaseWeight(){
+    public double[] getBaseWeight(){
         return this.baseWeight;
     }
 
-	public Station getStation(){
+    public Station getStation(){
         return this.station;
     }
 
-	public double getAngularFoV(){
+    public double getAngularFoV(){
         return this.angularFoV;
     }
 
-	public double getStepMeasure() {
+    public double getStepMeasure() {
         return this.stepMeasure;
     }
-	
-	public FieldOfView getFov(){
+
+    public FieldOfView getFov(){
         return this.fov;
     }
 
@@ -134,48 +149,48 @@ public class Radar {
 
     /* Création Final Detector */
     public BooleanDetector createRadarDetector() {
-        
+
         //Elevation Detector
         System.out.println(station.getBaseFrame());
-    	ElevationDetector elevationDetector = new ElevationDetector(station.getBaseFrame()); //visible quand positif
-    	elevationDetector = elevationDetector.withHandler(
-    			(s, detector, increasing) -> {
-    				return increasing ? Action.CONTINUE : Action.CONTINUE;
-    	        });
-    	
+        ElevationDetector elevationDetector = new ElevationDetector(station.getBaseFrame()); //visible quand positif
+        elevationDetector = elevationDetector.withHandler(
+                (s, detector, increasing) -> {
+                    return increasing ? Action.CONTINUE : Action.CONTINUE;
+                });
+
         //AltitudeDetector
         AltitudeDetector altitudeDetector = new AltitudeDetector(2000000, constants.earthShape);
         altitudeDetector = altitudeDetector.withHandler(
-            (s, detector, increasing) -> {
-                return increasing ? Action.CONTINUE : Action.CONTINUE;
-            });
-        NegateDetector newAltitudeDetector = new NegateDetector(altitudeDetector); 
+                (s, detector, increasing) -> {
+                    return increasing ? Action.CONTINUE : Action.CONTINUE;
+                });
+        NegateDetector newAltitudeDetector = new NegateDetector(altitudeDetector);
 
-    
-    	//FOV detector
-    	GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(station.getBaseFrame(), fov); // positif quand c'est visible
-    	fovDetector = fovDetector.withHandler(
-    			(s, detector, increasing) -> {
-    				return increasing ? Action.CONTINUE : Action.CONTINUE;
-    	        });
-        NegateDetector newFovDetector = new NegateDetector(fovDetector); 
-           
+
+        //FOV detector
+        GroundFieldOfViewDetector fovDetector = new GroundFieldOfViewDetector(station.getBaseFrame(), fov); // positif quand c'est visible
+        fovDetector = fovDetector.withHandler(
+                (s, detector, increasing) -> {
+                    return increasing ? Action.CONTINUE : Action.CONTINUE;
+                });
+        NegateDetector newFovDetector = new NegateDetector(fovDetector);
+
         //Final Detector
         BooleanDetector finalDetector = BooleanDetector.andCombine(elevationDetector, newAltitudeDetector, newFovDetector);
-    	return finalDetector;
+        return finalDetector;
     }
-    
+
 
     /* StepSelector */
     public FixedStepSelector createDateSelector() {
-    	FixedStepSelector dateSelector = new FixedStepSelector(this.stepMeasure, constants.utc);
-    	return dateSelector;
+        FixedStepSelector dateSelector = new FixedStepSelector(this.stepMeasure, constants.utc);
+        return dateSelector;
     }
-    
+
     /* Creation des mesureBuilder */
     public AngularAzElBuilder createAzElBuilder(ObservableSatellite satellite) {
-    	AngularAzElBuilder azElBuilder = new AngularAzElBuilder(this.noiseSource, this.station, this.sigma, this.baseWeight, satellite);
-    	return azElBuilder;
+        AngularAzElBuilder azElBuilder = new AngularAzElBuilder(this.noiseSource, this.station, this.sigma, this.baseWeight, satellite);
+        return azElBuilder;
     }
     public RangeBuilder createRangeBuilder(ObservableSatellite satellite){
         RangeBuilder rangeBuilder = new RangeBuilder(noiseSource, station, true, sigmaRadar, baseWeightRadar, satellite);
@@ -190,17 +205,17 @@ public class Radar {
 
     /*Création de l'EventBasedScheduler final */
     public List<EventBasedScheduler> createEventBasedScheduler(ObservableSatellite satellite, Propagator propagator) {
-    	
-        BooleanDetector detector = this.createRadarDetector();
-    	FixedStepSelector selector = this.createDateSelector();
 
-    	AngularAzElBuilder azElbuilder  = createAzElBuilder(satellite);
+        BooleanDetector detector = this.createRadarDetector();
+        FixedStepSelector selector = this.createDateSelector();
+
+        AngularAzElBuilder azElbuilder  = createAzElBuilder(satellite);
         RangeBuilder rangeBuilder = createRangeBuilder(satellite);
         RangeRateBuilder rangeRateBuilder =  createRangeRateBuilder(satellite);
 
         List<EventBasedScheduler> schedulerList  = new ArrayList<>();
 
-       	EventBasedScheduler schedulerAzEl = new EventBasedScheduler(azElbuilder, selector, propagator, detector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
+        EventBasedScheduler schedulerAzEl = new EventBasedScheduler(azElbuilder, selector, propagator, detector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
         EventBasedScheduler schedulerRange = new EventBasedScheduler(rangeBuilder, selector, propagator, detector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
         EventBasedScheduler schedulerRangeRate = new EventBasedScheduler(rangeRateBuilder, selector, propagator, detector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
 
@@ -208,6 +223,6 @@ public class Radar {
         schedulerList.add(schedulerRange);
         schedulerList.add(schedulerRangeRate);
 
-    	return schedulerList;
+        return schedulerList;
     }
-}   
+}

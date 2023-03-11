@@ -159,7 +159,7 @@ public class NewObserverPannel extends JPanel {
                     parent.obserController.writeObserverFile.writeObserverTelescope(newTelescope);
 
                     // Mise à jour du panneau d'affichage des stations sol
-                    displayObserverPannel.displayNewTelescope();
+                    displayObserverPannel.displayNewObserver();
                     displayObserverPannel.repaint();
                     displayObserverPannel.revalidate();
 
