@@ -64,6 +64,25 @@ public class DisplayObserverPannel extends JPanel{
             elements.add(sb.toString ());
         }
 
+        for (src.Kalman.Radar radar: parent.obserController.radarList) {
+            // Affichage de la liste des telescopes
+            StringBuilder sb = new StringBuilder();
+            sb.append(radar.getID());
+            sb.append(" : ");
+            sb.append("Mean :");
+            sb.append(Arrays.toString(radar.getMean()));
+            sb.append(", ");
+            sb.append("Angular incertitude :");
+            sb.append(Arrays.toString(radar.getAngularIncertitude()));
+            sb.append(", ");
+            sb.append("angularFoV :");
+            sb.append(radar.getAngularFoV());
+            sb.append(", ");
+            sb.append("stepMeasure :");
+            sb.append(radar.getStepMeasure());
+            elements.add(sb.toString ());
+        }
+
         String[] arr = {};
         arr = elements.toArray(arr);
         JList<String> liste = new JList<>(arr);
@@ -78,9 +97,8 @@ public class DisplayObserverPannel extends JPanel{
         }
     }
 
-    public void displayNewTelescope() {
+    public void displayNewObserver() {
         removeAllExceptTop();
-        this.parent = parent;
         setLayout(new GridBagLayout());
 
         // Titre
@@ -125,6 +143,25 @@ public class DisplayObserverPannel extends JPanel{
             sb.append(", ");
             sb.append("GEO :");
             sb.append(telescopeAzEl.getGEO());
+            elements.add(sb.toString ());
+        }
+
+        for (src.Kalman.Radar radar: parent.obserController.radarList) {
+            // Affichage de la liste des telescopes
+            StringBuilder sb = new StringBuilder();
+            sb.append(radar.getID());
+            sb.append(" : ");
+            sb.append("Mean :");
+            sb.append(Arrays.toString(radar.getMean()));
+            sb.append(", ");
+            sb.append("Angular incertitude :");
+            sb.append(Arrays.toString(radar.getAngularIncertitude()));
+            sb.append(", ");
+            sb.append("angularFoV :");
+            sb.append(radar.getAngularFoV());
+            sb.append(", ");
+            sb.append("stepMeasure :");
+            sb.append(radar.getStepMeasure());
             elements.add(sb.toString ());
         }
 

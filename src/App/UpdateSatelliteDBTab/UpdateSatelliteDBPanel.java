@@ -21,15 +21,11 @@ public class UpdateSatelliteDBPanel extends JPanel{
 
         // Création des boutons pour l'onglet Satellite
         JButton updateDatabseButton = new JButton("Update database");
-        JButton addSatelliteButton = new JButton("Add");
 
         // Ajout des boutons au panneau Satellite
         gc.gridy = 0;
         gc.gridx = 0;
         add(updateDatabseButton, gc);
-
-        gc.gridx = 1;
-        add(addSatelliteButton, gc);
 
         // Création du JTextArea et d'un JScrollPane pour pouvoir faire défiler le texte
         JTextArea outputTextArea = new JTextArea(30, 40);
@@ -46,7 +42,6 @@ public class UpdateSatelliteDBPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 // Désactiver le bouton pendant l'exécution du script
                 updateDatabseButton.setEnabled(false);
-                addSatelliteButton.setEnabled(false);
 
                 // Exécuter le script dans un Thread séparé pour ne pas bloquer l'interface graphique
                 Thread thread = new Thread(new Runnable() {
@@ -75,7 +70,6 @@ public class UpdateSatelliteDBPanel extends JPanel{
                                     outputTextArea.append("Script sh terminé avec le code de sortie " + exitCode + "\n");
                                     // Réactiver les boutons lorsque le script est terminé
                                     updateDatabseButton.setEnabled(true);
-                                    addSatelliteButton.setEnabled(true);
                                 }
                             });
                         } catch (IOException | InterruptedException ex) {

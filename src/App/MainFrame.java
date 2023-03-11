@@ -73,7 +73,7 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("Update DB", updateSatelliteDBPanel);
         tabbedPane.addTab("Ground Station", groundStationPanel);
         tabbedPane.addTab("Observer", observerPanel);
-        tabbedPane.addTab("globe",globePanel);
+        tabbedPane.addTab("Globe",globePanel);
         //tabbedPane.addTab("Station visualization", worldMapPanel);
         // tabbedPane.addTab("Analysis", analysisPanel);
         tabbedPane.addTab("Simulation parameters", parametersPanel);

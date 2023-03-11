@@ -2,6 +2,7 @@ package src.App.ObserverTab;
 
 import src.App.MainFrame;
 import src.App.WorldMapTab.WorldMapPanel;
+import src.Kalman.Radar;
 import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
 import src.UseCase1_GSNetwork.GSNetwork;
@@ -49,6 +50,9 @@ public class CreateNetworkPanel extends JPanel {
         listModel = new DefaultListModel ();
         for (TelescopeAzEl tele : parent.obserController.telescopeAzElList) {
             listModel.addElement(tele.getID ());
+        }
+        for (Radar radar : parent.obserController.radarList) {
+            listModel.addElement(radar.getID ());
         }
         list = new JList(listModel);
         list.setLayoutOrientation ( JList.VERTICAL);
@@ -111,5 +115,15 @@ public class CreateNetworkPanel extends JPanel {
 
             }
         });
+    }
+
+    public void update(){
+        listModel.clear ();
+        for (TelescopeAzEl tele : parent.obserController.telescopeAzElList) {
+            listModel.addElement(tele.getID ());
+        }
+        for (Radar radar : parent.obserController.radarList) {
+            listModel.addElement(radar.getID ());
+        }
     }
 }

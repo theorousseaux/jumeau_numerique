@@ -27,13 +27,12 @@ public class ObserverPannel extends JPanel {
         // Choix des stations sol pour le réseau
         //CreateNetworkPannel createNetworkPannel = new CreateNetworkPannel(parent, displayNetworkPannel);
 
-        // Affichage du formulaire d'ajout d'une station sol
-        NewObserverPannel newObserverPannel = new NewObserverPannel(parent, displayObserverPannel);
-
         DisplayNetworkPanel displayNetworkPannel = new DisplayNetworkPanel(parent);
         WorldMapPanel worldMapPanel = (WorldMapPanel) parent.globePanel;
         // Choix des stations sol pour le réseau
         CreateNetworkPanel createNetworkPannel = new CreateNetworkPanel(parent, displayNetworkPannel, worldMapPanel);
+        // Affichage du formulaire d'ajout d'une station sol
+        NewObserverPannel newObserverPannel = new NewObserverPannel(parent, displayObserverPannel, createNetworkPannel);
 
         gc.gridx = 0;
         gc.gridy = 0;
