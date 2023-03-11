@@ -10,6 +10,7 @@ import gov.nasa.worldwind.render.PointPlacemark;
 import gov.nasa.worldwind.render.PointPlacemarkAttributes;
 import src.App.MainFrame;
 import src.Kalman.Station;
+import src.Kalman.TelescopeAzEl;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,6 +18,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class displays a globe with the ground stations.
@@ -56,7 +59,7 @@ public final class WorldMapPanel extends JPanel{
 
             placemark.setLabelText(station.getName());
 
-            placemark.setAttributes(createPlacemarkAttributes(false));
+            placemark.setAttributes(createPlacemarkAttributes(station.getName (), new HashMap<String,String> ()));
             GSLayer.addRenderable(placemark);
 
         }
@@ -77,6 +80,11 @@ public final class WorldMapPanel extends JPanel{
         Model m = (Model)WorldWind.createConfigurationComponent
                 (AVKey.MODEL_CLASS_NAME);
 
+        HashMap<String, String> selectedStations = new HashMap<> (  );
+        for (TelescopeAzEl teles : parent.obserController.observerNetwork.getTelescopes ()){
+            String station = teles.getStation ().getName ();
+            selectedStations.put(station,"");
+        }
         wwPanel.setModel(m);
         GSLayer = new RenderableLayer();
         for (Station station : parent.gsController.groundStationList){
@@ -87,11 +95,15 @@ public final class WorldMapPanel extends JPanel{
             Position position = Position.fromRadians(latitude, longitude, altitude);
             PointPlacemark placemark = new PointPlacemark(position);
             try{
-                    placemark.setAttributes(createPlacemarkAttributes(parent.gsController.gsNetwork.getNames().contains(station.getName())));
+                    placemark.setAttributes(createPlacemarkAttributes(station.getName (), selectedStations));
             }catch(Exception e){
 
             }
-            placemark.setLabelText(station.getName());
+            if(selectedStations.containsKey ( station )){
+                placemark.setLabelText ( station.getName ( ) +": " + selectedStations.get (station.getName ()) );
+            }else{
+                placemark.setLabelText ( station.getName ( ) );
+            }
             GSLayer.addRenderable(placemark);
         }
         wwPanel.getModel().getLayers().add(GSLayer);
@@ -100,9 +112,11 @@ public final class WorldMapPanel extends JPanel{
         this.add(this.wwPanel, BorderLayout.CENTER);
     }
 
-    private PointPlacemarkAttributes createPlacemarkAttributes(boolean selected) {
+    private PointPlacemarkAttributes createPlacemarkAttributes(String station, HashMap<String, String> selectedstations) {
         String imageName;
         PointPlacemarkAttributes attrs = new PointPlacemarkAttributes();
+        boolean selected = selectedstations.containsKey ( station );
+
         if (selected){
             imageName ="src/App/img/selected.jpeg";
             attrs.setLabelColor("0xFF00FF00");

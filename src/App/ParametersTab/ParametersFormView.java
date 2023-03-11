@@ -69,21 +69,6 @@ public class ParametersFormView extends JPanel{
 
         formPanel.add(paramLabel, gc);
 
-        // Adding noise selection
-        gc.gridx = 0;
-        gc.gridy = 1;
-        gc.gridwidth = 1;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.anchor = GridBagConstraints.LINE_END;
-
-        formPanel.add(new JLabel("Noise level: "), gc);
-
-        gc.gridx ++;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-
-        formPanel.add(noiseLevField, gc);
-
         // Adding start date
         gc.gridx = 0;
         gc.gridy++;
@@ -135,8 +120,6 @@ public class ParametersFormView extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 // Fetching input data
                 try {
-                    double noiseLevel = Double.parseDouble ( noiseLevField.getText ( ) );
-
                     int startDay = Integer.parseInt ( startDayField.getText ( ) );
                     int startMonth = Integer.parseInt ( startMonthField.getText ( ) );
                     int startYear = Integer.parseInt ( startYearField.getText ( ) );
@@ -154,8 +137,7 @@ public class ParametersFormView extends JPanel{
                         JOptionPane.showMessageDialog ( parent , "Invalid dates" , "Error" , JOptionPane.ERROR_MESSAGE );
                     } else {
                         // Creating the model
-                        System.out.println ( "Noise level: " + String.valueOf ( noiseLevel ) );
-                        controller.setNoiseLevel ( noiseLevel );
+
 
                         controller.setStartDate ( startYear , startMonth , startDay );
 

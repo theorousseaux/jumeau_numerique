@@ -102,14 +102,26 @@ public class CreateNetworkPanel extends JPanel {
                 displayNetworkPannel.repaint();
                 displayNetworkPannel.revalidate();
 
-                /*
-                worldMapPanel.displayNewObs(parent);
+                try {
+                    worldMapPanel.displayNewGS(parent);
+                } catch (IOException ex) {
+                    throw new RuntimeException ( ex );
+                }
                 worldMapPanel.repaint();
                 worldMapPanel.revalidate();
 
-                 */
 
             }
         });
+
+
+
+    }
+    public void displayNewTelescope (TelescopeAzEl teles) {
+
+        String name = teles.getID();
+
+        listModel.addElement(name);
+
     }
 }

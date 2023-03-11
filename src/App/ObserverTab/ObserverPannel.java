@@ -23,17 +23,17 @@ public class ObserverPannel extends JPanel {
 
         // Affichage du réseau
         DisplayObserverPannel displayObserverPannel = new DisplayObserverPannel(parent);
-
-        // Choix des stations sol pour le réseau
-        //CreateNetworkPannel createNetworkPannel = new CreateNetworkPannel(parent, displayNetworkPannel);
-
-        // Affichage du formulaire d'ajout d'une station sol
-        NewObserverPannel newObserverPannel = new NewObserverPannel(parent, displayObserverPannel);
-
         DisplayNetworkPanel displayNetworkPannel = new DisplayNetworkPanel(parent);
         WorldMapPanel worldMapPanel = (WorldMapPanel) parent.globePanel;
         // Choix des stations sol pour le réseau
+        //CreateNetworkPannel createNetworkPannel = new CreateNetworkPannel(parent, displayNetworkPannel);
         CreateNetworkPanel createNetworkPannel = new CreateNetworkPanel(parent, displayNetworkPannel, worldMapPanel);
+
+        // Affichage du formulaire d'ajout d'une station sol
+        NewObserverPannel newObserverPannel = new NewObserverPannel(parent, displayObserverPannel, createNetworkPannel);
+
+
+        // Choix des stations sol pour le réseau
 
         gc.gridx = 0;
         gc.gridy = 0;
@@ -55,12 +55,14 @@ public class ObserverPannel extends JPanel {
         gc.anchor = GridBagConstraints.CENTER;
         this.add(createNetworkPannel, gc);
 
-
+        /*
         // Affichage du réseau
         gc.gridx = 0;
         gc.gridy ++;
         gc.gridheight = GridBagConstraints.REMAINDER;
         gc.anchor = GridBagConstraints.CENTER;
         this.add(displayNetworkPannel, gc);
+        */
+
     }
 }

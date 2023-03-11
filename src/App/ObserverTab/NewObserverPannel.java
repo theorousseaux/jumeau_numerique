@@ -18,7 +18,7 @@ public class NewObserverPannel extends JPanel {
     private JComboBox<String> cbType;
     private JPanel formPanel;
 
-    public NewObserverPannel(MainFrame parent, DisplayObserverPannel displayObserverPannel) {
+    public NewObserverPannel(MainFrame parent, DisplayObserverPannel displayObserverPannel, CreateNetworkPanel createNetworkPanel) {
 
         this.parent = parent;
 
@@ -51,7 +51,7 @@ public class NewObserverPannel extends JPanel {
         cbType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateFormPanel(displayObserverPannel);
+                updateFormPanel(displayObserverPannel, createNetworkPanel);
             }
         });
         add(cbType, gc);
@@ -62,11 +62,11 @@ public class NewObserverPannel extends JPanel {
         gc.insets = new Insets(10, 0, 0, 0);
 
         formPanel = new JPanel();
-        updateFormPanel(displayObserverPannel);
+        updateFormPanel(displayObserverPannel, createNetworkPanel);
         add(formPanel, gc);
     }
 
-    private void updateFormPanel(DisplayObserverPannel displayObserverPannel) {
+    private void updateFormPanel(DisplayObserverPannel displayObserverPannel, CreateNetworkPanel createNetworkPanel) {
         String selectedType = (String) cbType.getSelectedItem();
         assert selectedType != null;
         if (selectedType.equals("Telescope")) {
@@ -164,6 +164,10 @@ public class NewObserverPannel extends JPanel {
                     displayObserverPannel.revalidate();
 
                     // Mise à jour du panneau de choix des telescopes
+                    createNetworkPanel.displayNewTelescope(newTelescope);
+                    createNetworkPanel.repaint();
+                    createNetworkPanel.revalidate();
+
 
                 }
             });
