@@ -121,19 +121,20 @@ public class OD {
     	KalmanEstimator kalmanEstimator = estimatorBuilder.build();
     	
     	LinkedHashMap<ObservedMeasurement<?>, Propagator> mapMeasurePropagator = new LinkedHashMap<ObservedMeasurement<?>, Propagator>();
-    	if (measurementsSet.size() > 1 ){
+    	if (measurementsSet.size() > 0 ){
 			for (ObservedMeasurement<?> measure : measurementsSet) {
-				System.out.println(measure.getSatellites ().get(0));
-				System.out.println("Nb satellite ds la mesure " + measure.getSatellites ().size());
+				//System.out.println ( "Mesure dans Kalman : " +measure);
+				//System.out.println(measure.getSatellites ().get(0));
+				//System.out.println("Nb satellite ds la mesure " + measure.getSatellites ().size());
 
 				Propagator[] propagatorEstimated = kalmanEstimator.estimationStep ( measure );
 				mapMeasurePropagator.put ( measure , propagatorEstimated[0] );
 				//RESULTAT
 				//covarianceAnalysis(propagatorEstimated[0], kalmanEstimator);
-				results ( propagator , propagatorEstimated );
+				//results ( propagator , propagatorEstimated );
 			}
 		}
-    	
+    	System.out.println("Kalman DOne");
     	return mapMeasurePropagator;
     }
 
@@ -176,8 +177,10 @@ public class OD {
     public static double[] incertitudes ( Propagator propagator , Propagator estimatedPropagator ) {
     	LocalOrbitalFrame LOFrame = new LocalOrbitalFrame(constants.gcrf, LOFType.LVLH, propagator, "LOF");
     	AbsoluteDate date = estimatedPropagator.getInitialState().getDate();
-    	SpacecraftState estimatedState = estimatedPropagator.propagate(date);
-    	SpacecraftState trueState = propagator.propagate(date);
+    	SpacecraftState estimatedState = estimatedPropagator.getInitialState ();
+		System.out.println("estimation propagée");
+    	SpacecraftState trueState = propagator.getInitialState ();
+		System.out.println("vraie propagée");
     	Transform eci2lof_frozen = constants.gcrf.getTransformTo(LOFrame, date).freeze();    	
     	Vector3D dV_eci = estimatedState.getPVCoordinates().getVelocity().subtract(trueState.getPVCoordinates().getVelocity());
     	Vector3D dP_eci = estimatedState.getPVCoordinates().getPosition().subtract(trueState.getPVCoordinates().getPosition());
@@ -187,13 +190,12 @@ public class OD {
 		System.out.println("norm of deltaP(m) : " + dP_lof.getNorm());
 		double[] errors = {dP_lof.getNorm(),dV_lof.getNorm()};
 		return errors;
-
     }
-    
-    static void incertitudes2(Propagator propagator , Propagator estimatedPropagator) {
+
+	public static double[] incertitudes2(Propagator propagator , Propagator estimatedPropagator) {
     	AbsoluteDate date = estimatedPropagator.getInitialState().getDate();
-    	SpacecraftState state1 = estimatedPropagator.propagate(date);
-    	SpacecraftState state2 = propagator.propagate(date);
+    	SpacecraftState state1 = estimatedPropagator.getInitialState ();
+    	SpacecraftState state2 = propagator.getInitialState ();
   	  	Vector3D deltaVInInertialFrame = state2.getPVCoordinates().getVelocity().
   	                                   subtract(state1.getPVCoordinates().getVelocity());
   	  	Vector3D deltaPInInertialFrame = state2.getPVCoordinates().getPosition().
@@ -203,6 +205,8 @@ public class OD {
   	  	Vector3D deltaPProjected = inertialToSpacecraftFrame.transformVector(deltaPInInertialFrame);
   	  	System.out.println("norm of deltaV(m/s) : " + deltaVProjected.getNorm());
   	  	System.out.println("norm of deltaP(m) : " + deltaPProjected.getNorm());
+		double[] errors = {deltaPProjected.getNorm(),deltaVProjected.getNorm()};
+		return errors;
     }
     
     static void incertitudes3(Propagator propagator , Propagator estimatedPropagator) {

@@ -54,7 +54,8 @@ public class ParametersFormView extends JPanel{
 
         // Creation of the form
         JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridBagLayout());
+        formPanel.setLayout(new GridLayout(2, 4));
+
         GridBagConstraints gc = new GridBagConstraints();
 
         // Setting padding
@@ -67,51 +68,35 @@ public class ParametersFormView extends JPanel{
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = GridBagConstraints.REMAINDER;
 
-        formPanel.add(paramLabel, gc);
+        add(paramLabel,gc);
 
         // Adding start date
         gc.gridx = 0;
         gc.gridy++;
-        gc.anchor = GridBagConstraints.LINE_END;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(new JLabel("Start Date (dd-jj-aaa): "), gc);
+        formPanel.add(new JLabel("Start Date (jj-mm-aaa): "));
 
         gc.gridx++;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(startDayField, gc);
+        formPanel.add(startDayField);
 
         gc.gridx++;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(startMonthField, gc);
+        formPanel.add(startMonthField);
 
         gc.gridx++;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(startYearField, gc);
+        formPanel.add(startYearField);
 
         // Adding end date
         gc.gridx = 0;
         gc.gridy++;
-        gc.anchor = GridBagConstraints.LINE_END;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(new JLabel("End Date (dd-jj-aaa): "), gc);
+        formPanel.add(new JLabel("End Date (jj-mm-aaa): "));
 
         gc.gridx++;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(endDayField, gc);
+        formPanel.add(endDayField);
 
         gc.gridx++;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(endMonthField, gc);
+        formPanel.add(endMonthField);
 
         gc.gridx++;
-        gc.anchor = GridBagConstraints.LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(endYearField, gc);
+        formPanel.add(endYearField);
 
          // Add button creation
          JButton addButton = new JButton("Set Parameters");

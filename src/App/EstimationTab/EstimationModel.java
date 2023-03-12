@@ -25,6 +25,47 @@ public class EstimationModel {
 
     List<String> estimationsList = new ArrayList<> (  );
 
+
+    double noiseLevelPos;
+
+    public double getNoiseLevelPos ( ) {
+        return noiseLevelPos;
+    }
+
+    public void setNoiseLevelPos ( double noiseLevelPos ) {
+        this.noiseLevelPos = noiseLevelPos;
+    }
+
+    public double getNoiseLevelV ( ) {
+        return noiseLevelV;
+    }
+
+    public void setNoiseLevelV ( double noiseLevelV ) {
+        this.noiseLevelV = noiseLevelV;
+    }
+
+    double noiseLevelV;
+
+    public double getStdP ( ) {
+        return stdPos;
+    }
+
+    public void setStdPos ( double stdP ) {
+        this.stdPos = stdP;
+    }
+
+    public double getStdV ( ) {
+        return stdV;
+    }
+
+    public void setStdV ( double stdV ) {
+        this.stdV = stdV;
+    }
+
+    double stdPos;
+
+    double stdV;
+
     public List<ObservableSatellite> getSatellites ( ) {
         return satellites;
     }
