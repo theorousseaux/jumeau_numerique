@@ -122,7 +122,7 @@ public class NewGSPannel extends JPanel {
                     displayGSPannel.revalidate();
 
                     // Mise à jour des choix dans l'onglet Observer
-                    JPanel tabPanel = (JPanel) parent.tabbedPane.getComponentAt(3);
+                    JPanel tabPanel = (JPanel) parent.tabbedPane.getComponentAt(4);
                     NewObserverPannel newObserverPannel = (NewObserverPannel) tabPanel.getComponent(1);
                     newObserverPannel.updateStationComboBox();
 

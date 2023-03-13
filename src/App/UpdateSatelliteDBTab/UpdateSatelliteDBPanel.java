@@ -9,21 +9,31 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 public class UpdateSatelliteDBPanel extends JPanel{
 
     MainFrame parent;
     GridBagConstraints gc = new GridBagConstraints();
-    public UpdateSatelliteDBPanel(MainFrame parent) {
+
+    public UpdateSatelliteDBPanel(MainFrame parent) throws SQLException, IOException, ClassNotFoundException {
 
         this.parent = parent;
         setLayout(new GridBagLayout());
 
+        // Tittle
+        JLabel title = new JLabel("Update Satellite Database");
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+        gc.gridy = 0;
+        gc.gridx = 0;
+        gc.gridwidth = 2;
+        add(title, gc);
+
         // Création des boutons pour l'onglet Satellite
-        JButton updateDatabseButton = new JButton("Update database");
+        JButton updateDatabseButton = new JButton("Update CSV");
 
         // Ajout des boutons au panneau Satellite
-        gc.gridy = 0;
+        gc.gridy = 1;
         gc.gridx = 0;
         add(updateDatabseButton, gc);
 
@@ -32,10 +42,17 @@ public class UpdateSatelliteDBPanel extends JPanel{
         JScrollPane scrollPane = new JScrollPane(outputTextArea);
 
         // Ajout du JScrollPane au panneau
-        gc.gridy = 1;
+        gc.gridy = 2;
         gc.gridx = 0;
         gc.gridwidth = 2;
         add(scrollPane, gc);
+
+        // Création du bouton pour créer la base de données
+        JButton createDBButton = new JButton("Create/Connect DB");
+        gc.gridy = 3;
+        gc.gridx = 0;
+        gc.gridwidth = 1;
+        add(createDBButton, gc);
 
         // Ajout d'un ActionListener pour le bouton "Update database"
         updateDatabseButton.addActionListener(new ActionListener() {
@@ -48,7 +65,7 @@ public class UpdateSatelliteDBPanel extends JPanel{
                     public void run() {
                         try {
                             // Exécution du script sh
-                            Process p = Runtime.getRuntime().exec("sh src/TLE/updatedb.sh");
+                            Process p = Runtime.getRuntime().exec("sh src/TLE/TLE_recov_kep.sh");
 
                             // Redirection de la sortie d'erreur du processus vers le JTextArea en temps réel
                             BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
@@ -78,6 +95,17 @@ public class UpdateSatelliteDBPanel extends JPanel{
                     }
                 });
                 thread.start();
+            }
+        });
+
+        // Ajout d'un ActionListener pour le bouton "Create DB"
+        createDBButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    parent.updateDBController.createDB("src/TLE/tle.csv");
+                } catch (SQLException | IOException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }

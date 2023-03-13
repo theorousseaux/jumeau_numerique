@@ -1,15 +1,16 @@
-touch cookies.txt
-curl -c cookies.txt -b cookies.txt https://www.space-track.org/ajaxauth/login -d 'identity=eliotty77@hotmail.fr&password=730ElJ77976EbK77'
-echo "Connecting to spacetrack.org"
-echo "Source file (will be removed)"
-read sourceFile
-echo "Destination file for TLE"
-read TLEFile
-curl --limit-rate 100K --cookie cookies.txt https://www.space-track.org/basicspacedata/query/class/gp/EPOCH/%3Enow-30/orderby/NORAD_CAT_ID,EPOCH/format/3le > $sourceFile
-python3 3LE2TLE.py $sourceFile $TLEFile
-rm $sourceFile
-python3 TLE2KEP.py $TLEFile $sourceFile
+curl -c cookies.txt -b cookies.txt https://www.space-track.org/ajaxauth/login -d 'identity=eliotty77@hotmail.fr&password=730ElJ77976EbK77' 2>&1
+echo "Connecting to spacetrack.org" >&2
+echo "" >&2
+
+curl --limit-rate 100K --cookie cookies.txt https://www.space-track.org/basicspacedata/query/class/gp/EPOCH/%3Enow-30/orderby/NORAD_CAT_ID,EPOCH/format/3le > 'src/TLE/spacetrackrecov.txt'
+
+python3 src/TLE/3LE2TLE.py 'src/TLE/spacetrackrecov.txt' 'src/TLE/tle.csv'
+
+python3 src/TLE/TLE2KEP.py 'src/TLE/tle.csv' 'src/TLE/spacetrackrecov.txt'
+
+python3 src/TLE/setSM.py 'src/TLE/spacetrackrecov.txt' 'src/TLE/tle.csv'
+
+rm 'src/TLE/spacetrackrecov.txt'
 rm cookies.txt
-python3 setSM.py $sourceFile $TLEFile
-rm $sourceFile
-echo "Data collected"
+
+echo "Data collected" >&2

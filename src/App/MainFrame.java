@@ -16,6 +16,9 @@ import src.App.ObserverTab.ObserverController;
 import src.App.ObserverTab.ObserverPannel;
 import src.App.ParametersTab.ParametersController;
 import src.App.ParametersTab.ParametersView;
+import src.App.SatelliteTab.SatelliteController;
+import src.App.SatelliteTab.SatellitePanel;
+import src.App.UpdateSatelliteDBTab.UpdateDBController;
 import src.App.UpdateSatelliteDBTab.UpdateSatelliteDBPanel;
 import src.App.WorldMapTab.WorldMapPanel;
 import src.App.SimulationTab.SimulationController;
@@ -26,12 +29,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainFrame extends JFrame {
     public JPanel globePanel;
     public GSController gsController;
+    public UpdateDBController updateDBController;
 
     public ObserverController obserController;
+
+    public SatelliteController satController;
 
     public ParametersController paramController;
 
@@ -40,16 +47,16 @@ public class MainFrame extends JFrame {
     public EstimationController estimationController;
     public JTabbedPane tabbedPane;
 
-    public MainFrame() throws NumberFormatException, IOException {
+    public MainFrame() throws NumberFormatException, IOException, SQLException, ClassNotFoundException {
 
         // Initialisation du controller des stations sol
         gsController = new GSController();
-
         obserController = new ObserverController(gsController);
-
         paramController = new ParametersController();
         estimationController = new EstimationController ();
         simuController = new SimulationController();
+        updateDBController = new UpdateDBController();
+        satController = new SatelliteController(updateDBController);
 
         JFrame frame = new JFrame("Space Observation Digital Twin");
         globePanel = new WorldMapPanel(this);
@@ -58,6 +65,7 @@ public class MainFrame extends JFrame {
         this.tabbedPane=new JTabbedPane();
         JPanel homePanel = new HomePannel();
         JPanel updateSatelliteDBPanel = new UpdateSatelliteDBPanel(this);
+        JPanel satPanel = new SatellitePanel(this);
         JPanel groundStationPanel = new GSpannel(this);
         JPanel observerPanel = new ObserverPannel(this);
         // JPanel analysisPanel = new AnalysisPannel();
@@ -71,6 +79,7 @@ public class MainFrame extends JFrame {
         // Ajout des onglets au panneau d'onglets
         tabbedPane.addTab("Home", homePanel);
         tabbedPane.addTab("Update DB", updateSatelliteDBPanel);
+        tabbedPane.addTab("Satellites", satPanel);
         tabbedPane.addTab("Ground Station", groundStationPanel);
         tabbedPane.addTab("Observer", observerPanel);
         tabbedPane.addTab("Globe",globePanel);
@@ -89,7 +98,7 @@ public class MainFrame extends JFrame {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) throws NumberFormatException, IOException {
+    public static void main(String[] args) throws NumberFormatException, IOException, SQLException, ClassNotFoundException {
         //importation des donnees de base (toujour mettre ça en début de programme)
         File orekitData = new File("lib/orekit-data-master");
         DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();

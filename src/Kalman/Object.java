@@ -18,4 +18,10 @@ public class Object {
 	public NumericalPropagator getPropagator() {
 		return this.propagator;
 	}
+	public String getId() {
+		return this.id;
+	}
+	public double getSM() {
+		return this.SM;
+	}
 }

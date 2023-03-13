@@ -3,12 +3,10 @@ package src.App.UpdateSatelliteDBTab;
 public class UpdateDBController {
 	
 	DataBase db;
-/*
-    UpdateDBModel model = new UpdateDBModel ();
 
-    public void CreateDB(String dbFile){
-    	this.db = new DataBase(dbFile);
+
+    public void createDB(String csvFile) throws SQLException, IOException, ClassNotFoundException {
+    	db = new DataBase(csvFile);
+        System.out.println("Database created");
     }
-
- */
 }

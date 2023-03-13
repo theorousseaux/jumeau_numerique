@@ -35,9 +35,13 @@ public class DataBase {
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
         String url = "jdbc:derby:myDB;create=true";
         this.connection = DriverManager.getConnection(url);
-        Statement stmt = connection.createStatement();
-        stmt.execute("CREATE TABLE tleDB (id_sat CHAR(10), date CHAR(40), a DOUBLE, eccentricity DOUBLE, inclination DOUBLE, raan DOUBLE, argp DOUBLE, ma DOUBLE, SM DOUBLE)");
-        stmt.close();
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.execute("CREATE TABLE tleDB (id_sat CHAR(10), date CHAR(40), a DOUBLE, eccentricity DOUBLE, inclination DOUBLE, raan DOUBLE, argp DOUBLE, ma DOUBLE, SM DOUBLE)");
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Table already exists");
+        }
         
         //String csvFile = "/Users/eliott/Documents/jumeau_numerique/src/PIE_SQL/src/tle.csv";
         String filename = csvFile;
@@ -181,7 +185,7 @@ public class DataBase {
         if (type == "LEO") {
             select = "*";
             from = "tleDB";
-            where = "a BETWEEN 200000 AND 800000 AND inclination BETWEEN -0.1 AND 0.1 AND eccentricity < 0.1";
+            where = "a BETWEEN 6600000 AND 6900000 AND inclination BETWEEN -0.1 AND 0.1 AND eccentricity < 0.1";
         }
         String query = "SELECT " + select + " FROM " + from + " WHERE " + where;
         
