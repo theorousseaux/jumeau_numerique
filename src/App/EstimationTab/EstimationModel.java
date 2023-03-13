@@ -1,8 +1,10 @@
 package src.App.EstimationTab;
 
+import org.hipparchus.util.Pair;
 import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.estimation.measurements.ObservedMeasurement;
 import org.orekit.propagation.Propagator;
+import org.orekit.propagation.SpacecraftState;
 import org.orekit.propagation.conversion.OrbitDeterminationPropagatorBuilder;
 import org.orekit.time.AbsoluteDate;
 
@@ -18,7 +20,7 @@ public class EstimationModel {
 
     List<OrbitDeterminationPropagatorBuilder> propagatorBuilders;
 
-    List<SortedSet<ObservedMeasurement<?>>> measurements;
+    Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measurements;
     AbsoluteDate initialDate;
 
     AbsoluteDate finalDate;
@@ -90,11 +92,11 @@ public class EstimationModel {
         this.propagatorBuilders = propagatorBuilders;
     }
 
-    public List<SortedSet<ObservedMeasurement<?>>> getMeasurements ( ) {
+    public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> getMeasurements ( ) {
         return measurements;
     }
 
-    public void setMeasurements ( List<SortedSet<ObservedMeasurement<?>>> measurements ) {
+    public void setMeasurements ( Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measurements ) {
         this.measurements = measurements;
     }
 

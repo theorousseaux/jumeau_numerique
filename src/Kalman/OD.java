@@ -37,7 +37,6 @@ import org.orekit.utils.Constants;
 import org.orekit.utils.PVCoordinates;
 import org.orekit.utils.TimeStampedPVCoordinates;
 
-import static src.Kalman.simu.createDiagonalMatrix;
 
 public class OD {
 	public ObservableSatellite object;
@@ -192,19 +191,21 @@ public class OD {
 		return errors;
     }
 
-	public static double[] incertitudes2(Propagator propagator , Propagator estimatedPropagator) {
-    	AbsoluteDate date = estimatedPropagator.getInitialState().getDate();
-    	SpacecraftState state1 = estimatedPropagator.getInitialState ();
-    	SpacecraftState state2 = propagator.getInitialState ();
-  	  	Vector3D deltaVInInertialFrame = state2.getPVCoordinates().getVelocity().
-  	                                   subtract(state1.getPVCoordinates().getVelocity());
-  	  	Vector3D deltaPInInertialFrame = state2.getPVCoordinates().getPosition().
-                subtract(state1.getPVCoordinates().getPosition());
-  	  	Transform inertialToSpacecraftFrame = state1.toTransform();
-  	  	Vector3D deltaVProjected = inertialToSpacecraftFrame.transformVector(deltaVInInertialFrame);
+	public static double[] incertitudes2(SpacecraftState trueState , Propagator estimatedPropagator) {
+    	SpacecraftState estimatedState= estimatedPropagator.getInitialState ();
+  	  	Vector3D deltaVInInertialFrame = trueState.getPVCoordinates().getVelocity().
+  	                                   subtract(estimatedState.getPVCoordinates().getVelocity());
+  	  	Vector3D deltaPInInertialFrame = trueState.getPVCoordinates().getPosition().
+                subtract(estimatedState.getPVCoordinates().getPosition());
+  	  	Transform inertialToSpacecraftFrame = estimatedState.toTransform();
+		System.out.println ( trueState.getA ()+","+ trueState.getE ( )+","+ trueState.getI ( ) );
+		System.out.println ( estimatedState.getA ()+","+ estimatedState.getE ( )+","+ estimatedState.getI ( ) );
+		System.out.println("---------------------------------------");
+
+		Vector3D deltaVProjected = inertialToSpacecraftFrame.transformVector(deltaVInInertialFrame);
   	  	Vector3D deltaPProjected = inertialToSpacecraftFrame.transformVector(deltaPInInertialFrame);
-  	  	System.out.println("norm of deltaV(m/s) : " + deltaVProjected.getNorm());
-  	  	System.out.println("norm of deltaP(m) : " + deltaPProjected.getNorm());
+  	  	//System.out.println("norm of deltaV(m/s) : " + deltaVProjected.getNorm());
+  	  	//System.out.println("norm of deltaP(m) : " + deltaPProjected.getNorm());
 		double[] errors = {deltaPProjected.getNorm(),deltaVProjected.getNorm()};
 		return errors;
     }
@@ -260,5 +261,26 @@ public class OD {
 		DormandPrince853IntegratorBuilder integratorBuilder = new DormandPrince853IntegratorBuilder(prop_min_step, prop_max_step, prop_position_error);
 		NumericalPropagatorBuilder numericalPropagatorBuilder = new NumericalPropagatorBuilder(estimatedOrbit_, integratorBuilder, constants.type, estimator_position_scale);
 		return numericalPropagatorBuilder;
+	}
+
+	public static double[][] createDiagonalMatrix(double[] diagonal) {
+		int size = diagonal.length;
+		double[][] matrix = new double[size][size];
+		for (int i = 0; i < size; i++) {
+			matrix[i][i] = diagonal[i];
+		}
+		return matrix;
+	}
+
+	static void incertitudes(SpacecraftState state1, SpacecraftState state2) {
+		Vector3D deltaVInInertialFrame = state2.getPVCoordinates().getVelocity().
+				subtract(state1.getPVCoordinates().getVelocity());
+		Vector3D deltaPInInertialFrame = state2.getPVCoordinates().getPosition().
+				subtract(state1.getPVCoordinates().getPosition());
+		Transform inertialToSpacecraftFrame = state1.toTransform();
+		Vector3D deltaVProjected = inertialToSpacecraftFrame.transformVector(deltaVInInertialFrame);
+		Vector3D deltaPProjected = inertialToSpacecraftFrame.transformVector(deltaPInInertialFrame);
+		System.out.println("norm of deltaV(m/s) : " + deltaVProjected.getNorm());
+		System.out.println("norm of deltaP(m) : " + deltaPProjected.getNorm());
 	}
 }

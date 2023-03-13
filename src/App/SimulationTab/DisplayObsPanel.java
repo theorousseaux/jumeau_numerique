@@ -71,7 +71,7 @@ public class DisplayObsPanel extends JPanel{
         gc.gridy = 2;
         gc.anchor = GridBagConstraints.WEST;
 
-        List<SortedSet<ObservedMeasurement<?>>> measurementsList = this.parent.simuController.model.getMeasurementsSetsList();
+        List<SortedSet<ObservedMeasurement<?>>> measurementsList = this.parent.simuController.model.getMeasurementsSetsList().getFirst ();
 
         gc.anchor = GridBagConstraints.PAGE_START;
         ArrayList<String> elements = new ArrayList<String>();

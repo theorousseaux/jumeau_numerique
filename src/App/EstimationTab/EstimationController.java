@@ -4,6 +4,7 @@ import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.util.Pair;
 import org.orekit.estimation.measurements.AngularAzEl;
 import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.estimation.measurements.ObservedMeasurement;
@@ -54,20 +55,19 @@ public class EstimationController {
 
          */
         System.out.println("Nb propagators : " + model.getPropagators ().size ());
-        System.out.println("Nb sorted sets : " + model.getMeasurements ().size());
         System.out.println("Nb satellites : "+model.getSatellites ().size());
         System.out.println("Std pos : " + model.getStdP ());
-        for (SortedSet<ObservedMeasurement<?>> measureListInit : this.model.getMeasurements ( )){
+        for (SortedSet<ObservedMeasurement<?>> measureListInit : this.model.getMeasurements ( ).getFirst ()){
             System.out.println ( j );
             System.out.println( measureListInit.size());
-            performEstimation(j,measureListInit);
+            performEstimation(j,measureListInit, model.getMeasurements ().getSecond ().get(j));
 
             j ++;
         }
         System.out.println("Simulation done");
     }
 
-    public void performEstimation( int j, SortedSet<ObservedMeasurement<?>> measureListInit){
+    public void performEstimation( int j, SortedSet<ObservedMeasurement<?>> measureListInit, List<SpacecraftState> states){
         if (measureListInit.size()>0) {
             Propagator propagator = this.model.getPropagators ( ).get ( j );
 
@@ -76,7 +76,7 @@ public class EstimationController {
             Vector3D P_InertialFrame = trueState.getPVCoordinates ( ).getPosition ( );
             double[] mean = {P_InertialFrame.getX ( ) , P_InertialFrame.getY ( ) , P_InertialFrame.getZ ( ) , V_InertialFrame.getX ( ) , V_InertialFrame.getY ( ) , V_InertialFrame.getZ ( )};
             double[] variance = {Math.pow ( this.model.stdPos , 2 ) , Math.pow ( this.model.stdPos , 2 ) , Math.pow ( this.model.stdPos , 2 ) , Math.pow ( this.model.stdV , 2 ) , Math.pow ( this.model.stdV , 2 ) , Math.pow ( this.model.stdV , 2 )};
-            double[][] covariance = src.Kalman.simu.createDiagonalMatrix ( variance );
+            double[][] covariance = src.Kalman.OD.createDiagonalMatrix ( variance );
             MultivariateNormalDistribution distribution = new MultivariateNormalDistribution ( mean , covariance );
             double[] estimatedParameters = distribution.sample ( ); // Générez un nombre aléatoire selon la loi gaussienne
             Vector3D estimatedV_InertialFrame = new Vector3D ( Arrays.copyOfRange ( estimatedParameters , 3 , 6 ) );
@@ -124,11 +124,16 @@ public class EstimationController {
             LinkedHashMap<ObservedMeasurement<?>, Propagator> estimation = estimator.Kalman ( processNoise );
             System.out.println ( estimation.toString () );
             System.out.println("Calcul des erreurs");
+            int i = 0;
+            System.out.println("---------------------------------------");
+            System.out.println("---------------------------------------");
+
             for (Map.Entry<ObservedMeasurement<?>,Propagator> entry : estimation.entrySet ()) {
                 System.out.println(entry.getKey ());
-                double[] errors = OD.incertitudes2 ( propagator , entry.getValue () );
+                double[] errors = OD.incertitudes2 ( states.get ( i ), entry.getValue () );
                 System.out.println ("error : " +  errors.toString ( ) );
                 this.model.estimationsList.add ( "Satellite: " + String.valueOf ( j ) + "; Date: " + entry.getKey ().getDate ( ).toString ( ) + "; dP: " + String.valueOf ( errors[0] ) + "; dV: " + errors[1] );
+                i ++;
             }
             System.out.println("Calcul des erreurs terminé");
 
