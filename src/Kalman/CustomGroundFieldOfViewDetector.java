@@ -16,12 +16,8 @@
  */
 package src.Kalman;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.util.FastMath;
 import org.orekit.frames.Frame;
 import org.orekit.geometry.fov.FieldOfView;
 import org.orekit.propagation.SpacecraftState;
@@ -30,6 +26,9 @@ import org.orekit.propagation.events.VisibilityTrigger;
 import org.orekit.propagation.events.handlers.EventHandler;
 import org.orekit.propagation.events.handlers.StopOnIncreasing;
 import org.orekit.time.TimeComponents;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Finder for satellite entry/exit events with respect to a sensor {@link
@@ -52,10 +51,14 @@ import org.orekit.time.TimeComponents;
  */
 public class CustomGroundFieldOfViewDetector extends AbstractDetector<CustomGroundFieldOfViewDetector> {
 
-    /** the reference frame attached to the sensor. */
+    /**
+     * the reference frame attached to the sensor.
+     */
     private final Frame frame;
 
-    /** Field of view of the sensor. */
+    /**
+     * Field of view of the sensor.
+     */
     private final LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
 
     /**
@@ -69,11 +72,11 @@ public class CustomGroundFieldOfViewDetector extends AbstractDetector<CustomGrou
      * @param fov   Field Of View of the sensor.
      * @since 10.1
      */
-    public CustomGroundFieldOfViewDetector(final Frame frame,
-                                     final LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {
-        this(DEFAULT_MAXCHECK, DEFAULT_THRESHOLD, DEFAULT_MAX_ITER,
-                new StopOnIncreasing<CustomGroundFieldOfViewDetector>(),
-                frame, skyCoveringMap);
+    public CustomGroundFieldOfViewDetector ( final Frame frame ,
+                                             final LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap ) {
+        this ( DEFAULT_MAXCHECK , DEFAULT_THRESHOLD , DEFAULT_MAX_ITER ,
+                new StopOnIncreasing<CustomGroundFieldOfViewDetector> ( ) ,
+                frame , skyCoveringMap );
     }
 
     /**
@@ -90,25 +93,27 @@ public class CustomGroundFieldOfViewDetector extends AbstractDetector<CustomGrou
      * @param frame     the reference frame attached to the sensor.
      * @param fov       Field Of View of the sensor.
      */
-    private CustomGroundFieldOfViewDetector(final double maxCheck,
-                                      final double threshold,
-                                      final int maxIter,
-                                      final EventHandler<? super CustomGroundFieldOfViewDetector> handler,
-                                      final Frame frame,
-                                      final LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap) {
-        super(maxCheck, threshold, maxIter, handler);
+    private CustomGroundFieldOfViewDetector ( final double maxCheck ,
+                                              final double threshold ,
+                                              final int maxIter ,
+                                              final EventHandler<? super CustomGroundFieldOfViewDetector> handler ,
+                                              final Frame frame ,
+                                              final LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap ) {
+        super ( maxCheck , threshold , maxIter , handler );
         this.frame = frame;
         this.skyCoveringMap = skyCoveringMap;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected CustomGroundFieldOfViewDetector create(final double newMaxCheck,
-                                               final double newThreshold,
-                                               final int newMaxIter,
-                                               final EventHandler<? super CustomGroundFieldOfViewDetector> newHandler) {
-        return new CustomGroundFieldOfViewDetector(newMaxCheck, newThreshold,
-                newMaxIter, newHandler, this.frame, this.skyCoveringMap);
+    protected CustomGroundFieldOfViewDetector create ( final double newMaxCheck ,
+                                                       final double newThreshold ,
+                                                       final int newMaxIter ,
+                                                       final EventHandler<? super CustomGroundFieldOfViewDetector> newHandler ) {
+        return new CustomGroundFieldOfViewDetector ( newMaxCheck , newThreshold ,
+                newMaxIter , newHandler , this.frame , this.skyCoveringMap );
     }
 
     /**
@@ -116,15 +121,17 @@ public class CustomGroundFieldOfViewDetector extends AbstractDetector<CustomGrou
      *
      * @return the reference frame attached to the sensor.
      */
-    public Frame getFrame() {
+    public Frame getFrame ( ) {
         return this.frame;
     }
 
-    /** Get the Field Of View.
+    /**
+     * Get the Field Of View.
+     *
      * @return Field Of View
      * @since 10.1
      */
-    public LinkedHashMap<TimeComponents, FieldOfView> getskyCoveringMap() {
+    public LinkedHashMap<TimeComponents, FieldOfView> getskyCoveringMap ( ) {
         return skyCoveringMap;
     }
 
@@ -132,7 +139,7 @@ public class CustomGroundFieldOfViewDetector extends AbstractDetector<CustomGrou
      * {@inheritDoc}
      *
      * <p> The g function value is the angular offset between the satellite and
-     * the {@link FieldOfView#offsetFromBoundary(Vector3D, double, VisibilityTrigger)
+     * the {@link FieldOfView#offsetFromBoundary(Vector3D , double , VisibilityTrigger)
      * Field Of View boundary}. It is negative if the satellite is visible within
      * the Field Of View and positive if it is outside of the Field Of View,
      * including the margin. </p>
@@ -141,23 +148,23 @@ public class CustomGroundFieldOfViewDetector extends AbstractDetector<CustomGrou
      * Of View, a decreasing event is generated, and when the satellite leaves
      * the Field Of View, an increasing event is generated. </p>
      */
-    public double g(final SpacecraftState s) {
+    public double g ( final SpacecraftState s ) {
 
         // get line of sight in sensor frame
-        final Vector3D los = s.getPVCoordinates(this.frame).getPosition();
-        
+        final Vector3D los = s.getPVCoordinates ( this.frame ).getPosition ( );
+
         //---------
         FieldOfView fov = null;
-        TimeComponents time = s.getDate().getComponents(constants.utc).getTime();
-        for(Map.Entry mapEntry : this.skyCoveringMap.entrySet()) {
-        	fov = (FieldOfView) mapEntry.getValue();
-        	if(time.compareTo((TimeComponents) mapEntry.getKey())<0) {
-        		break;
-        	}
+        TimeComponents time = s.getDate ( ).getComponents ( constants.utc ).getTime ( );
+        for (Map.Entry mapEntry : this.skyCoveringMap.entrySet ( )) {
+            fov = (FieldOfView) mapEntry.getValue ( );
+            if (time.compareTo ( (TimeComponents) mapEntry.getKey ( ) ) < 0) {
+                break;
+            }
         }
         //---------
 
-        return -fov.offsetFromBoundary(los, 0.0, VisibilityTrigger.VISIBLE_ONLY_WHEN_FULLY_IN_FOV); // le "-" est TRES important -> positif quand dans fov
+        return -fov.offsetFromBoundary ( los , 0.0 , VisibilityTrigger.VISIBLE_ONLY_WHEN_FULLY_IN_FOV ); // le "-" est TRES important -> positif quand dans fov
     }
 
 }

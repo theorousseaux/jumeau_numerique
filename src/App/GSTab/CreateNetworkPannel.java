@@ -6,108 +6,105 @@ import src.Kalman.Station;
 import src.UseCase1_GSNetwork.GSNetwork;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class CreateNetworkPannel extends JPanel {
 
     MainFrame parent;
     DisplayNetworkPannel displayNetworkPannel;
-
+    Set<String> selectedStations;
     private JList list;
     private DefaultListModel listModel;
-    Set<String> selectedStations;
 
-    public CreateNetworkPannel(MainFrame parent, DisplayNetworkPannel displayNetworkPannel, WorldMapPanel worldMapPanel) {
+    public CreateNetworkPannel ( MainFrame parent , DisplayNetworkPannel displayNetworkPannel , WorldMapPanel worldMapPanel ) {
 
         this.parent = parent;
         this.displayNetworkPannel = displayNetworkPannel;
-        GridBagConstraints gc = new GridBagConstraints();
-        setLayout(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints ( );
+        setLayout ( new GridBagLayout ( ) );
 
         // Titre
-        JLabel tittle = new JLabel("Choose ground stations to create the network");
-        tittle.setFont(new Font("Arial", Font.BOLD, 18)); // Définit la police d'écriture en Arial, en gras et en taille 18
-        tittle.setForeground(Color.BLUE); // Définit la couleur du texte en bleu
+        JLabel tittle = new JLabel ( "Choose ground stations to create the network" );
+        tittle.setFont ( new Font ( "Arial" , Font.BOLD , 18 ) ); // Définit la police d'écriture en Arial, en gras et en taille 18
+        tittle.setForeground ( Color.BLUE ); // Définit la couleur du texte en bleu
 
         gc.gridx = 0;
         gc.gridy = 0;
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        this.add(tittle, gc);
+        this.add ( tittle , gc );
 
 
-        listModel = new DefaultListModel ();
+        listModel = new DefaultListModel ( );
         for (Station station : parent.gsController.groundStationList) {
-            listModel.addElement(station.getName());
+            listModel.addElement ( station.getName ( ) );
         }
-        list = new JList(listModel);
-        list.setLayoutOrientation ( JList.VERTICAL);
+        list = new JList ( listModel );
+        list.setLayoutOrientation ( JList.VERTICAL );
         list.setSelectionMode ( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
-        JScrollPane scrollPane = new JScrollPane (list);
-        scrollPane.setPreferredSize(new Dimension(150, 300));
-        gc.insets = new Insets ( 15, 10, 15, 10 );
+        JScrollPane scrollPane = new JScrollPane ( list );
+        scrollPane.setPreferredSize ( new Dimension ( 150 , 300 ) );
+        gc.insets = new Insets ( 15 , 10 , 15 , 10 );
         gc.anchor = GridBagConstraints.WEST;
 
         gc.gridy = 2;
-        this.add(scrollPane,gc);
+        this.add ( scrollPane , gc );
 
-        JLabel label = new JLabel("Network name : ");
+        JLabel label = new JLabel ( "Network name : " );
         gc.gridx = 1;
         gc.gridy = 1;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.SOUTH;
-        this.add(label, gc);
+        this.add ( label , gc );
 
-        JTextField textField = new JTextField(10);
+        JTextField textField = new JTextField ( 10 );
         gc.gridx = 1;
         gc.gridy = 2;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.CENTER;
-        this.add(textField, gc);
+        this.add ( textField , gc );
 
 
-        JButton button = new JButton("Create network");
+        JButton button = new JButton ( "Create network" );
         gc.gridx = 1;
-        gc.gridy =3;
+        gc.gridy = 3;
         gc.anchor = GridBagConstraints.EAST;
-        this.add(button, gc);
+        this.add ( button , gc );
 
         // Si le boutton add est cliqué, on crée un réseau avec les stations sélectionnées
-        button.addActionListener(new ActionListener() {
+        button.addActionListener ( new ActionListener ( ) {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed ( ActionEvent e ) {
 
-                selectedStations = new HashSet<> (  );
-                for (Object name : list.getSelectedValues ()){
-                    selectedStations.add(name.toString ());
+                selectedStations = new HashSet<> ( );
+                for (Object name : list.getSelectedValues ( )) {
+                    selectedStations.add ( name.toString ( ) );
                 }
 
                 try {
                     System.out.println ( selectedStations );
-                    parent.gsController.gsNetwork = new GSNetwork(textField.getText(), new ArrayList<> ( selectedStations ));
-                    displayNetworkPannel.update();
-                    displayNetworkPannel.repaint();
-                    displayNetworkPannel.revalidate();
+                    parent.gsController.gsNetwork = new GSNetwork ( textField.getText ( ) , new ArrayList<> ( selectedStations ) );
+                    displayNetworkPannel.update ( );
+                    displayNetworkPannel.repaint ( );
+                    displayNetworkPannel.revalidate ( );
 
-                    worldMapPanel.displayNewGS(parent);
-                    worldMapPanel.repaint();
-                    worldMapPanel.revalidate();
+                    worldMapPanel.displayNewGS ( parent );
+                    worldMapPanel.repaint ( );
+                    worldMapPanel.revalidate ( );
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    throw new RuntimeException ( ex );
                 }
             }
-        });
+        } );
     }
 
-    public void displayNewGS(Station groundStation) {
+    public void displayNewGS ( Station groundStation ) {
         /*
         GridBagConstraints newGC = new GridBagConstraints();
         newGC.gridx = 0;
@@ -122,9 +119,9 @@ public class CreateNetworkPannel extends JPanel {
 
          */
 
-        String name = groundStation.getName ();
+        String name = groundStation.getName ( );
 
-        listModel.addElement(name);
+        listModel.addElement ( name );
 
     }
 

@@ -3,139 +3,134 @@ package src.App.ObserverTab;
 import src.App.MainFrame;
 import src.App.WorldMapTab.WorldMapPanel;
 import src.Kalman.Radar;
-import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
-import src.UseCase1_GSNetwork.GSNetwork;
 import src.UseCase1_GSNetwork.ObserverNetwork;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class CreateNetworkPanel extends JPanel {
 
     MainFrame parent;
     DisplayNetworkPanel displayNetworkPannel;
-
+    Set<String> selectedStations;
     private JList list;
     private DefaultListModel listModel;
-    Set<String> selectedStations;
 
-    public CreateNetworkPanel(MainFrame parent, DisplayNetworkPanel displayNetworkPannel, WorldMapPanel worldMapPanel) {
+    public CreateNetworkPanel ( MainFrame parent , DisplayNetworkPanel displayNetworkPannel , WorldMapPanel worldMapPanel ) {
 
         this.parent = parent;
         this.displayNetworkPannel = displayNetworkPannel;
-        GridBagConstraints gc = new GridBagConstraints();
-        setLayout(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints ( );
+        setLayout ( new GridBagLayout ( ) );
 
         // Titre
-        JLabel tittle = new JLabel("Choose observers to create the network");
-        tittle.setFont(new Font("Arial", Font.BOLD, 18)); // Définit la police d'écriture en Arial, en gras et en taille 18
-        tittle.setForeground(Color.BLUE); // Définit la couleur du texte en bleu
+        JLabel tittle = new JLabel ( "Choose observers to create the network" );
+        tittle.setFont ( new Font ( "Arial" , Font.BOLD , 18 ) ); // Définit la police d'écriture en Arial, en gras et en taille 18
+        tittle.setForeground ( Color.BLUE ); // Définit la couleur du texte en bleu
 
         gc.gridx = 0;
         gc.gridy = 0;
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        this.add(tittle, gc);
+        this.add ( tittle , gc );
 
 
-        listModel = new DefaultListModel ();
+        listModel = new DefaultListModel ( );
         for (TelescopeAzEl tele : parent.obserController.telescopeAzElList) {
-            listModel.addElement(tele.getID ());
+            listModel.addElement ( tele.getID ( ) );
         }
         for (Radar radar : parent.obserController.radarList) {
-            listModel.addElement(radar.getID ());
+            listModel.addElement ( radar.getID ( ) );
         }
-        list = new JList(listModel);
-        list.setLayoutOrientation ( JList.VERTICAL);
+        list = new JList ( listModel );
+        list.setLayoutOrientation ( JList.VERTICAL );
         list.setSelectionMode ( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
-        JScrollPane scrollPane = new JScrollPane (list);
-        scrollPane.setPreferredSize(new Dimension(200, 200));
-        gc.insets = new Insets ( 15, 10, 15, 10 );
+        JScrollPane scrollPane = new JScrollPane ( list );
+        scrollPane.setPreferredSize ( new Dimension ( 200 , 200 ) );
+        gc.insets = new Insets ( 15 , 10 , 15 , 10 );
         gc.anchor = GridBagConstraints.WEST;
         gc.gridx = 0;
         gc.gridy = 1;
         gc.gridwidth = 1;
         gc.gridheight = GridBagConstraints.REMAINDER;
-        this.add(scrollPane,gc);
+        this.add ( scrollPane , gc );
 
-        JLabel label = new JLabel("Network name : ");
+        JLabel label = new JLabel ( "Network name : " );
         gc.gridx = 1;
         gc.gridy = 1;
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.SOUTH;
-        this.add(label, gc);
+        this.add ( label , gc );
 
-        JTextField textField = new JTextField(10);
+        JTextField textField = new JTextField ( 10 );
         gc.gridx = 1;
         gc.gridy = 2;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.CENTER;
-        this.add(textField, gc);
+        this.add ( textField , gc );
 
 
-        JButton button = new JButton("Create network");
+        JButton button = new JButton ( "Create network" );
         gc.gridx = 1;
-        gc.gridy =3;
+        gc.gridy = 3;
         gc.anchor = GridBagConstraints.EAST;
-        this.add(button, gc);
+        this.add ( button , gc );
 
         // Si le boutton add est cliqué, on crée un réseau avec les stations sélectionnées
-        button.addActionListener(new ActionListener() {
+        button.addActionListener ( new ActionListener ( ) {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed ( ActionEvent e ) {
 
-                selectedStations = new HashSet<> (  );
-                for (Object name : list.getSelectedValues ()){
-                    selectedStations.add(name.toString ());
+                selectedStations = new HashSet<> ( );
+                for (Object name : list.getSelectedValues ( )) {
+                    selectedStations.add ( name.toString ( ) );
                 }
 
 
                 System.out.println ( selectedStations );
-                parent.obserController.observerNetwork = new ObserverNetwork (textField.getText(),new ArrayList<>(selectedStations),parent.obserController.telescopeAzElList);
-                displayNetworkPannel.update();
-                displayNetworkPannel.repaint();
-                displayNetworkPannel.revalidate();
+                parent.obserController.observerNetwork = new ObserverNetwork ( textField.getText ( ) , new ArrayList<> ( selectedStations ) , parent.obserController.telescopeAzElList );
+                displayNetworkPannel.update ( );
+                displayNetworkPannel.repaint ( );
+                displayNetworkPannel.revalidate ( );
 
                 try {
-                    worldMapPanel.displayNewGS(parent);
+                    worldMapPanel.displayNewGS ( parent );
                 } catch (IOException ex) {
                     throw new RuntimeException ( ex );
                 }
-                worldMapPanel.repaint();
-                worldMapPanel.revalidate();
+                worldMapPanel.repaint ( );
+                worldMapPanel.revalidate ( );
 
 
             }
-        });
-
+        } );
 
 
     }
-    public void displayNewTelescope (TelescopeAzEl teles) {
 
-        String name = teles.getID();
+    public void displayNewTelescope ( TelescopeAzEl teles ) {
 
-        listModel.addElement(name);
+        String name = teles.getID ( );
+
+        listModel.addElement ( name );
 
     }
 
-    public void update(){
-        listModel.clear ();
+    public void update ( ) {
+        listModel.clear ( );
         for (TelescopeAzEl tele : parent.obserController.telescopeAzElList) {
-            listModel.addElement(tele.getID ());
+            listModel.addElement ( tele.getID ( ) );
         }
         for (Radar radar : parent.obserController.radarList) {
-            listModel.addElement(radar.getID ());
+            listModel.addElement ( radar.getID ( ) );
         }
     }
 }

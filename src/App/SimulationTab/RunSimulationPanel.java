@@ -1,38 +1,37 @@
 package src.App.SimulationTab;
 
-import javax.swing.*;
-
 import src.App.MainFrame;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Panel to run the simulation
  */
-public class RunSimulationPanel extends JPanel{
-    
-    public RunSimulationPanel ( MainFrame parent, DisplayObsPanel disp){
+public class RunSimulationPanel extends JPanel {
 
-        GridBagConstraints gc = new GridBagConstraints();
+    public RunSimulationPanel ( MainFrame parent , DisplayObsPanel disp ) {
+
+        GridBagConstraints gc = new GridBagConstraints ( );
 
         // Button to run simulation
-        JButton runSimulationButton = new JButton("Run Simulation");
+        JButton runSimulationButton = new JButton ( "Run Simulation" );
 
         gc.gridx = 0;
         gc.gridy = 0;
         // Checkbox to choose to display measurements
-        JCheckBox checkBox = new JCheckBox("Display measurements");
-        add(checkBox,gc);
+        JCheckBox checkBox = new JCheckBox ( "Display measurements" );
+        add ( checkBox , gc );
         gc.gridx = 0;
-        gc.gridy =1;
-        add(runSimulationButton, gc);
+        gc.gridy = 1;
+        add ( runSimulationButton , gc );
 
         // Event manager
-        runSimulationButton.addActionListener(new ActionListener() {
+        runSimulationButton.addActionListener ( new ActionListener ( ) {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed ( ActionEvent e ) {
                 boolean meas = false;
                 try {
                     if (checkBox.isSelected ( )) {
@@ -44,12 +43,12 @@ public class RunSimulationPanel extends JPanel{
                     disp.repaint ( );
                     disp.revalidate ( );
 
-                }catch (NullPointerException npe) {
-                    JOptionPane.showMessageDialog(parent, "Load your simulation first", "Error",JOptionPane.ERROR_MESSAGE);
+                } catch (NullPointerException npe) {
+                    JOptionPane.showMessageDialog ( parent , "Load your simulation first" , "Error" , JOptionPane.ERROR_MESSAGE );
                 }
 
 
             }
-        });
+        } );
     }
 }

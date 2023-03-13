@@ -21,7 +21,7 @@ public class Parameters {
         this.endDate = finalDate;
     }
 
-    public Parameters(){
+    public Parameters ( ) {
 
     }
 

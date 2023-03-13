@@ -6,7 +6,6 @@ import src.Data.Observer.WriteObserverFile;
 import src.Kalman.Radar;
 import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
-import src.UseCase1_GSNetwork.GSNetwork;
 import src.UseCase1_GSNetwork.ObserverNetwork;
 
 import java.io.IOException;
@@ -22,42 +21,43 @@ public class ObserverController {
     public int numberOfRadar = 0;
 
     public ObserverNetwork observerNetwork;
-    public ObserverController(GSController gsController) throws IOException {
 
-        this.telescopeAzElList = new ArrayList<>();
-        this.readObserverFile = new ReadObserverFile();
-        this.writeObserverFile = new WriteObserverFile();
+    public ObserverController ( GSController gsController ) throws IOException {
 
-        this.telescopeAzElList = readObserverFile.readTelescopesFromCSV("src/Data/Observer/Observer.csv", gsController.groundStationList);
-        this.radarList = readObserverFile.readRadarsFromCSV("src/Data/Observer/Observer.csv", gsController.groundStationList);
+        this.telescopeAzElList = new ArrayList<> ( );
+        this.readObserverFile = new ReadObserverFile ( );
+        this.writeObserverFile = new WriteObserverFile ( );
 
-        this.numberOfTelescope = telescopeAzElList.size();
-        this.numberOfRadar = radarList.size();
+        this.telescopeAzElList = readObserverFile.readTelescopesFromCSV ( "src/Data/Observer/Observer.csv" , gsController.groundStationList );
+        this.radarList = readObserverFile.readRadarsFromCSV ( "src/Data/Observer/Observer.csv" , gsController.groundStationList );
+
+        this.numberOfTelescope = telescopeAzElList.size ( );
+        this.numberOfRadar = radarList.size ( );
 
     }
 
-    public void addTelescope(TelescopeAzEl newTelescope) {
-        telescopeAzElList.add(newTelescope);
+    public void addTelescope ( TelescopeAzEl newTelescope ) {
+        telescopeAzElList.add ( newTelescope );
     }
 
-    public void addRadar(Radar newRadar) {
-        radarList.add(newRadar);
+    public void addRadar ( Radar newRadar ) {
+        radarList.add ( newRadar );
     }
 
-    public int getNumberOfTelescopePerStation(Station station) {
+    public int getNumberOfTelescopePerStation ( Station station ) {
         int numberOfTelescope = 0;
         for (TelescopeAzEl telescopeAzEl : telescopeAzElList) {
-            if (telescopeAzEl.getStation().equals(station)) {
+            if (telescopeAzEl.getStation ( ).equals ( station )) {
                 numberOfTelescope++;
             }
         }
         return numberOfTelescope;
     }
 
-    public int getNumberOfRadarPerStation(Station station) {
+    public int getNumberOfRadarPerStation ( Station station ) {
         int numberOfRadar = 0;
         for (Radar radar : radarList) {
-            if (radar.getStation().equals(station)) {
+            if (radar.getStation ( ).equals ( station )) {
                 numberOfRadar++;
             }
         }

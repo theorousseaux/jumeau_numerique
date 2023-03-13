@@ -1,15 +1,9 @@
 package src.App.ParametersTab;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import src.App.MainFrame;
 
-import java.awt.event.*;
+import javax.swing.*;
 import java.awt.*;
-import javax.swing.JPanel;
 
 /**
  * This class groups all the information for the parameter setting tab
@@ -20,17 +14,17 @@ public class ParametersView extends JPanel {
     MainFrame parent;
 
     // The display manager
-    GridBagConstraints gc = new GridBagConstraints();
+    GridBagConstraints gc = new GridBagConstraints ( );
 
-    public ParametersView(MainFrame parent) {
+    public ParametersView ( MainFrame parent ) {
 
         this.parent = parent;
 
-        setLayout(new GridBagLayout());
+        setLayout ( new GridBagLayout ( ) );
 
-        SatelliteDataView satDataView = new SatelliteDataView(parent);
+        SatelliteDataView satDataView = new SatelliteDataView ( parent );
 
-        ParametersFormView paramSettingForm = new ParametersFormView(parent);
+        ParametersFormView paramSettingForm = new ParametersFormView ( parent );
 
         // Adding satellite data display
         gc.gridx = 0;
@@ -38,12 +32,12 @@ public class ParametersView extends JPanel {
         gc.weightx = 1;
         gc.weighty = 1;
         gc.anchor = GridBagConstraints.CENTER;
-        this.add(satDataView, gc);
+        this.add ( satDataView , gc );
 
         // Adding parameters setting form
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.CENTER;
-        this.add(paramSettingForm, gc);
+        this.add ( paramSettingForm , gc );
     }
 }
 

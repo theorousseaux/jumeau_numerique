@@ -12,6 +12,10 @@ public class ParametersController {
     // The parameters class used as model
     public Parameters model;
 
+    public ParametersController ( ) {
+        this.model = new Parameters ( );
+    }
+
     public Parameters getModel ( ) {
         return model;
     }
@@ -21,13 +25,8 @@ public class ParametersController {
         return "ParametersController [model=" + model + "]";
     }
 
-    public ParametersController ( ) {
-        this.model = new Parameters ( );
-    }
-
-
-    public String getStartDate ( ) {
-        return model.getStartDate ( ).toString ( );
+    public AbsoluteDate getStartDate ( ) {
+        return model.getStartDate ( );
     }
 
     public String getEndDate ( ) {

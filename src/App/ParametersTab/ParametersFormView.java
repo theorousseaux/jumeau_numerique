@@ -1,65 +1,65 @@
 package src.App.ParametersTab;
 
-import java.awt.event.ActionListener;
-import java.io.IOException;
-
-import javax.swing.*;
-
 import src.App.MainFrame;
 
-import java.awt.event.*;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * This class contains the form where the user will enter the setting for the simulation.
  */
-public class ParametersFormView extends JPanel{
+public class ParametersFormView extends JPanel {
 
+    // The display manager
+    GridBagConstraints gc = new GridBagConstraints ( );
+    // The main frame (i.e. the app)
+    MainFrame parent;
     // The controller that will use the input information in backend
     private ParametersController controller;
 
-    // The display manager
-    GridBagConstraints gc = new GridBagConstraints();
 
-    // The main frame (i.e. the app)
-    MainFrame parent;
-
+    public ParametersFormView ( MainFrame parent ) {
+        parametersForm ( parent );
+    }
 
     /**
      * Constructor
+     *
      * @param parent
      */
-    public void parametersForm(MainFrame parent){
+    public void parametersForm ( MainFrame parent ) {
 
         // Setting the attributes
         this.parent = parent;
         controller = parent.paramController;
 
         // Title
-        JLabel paramLabel = new JLabel("Set simulation parameters"); // Set text
-        paramLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font and size
-        paramLabel.setForeground(Color.BLUE); // Set color to blue
+        JLabel paramLabel = new JLabel ( "Set simulation parameters" ); // Set text
+        paramLabel.setFont ( new Font ( "Arial" , Font.BOLD , 18 ) ); // Set font and size
+        paramLabel.setForeground ( Color.BLUE ); // Set color to blue
 
 
         // Input fields creation
-        JTextField noiseLevField = new JTextField(10);
+        JTextField noiseLevField = new JTextField ( 10 );
 
-        JTextField startYearField = new JTextField(4);
-        JTextField startMonthField = new JTextField(2);
-        JTextField startDayField = new JTextField(2);
+        JTextField startYearField = new JTextField ( 4 );
+        JTextField startMonthField = new JTextField ( 2 );
+        JTextField startDayField = new JTextField ( 2 );
 
-        JTextField endYearField = new JTextField(4);
-        JTextField endMonthField = new JTextField(2);
-        JTextField endDayField = new JTextField(2);
+        JTextField endYearField = new JTextField ( 4 );
+        JTextField endMonthField = new JTextField ( 2 );
+        JTextField endDayField = new JTextField ( 2 );
 
         // Creation of the form
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(2, 4));
+        JPanel formPanel = new JPanel ( );
+        formPanel.setLayout ( new GridLayout ( 2 , 4 ) );
 
-        GridBagConstraints gc = new GridBagConstraints();
+        GridBagConstraints gc = new GridBagConstraints ( );
 
         // Setting padding
-        gc.insets = new Insets(20, 10, 20, 10);
+        gc.insets = new Insets ( 20 , 10 , 20 , 10 );
         // Adding title
         gc.gridx = 0;
         gc.gridy = 0;
@@ -68,41 +68,41 @@ public class ParametersFormView extends JPanel{
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = GridBagConstraints.REMAINDER;
 
-        add(paramLabel,gc);
+        add ( paramLabel , gc );
 
         // Adding start date
         gc.gridx = 0;
         gc.gridy++;
-        formPanel.add(new JLabel("Start Date (jj-mm-aaa): "));
+        formPanel.add ( new JLabel ( "Start Date (jj-mm-aaa): " ) );
 
         gc.gridx++;
-        formPanel.add(startDayField);
+        formPanel.add ( startDayField );
 
         gc.gridx++;
-        formPanel.add(startMonthField);
+        formPanel.add ( startMonthField );
 
         gc.gridx++;
-        formPanel.add(startYearField);
+        formPanel.add ( startYearField );
 
         // Adding end date
         gc.gridx = 0;
         gc.gridy++;
-        formPanel.add(new JLabel("End Date (jj-mm-aaa): "));
+        formPanel.add ( new JLabel ( "End Date (jj-mm-aaa): " ) );
 
         gc.gridx++;
-        formPanel.add(endDayField);
+        formPanel.add ( endDayField );
 
         gc.gridx++;
-        formPanel.add(endMonthField);
+        formPanel.add ( endMonthField );
 
         gc.gridx++;
-        formPanel.add(endYearField);
+        formPanel.add ( endYearField );
 
-         // Add button creation
-         JButton addButton = new JButton("Set Parameters");
-         addButton.addActionListener(new ActionListener() {
+        // Add button creation
+        JButton addButton = new JButton ( "Set Parameters" );
+        addButton.addActionListener ( new ActionListener ( ) {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed ( ActionEvent e ) {
                 // Fetching input data
                 try {
                     int startDay = Integer.parseInt ( startDayField.getText ( ) );
@@ -133,28 +133,22 @@ public class ParametersFormView extends JPanel{
                         System.out.println ( "Start date: " + controller.getEndDate ( ) );
                         System.out.println ( parent.paramController.getStartDate ( ).toString ( ) );
                     }
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog ( parent , "Invalid dates" , "Error" , JOptionPane.ERROR_MESSAGE );
                 }
-            
+
             }
-                
-         });
 
-        setLayout(new BorderLayout());
-        add(formPanel, BorderLayout.CENTER);
+        } );
+
+        setLayout ( new BorderLayout ( ) );
+        add ( formPanel , BorderLayout.CENTER );
 
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(addButton);
+        JPanel buttonPanel = new JPanel ( );
+        buttonPanel.add ( addButton );
 
-        add(buttonPanel, BorderLayout.SOUTH);
-   }
-
-  
-
-   public ParametersFormView(MainFrame parent) {
-        parametersForm(parent);
-   }
+        add ( buttonPanel , BorderLayout.SOUTH );
+    }
 }
 

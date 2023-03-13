@@ -1,28 +1,5 @@
 package src.Kalman;
 
-import java.util.ArrayList;
-
-/* Copyright 2002-2022 CS GROUP
- * Licensed to CS GROUP (CS) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * CS licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.util.Pair;
 import org.orekit.estimation.measurements.ObservedMeasurement;
@@ -38,8 +15,14 @@ import org.orekit.time.AbsoluteDate;
 import org.orekit.time.DatesSelector;
 import org.orekit.utils.TimeSpanMap;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-/** {@link Scheduler} based on {@link EventDetector} for generating measurements sequences.
+
+/**
+ * {@link Scheduler} based on {@link EventDetector} for generating measurements sequences.
  * <p>
  * Event-based schedulers generate measurements following a repetitive pattern when the
  * a {@link EventDetector detector} provided at construction is in a {@link SignSemantic
@@ -60,22 +43,30 @@ import org.orekit.utils.TimeSpanMap;
  * at high rate up to a maximum number, with a rest period between sequences (for example
  * sequences of up to 256 measurements every 100ms with 300s between each sequence).
  * </p>
+ *
  * @param <T> the type of the measurement
  * @author Luc Maisonobe
  * @since 9.3
  */
 public class CustomEventBasedScheduler<T extends ObservedMeasurement<T>> extends AbstractScheduler<T> {
 
-    /** Semantic of the detector g function sign to use. */
+    /**
+     * Semantic of the detector g function sign to use.
+     */
     private final SignSemantic signSemantic;
 
-    /** Feasibility status. */
+    /**
+     * Feasibility status.
+     */
     private TimeSpanMap<Boolean> feasibility;
 
-    /** Propagation direction. */
+    /**
+     * Propagation direction.
+     */
     private boolean forward;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * <p>
      * The event detector instance should <em>not</em> be already bound to the propagator.
      * It will be wrapped in an {@link AdapterDetector adapter} in order to manage time
@@ -88,99 +79,113 @@ public class CustomEventBasedScheduler<T extends ObservedMeasurement<T>> extends
      * reusable across several {@link EventBasedScheduler instances}. A separate selector
      * should be used for each scheduler.
      * </p>
-     * @param builder builder for individual measurements
-     * @param selector selector for dates (beware that selectors are generally not
-     * reusable across several {@link EventBasedScheduler instances}, each selector should
-     * be dedicated to one scheduler
-     * @param propagator propagator associated with this scheduler
-     * @param detector detector for checking measurements feasibility
+     *
+     * @param builder      builder for individual measurements
+     * @param selector     selector for dates (beware that selectors are generally not
+     *                     reusable across several {@link EventBasedScheduler instances}, each selector should
+     *                     be dedicated to one scheduler
+     * @param propagator   propagator associated with this scheduler
+     * @param detector     detector for checking measurements feasibility
      * @param signSemantic semantic of the detector g function sign to use
      */
-    public CustomEventBasedScheduler(final MeasurementBuilder<T> builder, final DatesSelector selector,
-                               final Propagator propagator,
-                               final EventDetector detector, final SignSemantic signSemantic) {
-        super(builder, selector);
+    public CustomEventBasedScheduler ( final MeasurementBuilder<T> builder , final DatesSelector selector ,
+                                       final Propagator propagator ,
+                                       final EventDetector detector , final SignSemantic signSemantic ) {
+        super ( builder , selector );
         this.signSemantic = signSemantic;
-        this.feasibility  = new TimeSpanMap<Boolean>(Boolean.FALSE);
-        this.forward      = true;
-        propagator.addEventDetector(new FeasibilityAdapter(detector));
+        this.feasibility = new TimeSpanMap<Boolean> ( Boolean.FALSE );
+        this.forward = true;
+        propagator.addEventDetector ( new FeasibilityAdapter ( detector ) );
     }
 
-    public Pair<SortedSet<ObservedMeasurement<?>>, List<SpacecraftState>> generate_(final List<OrekitStepInterpolator> interpolators) {
+    public Pair<SortedSet<ObservedMeasurement<?>>, HashMap<ObservedMeasurement, SpacecraftState>> generate_ ( final List<OrekitStepInterpolator> interpolators ) {
 
         // select dates in the current step, using arbitrarily interpolator 0
         // as all interpolators cover the same range
-        final List<AbsoluteDate> dates = getSelector().selectDates(interpolators.get(0).getPreviousState().getDate(),
-                                                                   interpolators.get(0).getCurrentState().getDate());
+        final List<AbsoluteDate> dates = getSelector ( ).selectDates ( interpolators.get ( 0 ).getPreviousState ( ).getDate ( ) ,
+                interpolators.get ( 0 ).getCurrentState ( ).getDate ( ) );
 
         // generate measurements when feasible
-        final SortedSet<ObservedMeasurement<?>> measurements = new TreeSet<>();
-        List<SpacecraftState> trueStates = new ArrayList<SpacecraftState>();
-
+        final SortedSet<ObservedMeasurement<?>> measurements = new TreeSet<> ( );
+        SortedSet<SpacecraftState> trueStates = new TreeSet<> ( new SpacecraftStateDateComparator ( ) );
+        HashMap<ObservedMeasurement, SpacecraftState> mapsStates = new HashMap<> ( );
         for (final AbsoluteDate date : dates) {
-            if (feasibility.get(date)) {
+            if (feasibility.get ( date )) {
                 // a measurement is feasible at this date
 
                 // interpolate states at measurement date
-                final SpacecraftState[] states = new SpacecraftState[interpolators.size()];
+                final SpacecraftState[] states = new SpacecraftState[interpolators.size ( )];
                 for (int i = 0; i < states.length; ++i) {
-                    states[i] = interpolators.get(i).getInterpolatedState(date);
-                    trueStates.add(states[i]);
+                    states[i] = interpolators.get ( i ).getInterpolatedState ( date );
+                    trueStates.add ( states[i] );
                 }
 
                 // generate measurement
-                measurements.add(getBuilder().build(states));
+                ObservedMeasurement meas = getBuilder ( ).build ( states );
+                measurements.add ( meas );
+                for (int i = 0; i < states.length; ++i) {
+                    mapsStates.put ( meas , states[i] );
+                }
+
             }
         }
 
-        return new Pair<SortedSet<ObservedMeasurement<?>>, List<SpacecraftState>>(measurements, trueStates);
+        return new Pair<SortedSet<ObservedMeasurement<?>>, HashMap<ObservedMeasurement, SpacecraftState>> ( measurements , mapsStates );
     }
 
-    /** Adapter for managing feasibility status changes. */
+    @Override
+    public SortedSet<T> generate ( List<OrekitStepInterpolator> interpolators ) {
+        System.out.println ( "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" );
+        return null;
+    }
+
+    /**
+     * Adapter for managing feasibility status changes.
+     */
     private class FeasibilityAdapter extends AdapterDetector {
 
-        /** Build an adaptor wrapping an existing detector.
+        /**
+         * Build an adaptor wrapping an existing detector.
+         *
          * @param detector detector to wrap
          */
-        FeasibilityAdapter(final EventDetector detector) {
-            super(detector);
+        FeasibilityAdapter ( final EventDetector detector ) {
+            super ( detector );
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public void init(final SpacecraftState s0, final AbsoluteDate t) {
-            super.init(s0, t);
-            forward     = t.compareTo(s0.getDate()) > 0;
-            feasibility = new TimeSpanMap<Boolean>(signSemantic.measurementIsFeasible(g(s0)));
+        public void init ( final SpacecraftState s0 , final AbsoluteDate t ) {
+            super.init ( s0 , t );
+            forward = t.compareTo ( s0.getDate ( ) ) > 0;
+            feasibility = new TimeSpanMap<Boolean> ( signSemantic.measurementIsFeasible ( g ( s0 ) ) );
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public Action eventOccurred(final SpacecraftState s, final boolean increasing) {
+        public Action eventOccurred ( final SpacecraftState s , final boolean increasing ) {
 
             // find the feasibility status AFTER the current date
-            final boolean statusAfter = signSemantic.measurementIsFeasible(increasing ? +1 : -1);
+            final boolean statusAfter = signSemantic.measurementIsFeasible ( increasing ? +1 : -1 );
 
             // store either status or its opposite according to propagation direction
             if (forward) {
                 // forward propagation
-                feasibility.addValidAfter(statusAfter, s.getDate(), false);
+                feasibility.addValidAfter ( statusAfter , s.getDate ( ) , false );
             } else {
                 // backward propagation
-                feasibility.addValidBefore(!statusAfter, s.getDate(), false);
+                feasibility.addValidBefore ( !statusAfter , s.getDate ( ) , false );
             }
 
             // delegate to wrapped detector
-            return super.eventOccurred(s, increasing);
+            return super.eventOccurred ( s , increasing );
 
         }
 
     }
-
-	@Override
-	public SortedSet<T> generate(List<OrekitStepInterpolator> interpolators) {
-		System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-		return null;
-	}
 
 }

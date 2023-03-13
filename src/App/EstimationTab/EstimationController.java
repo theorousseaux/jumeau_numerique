@@ -4,7 +4,6 @@ import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.util.Pair;
 import org.orekit.estimation.measurements.AngularAzEl;
 import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.estimation.measurements.ObservedMeasurement;
@@ -15,36 +14,33 @@ import org.orekit.propagation.Propagator;
 import org.orekit.propagation.SpacecraftState;
 import org.orekit.propagation.conversion.DormandPrince853IntegratorBuilder;
 import org.orekit.propagation.conversion.NumericalPropagatorBuilder;
-import org.orekit.propagation.conversion.OrbitDeterminationPropagatorBuilder;
 import org.orekit.utils.Constants;
 import org.orekit.utils.PVCoordinates;
 import org.orekit.utils.TimeStampedPVCoordinates;
 import src.App.MainFrame;
-import src.App.SimulationTab.SimulationModel;
-import src.Data.GS.ReadGSFile;
 import src.Kalman.OD;
-import src.Kalman.Observation;
 import src.Kalman.constants;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
+
+import static src.Kalman.OD.paramOrbitaux;
 
 public class EstimationController {
 
-    public EstimationModel model = new EstimationModel();
+    public EstimationModel model = new EstimationModel ( );
 
 
-    public void loadEstimation(MainFrame parent) throws NumberFormatException, IllegalArgumentException, IOException {
-        model.setSatellites(parent.simuController.model.getSatellitesNames ( ) );
+    public void loadEstimation ( MainFrame parent ) throws NumberFormatException, IllegalArgumentException, IOException {
+        model.setSatellites ( parent.simuController.model.getObservableSatellites ( ) );
         model.setPropagators ( parent.simuController.model.getSatellites ( ) );
-        model.setFinalDate ( parent.simuController.model.getSimulationParameters ().getEndDate () );
-        model.setInitialDate ( parent.simuController.model.getSimulationParameters ().getStartDate () );
-        model.setMeasurements ( parent.simuController.model.getMeasurementsSetsList () );
-
+        model.setFinalDate ( parent.simuController.model.getSimulationParameters ( ).getEndDate ( ) );
+        model.setInitialDate ( parent.simuController.model.getSimulationParameters ( ).getStartDate ( ) );
+        model.setMeasurements ( parent.simuController.model.getMeasurementsSetsList ( ) );
+        model.setSatellitesNames ( parent.simuController.model.getSatellitesNames () );
     }
-    public void runEstimation( MainFrame parent) throws IOException {
+
+    public void runEstimation ( MainFrame parent ) throws IOException {
         this.loadEstimation ( parent );
         int j = 0;
         /*
@@ -54,19 +50,18 @@ public class EstimationController {
         double noiseLevelV = 0.001;
 
          */
-        System.out.println("Nb propagators : " + model.getPropagators ().size ());
-        System.out.println("Nb satellites : "+model.getSatellites ().size());
-        for (SortedSet<ObservedMeasurement<?>> measureListInit : this.model.getMeasurements ( ).getFirst ()){
-            System.out.println ( j );
-            System.out.println( measureListInit.size());
-            performEstimation(j,measureListInit,model.getMeasurements ().getSecond ().get ( j ));
-            j ++;
+        System.out.println ( "Nb propagators : " + model.getPropagators ( ).size ( ) );
+        System.out.println ( "Nb satellites : " + model.getSatellites ( ).size ( ) );
+        for (SortedSet<ObservedMeasurement<?>> measureListInit : this.model.getMeasurements ( ).getFirst ( )) {
+            performEstimation ( j , measureListInit , model.getMeasurements ( ).getSecond ( ) );
+            j++;
+
         }
-        System.out.println("Simulation done");
+        System.out.println ( "Simulation done" );
     }
 
-    public void performEstimation( int j, SortedSet<ObservedMeasurement<?>> measureListInit, SortedSet<SpacecraftState> states){
-        if (measureListInit.size()>0) {
+    public void performEstimation ( int j , SortedSet<ObservedMeasurement<?>> measureListInit , HashMap<ObservedMeasurement, SpacecraftState> states ) {
+        if (measureListInit.size ( ) > 0) {
             Propagator propagator = this.model.getPropagators ( ).get ( j );
 
             SpacecraftState trueState = new SpacecraftState ( propagator.getInitialState ( ).getOrbit ( ) );
@@ -100,12 +95,13 @@ public class EstimationController {
             DormandPrince853IntegratorBuilder integratorBuilder = new DormandPrince853IntegratorBuilder ( prop_min_step , prop_max_step , prop_position_error );
             NumericalPropagatorBuilder numericalPropagatorBuilder = new NumericalPropagatorBuilder ( estimatedOrbit_ , integratorBuilder , constants.type , estimator_position_scale );
 
-            ObservableSatellite sat = new ObservableSatellite(0);
-            SortedSet<ObservedMeasurement<?>> measureList = new TreeSet<ObservedMeasurement<?>>();
-            System.out.println("Creation nvlles mesures");
-            for(ObservedMeasurement<?> measure : measureListInit) {
-                AngularAzEl m = new AngularAzEl(((AngularAzEl) measure).getStation(), measure.getDate(), measure.getObservedValue(), measure.getTheoreticalStandardDeviation(), measure.getBaseWeight(), sat);
-                measureList.add(m);
+            ObservableSatellite sat = new ObservableSatellite ( 0 );
+            SortedSet<ObservedMeasurement<?>> measureList = new TreeSet<ObservedMeasurement<?>> ( );
+            System.out.println ( "Creation nvlles mesures" );
+            for (ObservedMeasurement<?> measure : measureListInit) {
+                AngularAzEl m = new AngularAzEl ( ((AngularAzEl) measure).getStation ( ) , measure.getDate ( ) , measure.getObservedValue ( ) , measure.getTheoreticalStandardDeviation ( ) , measure.getBaseWeight ( ) , sat );
+                measureList.add ( m );
+                model.getObservedSat ().add ( this.model.satellitesNames.get(j) );
             }
 
             OD estimator = new OD ( this.model.getSatellites ( ).get ( j ) , propagator , numericalPropagatorBuilder , measureList , this.model.getInitialDate ( ) , this.model.getFinalDate ( ) , this.model.stdPos , this.model.stdV );
@@ -118,19 +114,16 @@ public class EstimationController {
             ConstantProcessNoise processNoise = new ConstantProcessNoise ( initialP , Q );
 
             LinkedHashMap<ObservedMeasurement<?>, Propagator> estimation = estimator.Kalman ( processNoise );
-            System.out.println("Calcul des erreurs");
-            int i = 0;
-            System.out.println("---------------------------------------");
-            System.out.println("---------------------------------------");
+            System.out.println ( "Calcul des erreurs" );
+            System.out.println ( "---------------------------------------" );
+            System.out.println ( "---------------------------------------" );
 
-            for (Map.Entry<ObservedMeasurement<?>,Propagator> entry : estimation.entrySet ()) {
-                System.out.println(entry.getKey ().getDate ());
-                double[] errors = OD.incertitudes2 ( (SpacecraftState) states.toArray ()[i], entry.getValue () );
-                System.out.println ("error : " +  errors.toString ( ) );
-                this.model.estimationsList.add ( "Satellite: " + String.valueOf ( j ) + "; Date: " + entry.getKey ().getDate ( ).toString ( ) + "; dP: " + String.valueOf ( errors[0] ) + "; dV: " + errors[1] );
-                i ++;
+            for (Map.Entry<ObservedMeasurement<?>, Propagator> entry : estimation.entrySet ( )) {
+                System.out.println ( entry.getKey ( ).getDate ( ) );
+                this.model.estimationsList.add ( "Sat " + model.getSatellitesNames ().get(j) + ": " + Arrays.toString ( paramOrbitaux ( entry.getValue ( ).getInitialState ( ).getOrbit ( ) ) ) );
+
             }
-            System.out.println("Calcul des erreurs terminé");
+            System.out.println ( "Calcul des erreurs terminé" );
 
         }
     }

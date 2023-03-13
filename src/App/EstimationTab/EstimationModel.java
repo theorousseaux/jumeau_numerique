@@ -8,27 +8,59 @@ import org.orekit.propagation.SpacecraftState;
 import org.orekit.propagation.conversion.OrbitDeterminationPropagatorBuilder;
 import org.orekit.time.AbsoluteDate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
+import java.util.*;
 
 public class EstimationModel {
 
     List<ObservableSatellite> satellites;
 
-    List<Propagator> propagators;
+    List<Propagator> propagators ;
+
+    public Set<String> getObservedSat ( ) {
+        return observedSat;
+    }
+
+    public void setObservedSat ( Set<String> observedSat ) {
+        this.observedSat = observedSat;
+    }
+
+    Set<String> observedSat = new HashSet<> (  );
+    public List<String> getSatellitesNames ( ) {
+        return satellitesNames;
+    }
+
+    public void setSatellitesNames ( List<String> satellitesNames ) {
+        this.satellitesNames = satellitesNames;
+    }
+
+    public List<String> getEstimationsList ( ) {
+        return estimationsList;
+    }
+
+    public void setEstimationsList ( List<String> estimationsList ) {
+        this.estimationsList = estimationsList;
+    }
+
+    public double getStdPos ( ) {
+        return stdPos;
+    }
+
+    List<String> satellitesNames;
 
     List<OrbitDeterminationPropagatorBuilder> propagatorBuilders;
 
-    Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> measurements;
+    Pair<List<SortedSet<ObservedMeasurement<?>>>, HashMap<ObservedMeasurement, SpacecraftState>> measurements;
     AbsoluteDate initialDate;
 
     AbsoluteDate finalDate;
 
-    List<String> estimationsList = new ArrayList<> (  );
+    List<String> estimationsList = new ArrayList<> ( );
 
 
     double noiseLevelPos;
+    double noiseLevelV;
+    double stdPos;
+    double stdV;
 
     public double getNoiseLevelPos ( ) {
         return noiseLevelPos;
@@ -46,8 +78,6 @@ public class EstimationModel {
         this.noiseLevelV = noiseLevelV;
     }
 
-    double noiseLevelV;
-
     public double getStdP ( ) {
         return stdPos;
     }
@@ -64,10 +94,6 @@ public class EstimationModel {
         this.stdV = stdV;
     }
 
-    double stdPos;
-
-    double stdV;
-
     public List<ObservableSatellite> getSatellites ( ) {
         return satellites;
     }
@@ -79,6 +105,8 @@ public class EstimationModel {
     public List<Propagator> getPropagators ( ) {
         return propagators;
     }
+
+
 
     public void setPropagators ( List<Propagator> propagators ) {
         this.propagators = propagators;
@@ -92,11 +120,11 @@ public class EstimationModel {
         this.propagatorBuilders = propagatorBuilders;
     }
 
-    public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> getMeasurements ( ) {
+    public Pair<List<SortedSet<ObservedMeasurement<?>>>, HashMap<ObservedMeasurement, SpacecraftState>> getMeasurements ( ) {
         return measurements;
     }
 
-    public void setMeasurements ( Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> measurements ) {
+    public void setMeasurements ( Pair<List<SortedSet<ObservedMeasurement<?>>>, HashMap<ObservedMeasurement, SpacecraftState>> measurements ) {
         this.measurements = measurements;
     }
 
