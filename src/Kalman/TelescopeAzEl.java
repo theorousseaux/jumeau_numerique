@@ -299,14 +299,14 @@ public class TelescopeAzEl {
 		return skyCoveringMap;
     }
 
-    public EventBasedScheduler createEventBasedScheduler(ObservableSatellite satellite, Propagator propagator) {
+    public CustomEventBasedScheduler createCustomEventBasedScheduler(ObservableSatellite satellite, Propagator propagator) {
     	BooleanDetector detector = createDetector(this.skyCoveringMap);
 		if (this.GEO == true) {
 			detector = createDetectorGEO();
 		}
     	FixedStepSelector selector = createDateSelector();
     	AngularAzElBuilder builder  = createAzElBuilder(satellite);
-       	EventBasedScheduler scheduler = new EventBasedScheduler(builder, selector, propagator, detector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
+       	CustomEventBasedScheduler scheduler = new CustomEventBasedScheduler(builder, selector, propagator, detector, SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE);
     	return scheduler;
     }
 }
