@@ -129,7 +129,6 @@ public class ParametersFormView extends JPanel{
                         controller.setEndDate ( endYear , endMonth , endDay );
 
                         System.out.println ( "Simulation saved" );
-                        System.out.println ( "Noise level: " + controller.getNoiseLevel ( ) );
                         System.out.println ( "Start date: " + controller.getStartDate ( ) );
                         System.out.println ( "Start date: " + controller.getEndDate ( ) );
                         System.out.println ( parent.paramController.getStartDate ( ).toString ( ) );
