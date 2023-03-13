@@ -132,7 +132,6 @@ public class LoadSimu {
             BufferedWriter bw = new BufferedWriter(fw);
 
             // Saving the network
-            bw.newLine ();
             bw.write ( "NETWORK" );
             ObserverNetwork network = simulationModel.getObserverNetwork ();
             bw.newLine ();

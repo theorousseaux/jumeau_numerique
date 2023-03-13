@@ -18,7 +18,7 @@ public class SimulationModel {
     Parameters simulationParameters;
     List<Propagator> satellites;
     Observation observations;
-    Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measurementsSetsList;
+    Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> measurementsSetsList;
     List<ObservableSatellite> satellitesNames;
     
     public List<ObservableSatellite> getSatellitesNames() {
@@ -64,10 +64,10 @@ public class SimulationModel {
     public void setObservations(Observation observations) {
         this.observations = observations;
     }
-    public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> getMeasurementsSetsList() {
+    public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> getMeasurementsSetsList() {
         return measurementsSetsList;
     }
-    public void setMeasurementsSetsList(Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measurementsSetsList) {
+    public void setMeasurementsSetsList(Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> measurementsSetsList) {
         this.measurementsSetsList = measurementsSetsList;
     }
 }

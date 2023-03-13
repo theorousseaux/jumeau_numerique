@@ -33,7 +33,7 @@ public class Observation {
 		this.finalDate = finalDate;
 	}
 	
-	public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measure(boolean plot){
+	public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> measure(boolean plot){
 		CustomGenerator generator = new CustomGenerator();
 		for(int i = 0; i < this.objectsList.size(); i++) {
 			generator.addPropagator(propagatorsList.get(i));
@@ -47,9 +47,9 @@ public class Observation {
 	        }
 	    }
 		System.out.println("generating measurements : ");
-	    Pair<SortedSet<ObservedMeasurement<?>>, List<SpacecraftState>> pair = generator.generate(this.initialDate, this.finalDate);
+	    Pair<SortedSet<ObservedMeasurement<?>>, SortedSet<SpacecraftState>> pair = generator.generate(this.initialDate, this.finalDate);
 	    SortedSet<ObservedMeasurement<?>> measurementsList = pair.getFirst();
-	    List<SpacecraftState> trueStatesList = pair.getSecond();
+	    SortedSet<SpacecraftState> trueStatesList = pair.getSecond();
 		System.out.println("done");
 	    
 	    if(plot) {
@@ -66,21 +66,21 @@ public class Observation {
 	    	System.out.println("END MESURES");
 	    }
 	    
-	    List<List<SpacecraftState>> trueStatesSetsList = new ArrayList<List<SpacecraftState>>();
+	    List<SortedSet<SpacecraftState>> trueStatesSetsList = new ArrayList<>();
 	    List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = new ArrayList<SortedSet<ObservedMeasurement<?>>>();
 	    for (int i = 0; i < propagatorsList.size(); i++) {
 	    	measurementsSetsList.add(new TreeSet<ObservedMeasurement<?>>());
-	    	trueStatesSetsList.add(new ArrayList<SpacecraftState>());
+	    	trueStatesSetsList.add(new TreeSet<SpacecraftState> (new SpacecraftStateDateComparator ()));
 	    }
         
         int i = 0;
 	    for(ObservedMeasurement<?> measure : measurementsList){
 	    	measurementsSetsList.get(measure.getSatellites().get(0).getPropagatorIndex()).add(measure);
-	    	trueStatesSetsList.get(measure.getSatellites().get(0).getPropagatorIndex()).add(trueStatesList.get(i));
+	    	trueStatesSetsList.get(measure.getSatellites().get(0).getPropagatorIndex()).add((SpacecraftState) trueStatesList.toArray ()[i]);
 	    	i = i+1;
 	    }
 	    
-	    return new Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>>(measurementsSetsList, trueStatesSetsList);
+	    return new Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>>(measurementsSetsList, trueStatesSetsList);
 	}
 
 }

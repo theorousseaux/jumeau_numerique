@@ -56,18 +56,16 @@ public class EstimationController {
          */
         System.out.println("Nb propagators : " + model.getPropagators ().size ());
         System.out.println("Nb satellites : "+model.getSatellites ().size());
-        System.out.println("Std pos : " + model.getStdP ());
         for (SortedSet<ObservedMeasurement<?>> measureListInit : this.model.getMeasurements ( ).getFirst ()){
             System.out.println ( j );
             System.out.println( measureListInit.size());
-            performEstimation(j,measureListInit, model.getMeasurements ().getSecond ().get(j));
-
+            performEstimation(j,measureListInit,model.getMeasurements ().getSecond ().get ( j ));
             j ++;
         }
         System.out.println("Simulation done");
     }
 
-    public void performEstimation( int j, SortedSet<ObservedMeasurement<?>> measureListInit, List<SpacecraftState> states){
+    public void performEstimation( int j, SortedSet<ObservedMeasurement<?>> measureListInit, SortedSet<SpacecraftState> states){
         if (measureListInit.size()>0) {
             Propagator propagator = this.model.getPropagators ( ).get ( j );
 
@@ -108,7 +106,6 @@ public class EstimationController {
             for(ObservedMeasurement<?> measure : measureListInit) {
                 AngularAzEl m = new AngularAzEl(((AngularAzEl) measure).getStation(), measure.getDate(), measure.getObservedValue(), measure.getTheoreticalStandardDeviation(), measure.getBaseWeight(), sat);
                 measureList.add(m);
-                System.out.println(measure);
             }
 
             OD estimator = new OD ( this.model.getSatellites ( ).get ( j ) , propagator , numericalPropagatorBuilder , measureList , this.model.getInitialDate ( ) , this.model.getFinalDate ( ) , this.model.stdPos , this.model.stdV );
@@ -119,18 +116,16 @@ public class EstimationController {
             double[] q = {this.model.noiseLevelPos , this.model.noiseLevelPos , this.model.noiseLevelPos , this.model.noiseLevelV , this.model.noiseLevelV , this.model.noiseLevelV};
             RealMatrix Q = MatrixUtils.createRealDiagonalMatrix ( q );
             ConstantProcessNoise processNoise = new ConstantProcessNoise ( initialP , Q );
-            System.out.println ( measureList );
 
             LinkedHashMap<ObservedMeasurement<?>, Propagator> estimation = estimator.Kalman ( processNoise );
-            System.out.println ( estimation.toString () );
             System.out.println("Calcul des erreurs");
             int i = 0;
             System.out.println("---------------------------------------");
             System.out.println("---------------------------------------");
 
             for (Map.Entry<ObservedMeasurement<?>,Propagator> entry : estimation.entrySet ()) {
-                System.out.println(entry.getKey ());
-                double[] errors = OD.incertitudes2 ( states.get ( i ), entry.getValue () );
+                System.out.println(entry.getKey ().getDate ());
+                double[] errors = OD.incertitudes2 ( (SpacecraftState) states.toArray ()[i], entry.getValue () );
                 System.out.println ("error : " +  errors.toString ( ) );
                 this.model.estimationsList.add ( "Satellite: " + String.valueOf ( j ) + "; Date: " + entry.getKey ().getDate ( ).toString ( ) + "; dP: " + String.valueOf ( errors[0] ) + "; dV: " + errors[1] );
                 i ++;

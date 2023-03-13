@@ -3,10 +3,14 @@ package src.App.SimulationTab;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 
+import org.hipparchus.util.Pair;
 import org.orekit.estimation.measurements.ObservableSatellite;
+import org.orekit.estimation.measurements.ObservedMeasurement;
 import org.orekit.propagation.Propagator;
 
+import org.orekit.propagation.SpacecraftState;
 import src.App.MainFrame;
 import src.Data.GS.ReadGSFile;
 import src.Kalman.Observation;
@@ -56,6 +60,17 @@ public class SimulationController {
     public void runSimulation(MainFrame parent){
         model.setObservations(new Observation(model.getObserverNetwork().getTelescopes(), model.getSatellitesNames(), model.getSatellites(), model.getSimulationParameters().getStartDate(), model.getSimulationParameters().getEndDate()));
         model.setMeasurementsSetsList(model.getObservations().measure(true));
+        Pair<List<SortedSet<ObservedMeasurement<?>>>, List<SortedSet<SpacecraftState>>> pair = model.getMeasurementsSetsList ();
+        List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList = pair.getFirst();
+        List<SortedSet<SpacecraftState>> trueStatesList = pair.getSecond();
+
+        System.out.println(trueStatesList.size());
+        System.out.println(measurementsSetsList.size());
+        for (int k = 0; k< 10; k++){
+            System.out.println(trueStatesList.get(k).size());
+            System.out.println(measurementsSetsList.get(k).size());
+        }
+
         System.out.println("Simulation done");
     }
 

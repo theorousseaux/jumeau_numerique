@@ -66,7 +66,7 @@ public class CustomGenerator {
      * @param end end of the measurements time span
      * @return generated measurements
      */
-    public Pair<SortedSet<ObservedMeasurement<?>>, List<SpacecraftState>> generate(final AbsoluteDate start, final AbsoluteDate end) {
+    public Pair<SortedSet<ObservedMeasurement<?>>, SortedSet<SpacecraftState>> generate(final AbsoluteDate start, final AbsoluteDate end) {
 
         // initialize schedulers
         for (final CustomEventBasedScheduler<?> scheduler : schedulers) {
@@ -80,7 +80,7 @@ public class CustomGenerator {
         // generate the measurements
         parallelizer.propagate(start, end);   
 
-        return new Pair<SortedSet<ObservedMeasurement<?>>, List<SpacecraftState>>(handler.getMeasurements(),handler.getTrueStates());
+        return new Pair<SortedSet<ObservedMeasurement<?>>, SortedSet<SpacecraftState>>(handler.getMeasurements(),handler.getTrueStates());
     }    
 
     /** Handler for measurements generation steps. */
@@ -93,7 +93,7 @@ public class CustomGenerator {
         private final SortedSet<ObservedMeasurement<?>> measurements;
         
         /** Set for true states. */
-        private final List<SpacecraftState> trueStates;
+        private final SortedSet<SpacecraftState> trueStates;
 
         /** Simple constructor.
          * @param schedulers sequences generators
@@ -101,7 +101,7 @@ public class CustomGenerator {
         GeneratorHandler(final List<CustomEventBasedScheduler<?>> schedulers) {
             this.schedulers   = schedulers;
             this.measurements = new TreeSet<>();
-            this.trueStates = new ArrayList<>();
+            this.trueStates = new TreeSet<> (new SpacecraftStateDateComparator ());
         }
 
         /** {@inheritDoc} */
@@ -129,7 +129,7 @@ public class CustomGenerator {
             return measurements;
         }
         
-        public List<SpacecraftState> getTrueStates() {
+        public SortedSet<SpacecraftState> getTrueStates() {
             return trueStates;
         }
     }

@@ -20,7 +20,7 @@ public class EstimationModel {
 
     List<OrbitDeterminationPropagatorBuilder> propagatorBuilders;
 
-    Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measurements;
+    Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> measurements;
     AbsoluteDate initialDate;
 
     AbsoluteDate finalDate;
@@ -92,11 +92,11 @@ public class EstimationModel {
         this.propagatorBuilders = propagatorBuilders;
     }
 
-    public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> getMeasurements ( ) {
+    public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> getMeasurements ( ) {
         return measurements;
     }
 
-    public void setMeasurements ( Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measurements ) {
+    public void setMeasurements ( Pair<List<SortedSet<ObservedMeasurement<?>>>,List<SortedSet<SpacecraftState>>> measurements ) {
         this.measurements = measurements;
     }
 
