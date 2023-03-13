@@ -120,7 +120,6 @@ public class DataBase {
         System.out.println(query);
         ResultSet rs = stmt.executeQuery(query);
         List<Object> objectList = new ArrayList<>();
-        int j = 0;
         while (rs.next()) {
             String id_sat = rs.getString("id_sat");
             String date = rs.getString("date");
@@ -143,8 +142,7 @@ public class DataBase {
             String[] seconds_parts = hours_parts[2].split("Z");
             Double second = Double.parseDouble(seconds_parts[0]);
 
-            AbsoluteDate date2 = new AbsoluteDate(year, month, day, hour, minute, second,
-                    TimeScalesFactory.getUTC());
+            AbsoluteDate date2 = new AbsoluteDate(year, month, day, hour, minute, second,TimeScalesFactory.getUTC());
             double prop_min_step = 0.001;
             double prop_max_step = 300.0;
             double prop_position_error = 10.0;
@@ -154,8 +152,7 @@ public class DataBase {
                     Double.parseDouble(ma), constants.type, constants.gcrf, date2,
                     constants.mu);
             double[][] tolerances = NumericalPropagator.tolerances(prop_position_error, orbit, OrbitType.CARTESIAN);
-            DormandPrince853Integrator integrator = new DormandPrince853Integrator(prop_min_step, prop_max_step,
-                    tolerances[0], tolerances[1]);
+            DormandPrince853Integrator integrator = new DormandPrince853Integrator(prop_min_step, prop_max_step, tolerances[0], tolerances[1]);
             NumericalPropagator propagator = new NumericalPropagator(integrator);
             CartesianOrbit cartOrbit = new CartesianOrbit(orbit);
             SpacecraftState initialState = new SpacecraftState(cartOrbit);
@@ -164,10 +161,7 @@ public class DataBase {
             OrbitType orbitType = OrbitType.CARTESIAN;
             propagator.setOrbitType(orbitType);
             propagator.setPositionAngleType(constants.type);
-            ObservableSatellite satellite = new ObservableSatellite(j);
-            Object object = new Object(satellite, propagator, id_sat,
-                    Double.parseDouble(SM));
-            j = j + 1;
+            Object object = new Object(propagator, id_sat, Double.parseDouble(SM));
             objectList.add(object);
         }
         return objectList;
