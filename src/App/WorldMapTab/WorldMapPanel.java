@@ -4,10 +4,16 @@ import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
+import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.RenderableLayer;
+import gov.nasa.worldwind.render.Ellipsoid;
 import gov.nasa.worldwind.render.PointPlacemark;
 import gov.nasa.worldwind.render.PointPlacemarkAttributes;
+import gov.nasa.worldwind.render.airspaces.Airspace;
+import gov.nasa.worldwind.render.airspaces.AirspaceAttributes;
+import gov.nasa.worldwind.render.airspaces.Orbit;
 import src.App.MainFrame;
 import src.Kalman.Station;
 import src.Kalman.TelescopeAzEl;
@@ -35,6 +41,8 @@ public final class WorldMapPanel extends JPanel{
     public WorldWindowGLJPanel wwPanel;
 
     public RenderableLayer GSLayer;
+
+    public RenderableLayer orbitLayer;
     public WorldMapPanel(MainFrame parent) throws IOException {
 
         super(new BorderLayout());
@@ -106,6 +114,14 @@ public final class WorldMapPanel extends JPanel{
             }
             GSLayer.addRenderable(placemark);
         }
+        /*
+        Angle lat;
+        Angle lon = new Angle();
+        orbitLayer = new RenderableLayer ();
+        orbitLayer.addRenderable ( new Ellipsoid (new Position ( new Angle() ,,-6300000 ), 8000000, 8000000, 8000000) );
+        wwPanel.getModel ().getLayers ().add(orbitLayer);
+
+         */
         wwPanel.getModel().getLayers().add(GSLayer);
 
         // Adding WorldWindPanel to the JPanel

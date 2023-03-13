@@ -9,7 +9,6 @@ import org.orekit.time.AbsoluteDate;
 public class Parameters {
 
     // The noise of the propagation model
-    private double noiseLevel;
 
     // Beginning of propagation
     private AbsoluteDate startDate;
@@ -17,17 +16,18 @@ public class Parameters {
     // End of propagation
     private AbsoluteDate endDate;
 
+    public Parameters ( AbsoluteDate initialDate , AbsoluteDate finalDate ) {
+        this.startDate = initialDate;
+        this.endDate = finalDate;
+    }
+
+    public Parameters(){
+
+    }
+
     @Override
     public String toString ( ) {
-        return "Parameters [noiseLevel=" + noiseLevel + ", startDate=" + startDate + ", endDate=" + endDate + "]";
-    }
-
-    public double getNoiseLevel ( ) {
-        return noiseLevel;
-    }
-
-    public void setNoiseLevel ( double noiseLevel ) {
-        this.noiseLevel = noiseLevel;
+        return "Parameters [startDate=" + startDate + ", endDate=" + endDate + "]";
     }
 
     public AbsoluteDate getStartDate ( ) {

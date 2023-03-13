@@ -2,12 +2,15 @@ package src.App.SimulationTab;
 import javax.swing.*;
 
 import org.orekit.estimation.measurements.ObservableSatellite;
+import src.Data.LoadSimu;
 import src.Kalman.Station;
 
 import src.App.MainFrame;
 import src.Kalman.TelescopeAzEl;
 import src.UseCase1_GSNetwork.GSNetwork;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import java.awt.*;
@@ -138,6 +141,34 @@ public class DisplaySimPanel extends JPanel{
         this.add(startDate, gc);
         gc.gridy ++;
         this.add(endDate, gc);
+
+        JLabel fileName = new JLabel ( "File to save simulation: " );
+        JTextField fileNameInput = new JTextField ( "filename",10 );
+        JButton saveSimulationButton = new JButton ( "Save simulation set up" );
+
+        gc.gridx = 0;
+        gc.gridy ++;
+        this.add(fileName,gc);
+
+        gc.gridx = 1;
+        this.add(fileNameInput,gc);
+
+        gc.gridy ++;
+        this.add ( saveSimulationButton,gc );
+        saveSimulationButton.addActionListener(new ActionListener () {
+            @Override
+            public void actionPerformed( ActionEvent e) {
+
+                try {
+                    LoadSimu saver = new LoadSimu (fileNameInput.getText ());
+                    saver.save ( fileNameInput.getText (), parent.simuController.model);
+                }
+
+                catch (Exception e2) {
+                    JOptionPane.showMessageDialog(parent, "Input simulation parameters, ground stations and satellites first.", "Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 
 }
