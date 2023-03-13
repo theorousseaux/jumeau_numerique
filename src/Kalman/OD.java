@@ -198,8 +198,10 @@ public class OD {
   	  	Vector3D deltaPInInertialFrame = trueState.getPVCoordinates().getPosition().
                 subtract(estimatedState.getPVCoordinates().getPosition());
   	  	Transform inertialToSpacecraftFrame = estimatedState.toTransform();
-		System.out.println ( trueState.getA ()+","+ trueState.getE ( )+","+ trueState.getI ( ) );
-		System.out.println ( estimatedState.getA ()+","+ estimatedState.getE ( )+","+ estimatedState.getI ( ) );
+		System.out.println(trueState.getDate ());
+		System.out.println ( estimatedState.getDate () );
+		System.out.println (paramOrbitaux ( trueState.getOrbit () ).toString () );
+		System.out.println ( paramOrbitaux ( estimatedState.getOrbit () ).toString ());
 		System.out.println("---------------------------------------");
 
 		Vector3D deltaVProjected = inertialToSpacecraftFrame.transformVector(deltaVInInertialFrame);

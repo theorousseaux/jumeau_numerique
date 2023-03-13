@@ -55,7 +55,7 @@ public class SimulationController {
     
     public void runSimulation(MainFrame parent){
         model.setObservations(new Observation(model.getObserverNetwork().getTelescopes(), model.getSatellitesNames(), model.getSatellites(), model.getSimulationParameters().getStartDate(), model.getSimulationParameters().getEndDate()));
-        //model.setMeasurementsSetsList(model.getObservations().measure(true));
+        model.setMeasurementsSetsList(model.getObservations().measure(true));
         System.out.println("Simulation done");
     }
 

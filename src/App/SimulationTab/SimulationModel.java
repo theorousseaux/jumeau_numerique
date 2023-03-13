@@ -3,10 +3,12 @@ package src.App.SimulationTab;
 import java.util.List;
 import java.util.SortedSet;
 
+import org.hipparchus.util.Pair;
 import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.estimation.measurements.ObservedMeasurement;
 import org.orekit.propagation.Propagator;
 
+import org.orekit.propagation.SpacecraftState;
 import src.App.ParametersTab.Parameters;
 import src.Kalman.Observation;
 import src.UseCase1_GSNetwork.ObserverNetwork;
@@ -16,7 +18,7 @@ public class SimulationModel {
     Parameters simulationParameters;
     List<Propagator> satellites;
     Observation observations;
-    List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList;
+    Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measurementsSetsList;
     List<ObservableSatellite> satellitesNames;
     
     public List<ObservableSatellite> getSatellitesNames() {
@@ -62,10 +64,10 @@ public class SimulationModel {
     public void setObservations(Observation observations) {
         this.observations = observations;
     }
-    public List<SortedSet<ObservedMeasurement<?>>> getMeasurementsSetsList() {
+    public Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> getMeasurementsSetsList() {
         return measurementsSetsList;
     }
-    public void setMeasurementsSetsList(List<SortedSet<ObservedMeasurement<?>>> measurementsSetsList) {
+    public void setMeasurementsSetsList(Pair<List<SortedSet<ObservedMeasurement<?>>>,List<List<SpacecraftState>>> measurementsSetsList) {
         this.measurementsSetsList = measurementsSetsList;
     }
 }
