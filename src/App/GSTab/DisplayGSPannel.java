@@ -2,6 +2,7 @@ package src.App.GSTab;
 
 import org.hipparchus.util.Precision;
 import src.App.MainFrame;
+import src.GroundStation.Station;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,21 +34,20 @@ public class DisplayGSPannel extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (src.Kalman.Station groundStation : parent.gsController.groundStationList) {
+        for (Station groundStation : parent.gsController.groundStationList) {
             // Affichage de la liste des stations sol dans une fenêtre de dialogue
-            StringBuilder sb = new StringBuilder ( );
-            sb.append ( groundStation.getName ( ) );
-            sb.append ( " : " );
-            sb.append ( "Latitude = " );
-            sb.append ( Precision.round ( groundStation.getLatitude ( ) * 180 / Math.PI , 2 ) );
-            sb.append ( ", " );
-            sb.append ( "Longitude = " );
-            sb.append ( Precision.round ( groundStation.getLongitude ( ) * 180 / Math.PI , 2 ) );
-            sb.append ( ", " );
-            sb.append ( "Altitude = " );
-            sb.append ( groundStation.getAltitude ( ) );
+            String sb = groundStation.getName ( ) +
+                    " : " +
+                    "Latitude = " +
+                    Precision.round ( groundStation.getLatitude ( ) * 180 / Math.PI , 2 ) +
+                    ", " +
+                    "Longitude = " +
+                    Precision.round ( groundStation.getLongitude ( ) * 180 / Math.PI , 2 ) +
+                    ", " +
+                    "Altitude = " +
+                    groundStation.getAltitude ( );
 
-            elements.add ( sb.toString ( ) );
+            elements.add ( sb );
 
             parent.gsController.numberOfGS++;
         }
@@ -86,21 +86,20 @@ public class DisplayGSPannel extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (src.Kalman.Station groundStation : parent.gsController.groundStationList) {
+        for (Station groundStation : parent.gsController.groundStationList) {
             // Affichage de la liste des stations sol dans une fenêtre de dialogue
-            StringBuilder sb = new StringBuilder ( );
-            sb.append ( groundStation.getName ( ) );
-            sb.append ( " : " );
-            sb.append ( "Latitude = " );
-            sb.append ( Precision.round ( groundStation.getLatitude ( ) * 180 / Math.PI , 2 ) );
-            sb.append ( ", " );
-            sb.append ( "Longitude = " );
-            sb.append ( Precision.round ( groundStation.getLongitude ( ) * 180 / Math.PI , 2 ) );
-            sb.append ( ", " );
-            sb.append ( "Altitude = " );
-            sb.append ( groundStation.getAltitude ( ) );
+            String sb = groundStation.getName ( ) +
+                    " : " +
+                    "Latitude = " +
+                    Precision.round ( groundStation.getLatitude ( ) * 180 / Math.PI , 2 ) +
+                    ", " +
+                    "Longitude = " +
+                    Precision.round ( groundStation.getLongitude ( ) * 180 / Math.PI , 2 ) +
+                    ", " +
+                    "Altitude = " +
+                    groundStation.getAltitude ( );
 
-            elements.add ( sb.toString ( ) );
+            elements.add ( sb );
 
             parent.gsController.numberOfGS++;
         }

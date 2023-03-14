@@ -1,6 +1,8 @@
 package src.App.ObserverTab;
 
 import src.App.MainFrame;
+import src.Observer.Radar;
+import src.Observer.TelescopeAzEl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,51 +34,49 @@ public class DisplayObserverPannel extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (src.Kalman.TelescopeAzEl telescopeAzEl : parent.obserController.telescopeAzElList) {
+        for (TelescopeAzEl telescopeAzEl : parent.obserController.telescopeAzElList) {
             // Affichage de la liste des telescopes
-            StringBuilder sb = new StringBuilder ( );
-            sb.append ( telescopeAzEl.getID ( ) );
-            sb.append ( " : " );
-            sb.append ( "Mean :" );
-            sb.append ( Arrays.toString ( telescopeAzEl.getMean ( ) ) );
-            sb.append ( ", " );
-            sb.append ( "Angular incertitude :" );
-            sb.append ( Arrays.toString ( telescopeAzEl.getAngularIncertitude ( ) ) );
-            sb.append ( ", " );
-            sb.append ( "eleVationLimit :" );
-            sb.append ( telescopeAzEl.getElevationLimit ( ) );
-            sb.append ( ", " );
-            sb.append ( "angularFoV :" );
-            sb.append ( telescopeAzEl.getAngularFoV ( ) );
-            sb.append ( ", " );
-            sb.append ( "stepMeasure :" );
-            sb.append ( telescopeAzEl.getStepMeasure ( ) );
-            sb.append ( ", " );
-            sb.append ( "breakTime :" );
-            sb.append ( telescopeAzEl.getBreakTime ( ) );
-            sb.append ( ", " );
-            sb.append ( "GEO :" );
-            sb.append ( telescopeAzEl.getGEO ( ) );
-            elements.add ( sb.toString ( ) );
+            String sb = telescopeAzEl.getID ( ) +
+                    " : " +
+                    "Mean :" +
+                    Arrays.toString ( telescopeAzEl.getMean ( ) ) +
+                    ", " +
+                    "Angular incertitude :" +
+                    Arrays.toString ( telescopeAzEl.getAngularIncertitude ( ) ) +
+                    ", " +
+                    "eleVationLimit :" +
+                    telescopeAzEl.getElevationLimit ( ) +
+                    ", " +
+                    "angularFoV :" +
+                    telescopeAzEl.getAngularFoV ( ) +
+                    ", " +
+                    "stepMeasure :" +
+                    telescopeAzEl.getStepMeasure ( ) +
+                    ", " +
+                    "breakTime :" +
+                    telescopeAzEl.getBreakTime ( ) +
+                    ", " +
+                    "GEO :" +
+                    telescopeAzEl.getGEO ( );
+            elements.add ( sb );
         }
 
-        for (src.Kalman.Radar radar : parent.obserController.radarList) {
+        for (Radar radar : parent.obserController.radarList) {
             // Affichage de la liste des telescopes
-            StringBuilder sb = new StringBuilder ( );
-            sb.append ( radar.getID ( ) );
-            sb.append ( " : " );
-            sb.append ( "Mean :" );
-            sb.append ( Arrays.toString ( radar.getMean ( ) ) );
-            sb.append ( ", " );
-            sb.append ( "Angular incertitude :" );
-            sb.append ( Arrays.toString ( radar.getAngularIncertitude ( ) ) );
-            sb.append ( ", " );
-            sb.append ( "angularFoV :" );
-            sb.append ( radar.getAngularFoV ( ) );
-            sb.append ( ", " );
-            sb.append ( "stepMeasure :" );
-            sb.append ( radar.getStepMeasure ( ) );
-            elements.add ( sb.toString ( ) );
+            String sb = radar.getID ( ) +
+                    " : " +
+                    "Mean :" +
+                    Arrays.toString ( radar.getMean ( ) ) +
+                    ", " +
+                    "Angular incertitude :" +
+                    Arrays.toString ( radar.getAngularIncertitude ( ) ) +
+                    ", " +
+                    "angularFoV :" +
+                    radar.getAngularFoV ( ) +
+                    ", " +
+                    "stepMeasure :" +
+                    radar.getStepMeasure ( );
+            elements.add ( sb );
         }
 
         String[] arr = {};
@@ -114,51 +114,49 @@ public class DisplayObserverPannel extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (src.Kalman.TelescopeAzEl telescopeAzEl : parent.obserController.telescopeAzElList) {
+        for (TelescopeAzEl telescopeAzEl : parent.obserController.telescopeAzElList) {
             // Affichage de la liste des telescopes
-            StringBuilder sb = new StringBuilder ( );
-            sb.append ( telescopeAzEl.getID ( ) );
-            sb.append ( " : " );
-            sb.append ( "Mean :" );
-            sb.append ( Arrays.toString ( telescopeAzEl.getMean ( ) ) );
-            sb.append ( ", " );
-            sb.append ( "Angular incertitude :" );
-            sb.append ( Arrays.toString ( telescopeAzEl.getAngularIncertitude ( ) ) );
-            sb.append ( ", " );
-            sb.append ( "eleVationLimit :" );
-            sb.append ( telescopeAzEl.getElevationLimit ( ) );
-            sb.append ( ", " );
-            sb.append ( "angularFoV :" );
-            sb.append ( telescopeAzEl.getAngularFoV ( ) );
-            sb.append ( ", " );
-            sb.append ( "stepMeasure :" );
-            sb.append ( telescopeAzEl.getStepMeasure ( ) );
-            sb.append ( ", " );
-            sb.append ( "breakTime :" );
-            sb.append ( telescopeAzEl.getBreakTime ( ) );
-            sb.append ( ", " );
-            sb.append ( "GEO :" );
-            sb.append ( telescopeAzEl.getGEO ( ) );
-            elements.add ( sb.toString ( ) );
+            String sb = telescopeAzEl.getID ( ) +
+                    " : " +
+                    "Mean :" +
+                    Arrays.toString ( telescopeAzEl.getMean ( ) ) +
+                    ", " +
+                    "Angular incertitude :" +
+                    Arrays.toString ( telescopeAzEl.getAngularIncertitude ( ) ) +
+                    ", " +
+                    "eleVationLimit :" +
+                    telescopeAzEl.getElevationLimit ( ) +
+                    ", " +
+                    "angularFoV :" +
+                    telescopeAzEl.getAngularFoV ( ) +
+                    ", " +
+                    "stepMeasure :" +
+                    telescopeAzEl.getStepMeasure ( ) +
+                    ", " +
+                    "breakTime :" +
+                    telescopeAzEl.getBreakTime ( ) +
+                    ", " +
+                    "GEO :" +
+                    telescopeAzEl.getGEO ( );
+            elements.add ( sb );
         }
 
-        for (src.Kalman.Radar radar : parent.obserController.radarList) {
+        for (Radar radar : parent.obserController.radarList) {
             // Affichage de la liste des telescopes
-            StringBuilder sb = new StringBuilder ( );
-            sb.append ( radar.getID ( ) );
-            sb.append ( " : " );
-            sb.append ( "Mean :" );
-            sb.append ( Arrays.toString ( radar.getMean ( ) ) );
-            sb.append ( ", " );
-            sb.append ( "Angular incertitude :" );
-            sb.append ( Arrays.toString ( radar.getAngularIncertitude ( ) ) );
-            sb.append ( ", " );
-            sb.append ( "angularFoV :" );
-            sb.append ( radar.getAngularFoV ( ) );
-            sb.append ( ", " );
-            sb.append ( "stepMeasure :" );
-            sb.append ( radar.getStepMeasure ( ) );
-            elements.add ( sb.toString ( ) );
+            String sb = radar.getID ( ) +
+                    " : " +
+                    "Mean :" +
+                    Arrays.toString ( radar.getMean ( ) ) +
+                    ", " +
+                    "Angular incertitude :" +
+                    Arrays.toString ( radar.getAngularIncertitude ( ) ) +
+                    ", " +
+                    "angularFoV :" +
+                    radar.getAngularFoV ( ) +
+                    ", " +
+                    "stepMeasure :" +
+                    radar.getStepMeasure ( );
+            elements.add ( sb );
         }
 
         String[] arr = {};

@@ -1,9 +1,9 @@
 package src.App.ObserverTab;
 
 import src.App.MainFrame;
-import src.Kalman.Radar;
-import src.Kalman.Station;
-import src.Kalman.TelescopeAzEl;
+import src.Observer.Radar;
+import src.GroundStation.Station;
+import src.Observer.TelescopeAzEl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +14,8 @@ public class NewObserverPannel extends JPanel {
 
     public JComboBox<Station> stationComboBox;
     MainFrame parent;
-    private JComboBox<String> cbType;
-    private JPanel formPanel;
+    private final JComboBox<String> cbType;
+    private final JPanel formPanel;
 
     public NewObserverPannel ( MainFrame parent , DisplayObserverPannel displayObserverPannel , CreateNetworkPanel createNetworkPannel ) {
 

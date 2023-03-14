@@ -2,9 +2,8 @@ package src.App.GSTab;
 
 import src.Data.GS.ReadGSFile;
 import src.Data.GS.WriteGSFile;
-import src.Kalman.Station;
-import src.Kalman.TelescopeAzEl;
-import src.UseCase1_GSNetwork.GSNetwork;
+import src.GroundStation.Station;
+import src.Observer.TelescopeAzEl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ public class GSController {
     public WriteGSFile GSWriter;
     public int numberOfGS = 0;
 
-    public GSNetwork gsNetwork;
 
     public GSController ( ) throws IOException {
 

@@ -4,7 +4,7 @@ import org.orekit.estimation.measurements.ObservableSatellite;
 import org.orekit.propagation.Propagator;
 import src.App.MainFrame;
 import src.App.UpdateSatelliteDBTab.UpdateDBController;
-import src.Kalman.Object;
+import src.Satellites.Object;
 
 import javax.swing.*;
 import java.sql.SQLException;

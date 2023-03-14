@@ -1,8 +1,8 @@
 package src.Data.Observer;
 
-import src.Kalman.Radar;
-import src.Kalman.Station;
-import src.Kalman.TelescopeAzEl;
+import src.Observer.Radar;
+import src.GroundStation.Station;
+import src.Observer.TelescopeAzEl;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

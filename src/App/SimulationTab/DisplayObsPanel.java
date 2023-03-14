@@ -20,7 +20,6 @@ public class DisplayObsPanel extends JPanel {
 
     // The display manager
     GridBagConstraints gc = new GridBagConstraints ( );
-    ;
 
     /**
      * Default creator
@@ -78,7 +77,7 @@ public class DisplayObsPanel extends JPanel {
 
         for (SortedSet<ObservedMeasurement<?>> set : measurementsList) {
             for (ObservedMeasurement<?> obs : set) {
-                elements.add ( "Date: " + obs.getDate ( ).toString ( ) + "; Station: " + ((AngularAzEl) obs).getStation ( ).getBaseFrame ( ).getName ( ) + "; Satellite: " +parent.simuController.model.getSatellitesNames().get(((AngularAzEl) obs).getSatellites ( ).get ( 0 ).getPropagatorIndex ( ) ));
+                elements.add ( "Date: " + obs.getDate ( ).toString ( ) + "; Station: " + ((AngularAzEl) obs).getStation ( ).getBaseFrame ( ).getName ( ) + "; Satellite: " +parent.simuController.model.getSatellitesNames().get( obs.getSatellites ( ).get ( 0 ).getPropagatorIndex ( ) ));
             }
         }
         String[] arr = {};

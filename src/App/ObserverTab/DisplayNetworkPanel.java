@@ -9,7 +9,6 @@ public class DisplayNetworkPanel extends JPanel {
 
     MainFrame parent;
     GridBagConstraints gc = new GridBagConstraints ( );
-    ;
 
     public DisplayNetworkPanel ( MainFrame parent ) {
 

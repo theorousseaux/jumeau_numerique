@@ -11,5 +11,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="gdal" level="project" />
     <orderEntry type="library" exported="" name="worldwind-v2.2" level="project" />
+    <orderEntry type="library" name="sql" level="project" />
   </component>
 </module>

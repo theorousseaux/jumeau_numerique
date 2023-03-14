@@ -3,10 +3,10 @@ package src.App.ObserverTab;
 import src.App.GSTab.GSController;
 import src.Data.Observer.ReadObserverFile;
 import src.Data.Observer.WriteObserverFile;
-import src.Kalman.Radar;
-import src.Kalman.Station;
-import src.Kalman.TelescopeAzEl;
-import src.UseCase1_GSNetwork.ObserverNetwork;
+import src.Observer.Radar;
+import src.GroundStation.Station;
+import src.Observer.TelescopeAzEl;
+import src.Observer.ObserverNetwork;
 
 import java.io.IOException;
 import java.util.ArrayList;

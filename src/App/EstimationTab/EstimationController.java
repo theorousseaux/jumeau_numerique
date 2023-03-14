@@ -18,20 +18,20 @@ import org.orekit.utils.Constants;
 import org.orekit.utils.PVCoordinates;
 import org.orekit.utils.TimeStampedPVCoordinates;
 import src.App.MainFrame;
-import src.Kalman.OD;
-import src.Kalman.constants;
+import src.OrbitDetermination.OD;
+import src.constants;
 
 import java.io.IOException;
 import java.util.*;
 
-import static src.Kalman.OD.paramOrbitaux;
+import static src.OrbitDetermination.OD.paramOrbitaux;
 
 public class EstimationController {
 
     public EstimationModel model = new EstimationModel ( );
 
 
-    public void loadEstimation ( MainFrame parent ) throws NumberFormatException, IllegalArgumentException, IOException {
+    public void loadEstimation ( MainFrame parent ) throws IllegalArgumentException, IOException {
         model.setSatellites ( parent.simuController.model.getObservableSatellites ( ) );
         model.setPropagators ( parent.simuController.model.getSatellites ( ) );
         model.setFinalDate ( parent.simuController.model.getSimulationParameters ( ).getEndDate ( ) );
@@ -69,14 +69,14 @@ public class EstimationController {
             Vector3D P_InertialFrame = trueState.getPVCoordinates ( ).getPosition ( );
             double[] mean = {P_InertialFrame.getX ( ) , P_InertialFrame.getY ( ) , P_InertialFrame.getZ ( ) , V_InertialFrame.getX ( ) , V_InertialFrame.getY ( ) , V_InertialFrame.getZ ( )};
             double[] variance = {Math.pow ( this.model.stdPos , 2 ) , Math.pow ( this.model.stdPos , 2 ) , Math.pow ( this.model.stdPos , 2 ) , Math.pow ( this.model.stdV , 2 ) , Math.pow ( this.model.stdV , 2 ) , Math.pow ( this.model.stdV , 2 )};
-            double[][] covariance = src.Kalman.OD.createDiagonalMatrix ( variance );
+            double[][] covariance = src.OrbitDetermination.OD.createDiagonalMatrix ( variance );
             MultivariateNormalDistribution distribution = new MultivariateNormalDistribution ( mean , covariance );
             double[] estimatedParameters = distribution.sample ( ); // Générez un nombre aléatoire selon la loi gaussienne
             Vector3D estimatedV_InertialFrame = new Vector3D ( Arrays.copyOfRange ( estimatedParameters , 3 , 6 ) );
             Vector3D estimatedP_InertialFrame = new Vector3D ( Arrays.copyOfRange ( estimatedParameters , 0 , 3 ) );
             PVCoordinates estimatedPV = new PVCoordinates ( estimatedP_InertialFrame , estimatedV_InertialFrame );
             TimeStampedPVCoordinates estimatedTSPV = new TimeStampedPVCoordinates ( this.model.initialDate , 1. , estimatedPV );
-            KeplerianOrbit estimatedOrbit = new KeplerianOrbit ( estimatedTSPV , constants.gcrf , constants.mu );
+            KeplerianOrbit estimatedOrbit = new KeplerianOrbit ( estimatedTSPV , constants.GCRF , constants.MU );
             double[] estimatedParamOrbitaux = {estimatedOrbit.getA ( ) , estimatedOrbit.getE ( ) , Math.IEEEremainder ( estimatedOrbit.getI ( ) , 2 * Math.PI ) , Math.IEEEremainder ( estimatedOrbit.getRightAscensionOfAscendingNode ( ) , 2 * Math.PI ) , Math.IEEEremainder ( estimatedOrbit.getPerigeeArgument ( ) , 2 * Math.PI ) , Math.IEEEremainder ( estimatedOrbit.getAnomaly ( constants.type ) , 2 * Math.PI )};
             double estimatedA = estimatedParamOrbitaux[0];
             double estimatedE = estimatedParamOrbitaux[1];
@@ -84,7 +84,7 @@ public class EstimationController {
             double estimatedRaan = estimatedParamOrbitaux[3];
             double estimatedPa = estimatedParamOrbitaux[4];
             double estimatedAnomaly = estimatedParamOrbitaux[5];
-            KeplerianOrbit estimatedOrbit__ = new KeplerianOrbit ( estimatedA , estimatedE , estimatedI , estimatedPa , estimatedRaan , estimatedAnomaly , constants.type , constants.gcrf , this.model.initialDate , Constants.EGM96_EARTH_MU );
+            KeplerianOrbit estimatedOrbit__ = new KeplerianOrbit ( estimatedA , estimatedE , estimatedI , estimatedPa , estimatedRaan , estimatedAnomaly , constants.type , constants.GCRF , this.model.initialDate , Constants.EGM96_EARTH_MU );
             CartesianOrbit estimatedOrbit_ = new CartesianOrbit ( estimatedOrbit__ );
 
 

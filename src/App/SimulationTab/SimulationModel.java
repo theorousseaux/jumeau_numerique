@@ -6,8 +6,8 @@ import org.orekit.estimation.measurements.ObservedMeasurement;
 import org.orekit.propagation.Propagator;
 import org.orekit.propagation.SpacecraftState;
 import src.App.ParametersTab.Parameters;
-import src.Kalman.Observation;
-import src.UseCase1_GSNetwork.ObserverNetwork;
+import src.Observer.Observation;
+import src.Observer.ObserverNetwork;
 
 import java.util.HashMap;
 import java.util.List;

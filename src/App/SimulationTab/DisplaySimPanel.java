@@ -1,8 +1,8 @@
 package src.App.SimulationTab;
 
 import src.App.MainFrame;
-import src.Data.LoadSimu;
-import src.Kalman.TelescopeAzEl;
+import src.Data.Simulation.LoadSimu;
+import src.Observer.TelescopeAzEl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +19,6 @@ public class DisplaySimPanel extends JPanel {
 
     MainFrame parent;
     GridBagConstraints gc = new GridBagConstraints ( );
-    ;
 
     /**
      * Default constructor

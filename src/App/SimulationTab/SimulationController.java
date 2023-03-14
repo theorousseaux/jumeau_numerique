@@ -4,7 +4,7 @@ import org.hipparchus.util.Pair;
 import org.orekit.estimation.measurements.ObservedMeasurement;
 import org.orekit.propagation.SpacecraftState;
 import src.App.MainFrame;
-import src.Kalman.Observation;
+import src.Observer.Observation;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class SimulationController {
         return "SimulationController [model=" + model + ", view=" + view + "]";
     }
 
-    public void loadSimulation ( MainFrame parent ) throws NumberFormatException, IllegalArgumentException, IOException {
+    public void loadSimulation ( MainFrame parent ) throws IllegalArgumentException, IOException {
         model.setSimulationParameters ( parent.paramController.model );
 
         model.setObserverNetwork ( parent.obserController.observerNetwork );

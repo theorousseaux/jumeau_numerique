@@ -1,6 +1,6 @@
 package src.Data.GS;
 
-import src.Kalman.Station;
+import src.GroundStation.Station;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

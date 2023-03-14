@@ -3,6 +3,7 @@ package src.App.GSTab;
 import src.App.MainFrame;
 import src.App.ObserverTab.NewObserverPannel;
 import src.App.WorldMapTab.WorldMapPanel;
+import src.GroundStation.Station;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,7 +105,7 @@ public class NewGSPannel extends JPanel {
                 String name = nameTextField.getText ( );
 
                 // Création de l'objet GroundStation avec les données saisies
-                src.Kalman.Station groundStation = new src.Kalman.Station ( name , latitude , longitude , altitude );
+                Station groundStation = new Station ( name , latitude , longitude , altitude );
 
                 // Ajout de la station sol à la liste de la fenêtre principale
                 parent.gsController.addGroundStation ( groundStation );

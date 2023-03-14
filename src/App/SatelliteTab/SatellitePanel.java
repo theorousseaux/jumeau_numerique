@@ -14,8 +14,8 @@ public class SatellitePanel extends JPanel {
     MainFrame parent;
     GridBagConstraints gc = new GridBagConstraints ( );
 
-    private JList list;
-    private DefaultListModel listModel;
+    private final JList list;
+    private final DefaultListModel listModel;
 
     public SatellitePanel ( MainFrame parent ) {
 

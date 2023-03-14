@@ -8,7 +8,7 @@ public class UpdateDBController {
     public DataBase db;
 
 
-    public void createDB ( String csvFile ) throws SQLException, IOException, ClassNotFoundException, SQLException, IOException {
+    public void createDB ( String csvFile ) throws ClassNotFoundException, SQLException, IOException {
         db = new DataBase ( csvFile );
         System.out.println ( "Database created" );
     }

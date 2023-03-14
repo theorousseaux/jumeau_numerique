@@ -2,7 +2,7 @@ package src.App.EstimationTab;
 
 import org.orekit.orbits.KeplerianOrbit;
 import src.App.MainFrame;
-import src.Kalman.constants;
+import src.constants;
 
 import javax.swing.*;
 import java.awt.*;

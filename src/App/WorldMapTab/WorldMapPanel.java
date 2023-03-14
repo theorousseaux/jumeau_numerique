@@ -9,8 +9,8 @@ import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.PointPlacemark;
 import gov.nasa.worldwind.render.PointPlacemarkAttributes;
 import src.App.MainFrame;
-import src.Kalman.Station;
-import src.Kalman.TelescopeAzEl;
+import src.GroundStation.Station;
+import src.Observer.TelescopeAzEl;
 
 import javax.swing.*;
 import java.awt.*;

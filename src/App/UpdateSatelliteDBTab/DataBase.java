@@ -9,8 +9,8 @@ import org.orekit.propagation.numerical.NumericalPropagator;
 import org.orekit.time.AbsoluteDate;
 import org.orekit.time.TimeScale;
 import org.orekit.time.TimeScalesFactory;
-import src.Kalman.Object;
-import src.Kalman.constants;
+import src.Satellites.Object;
+import src.constants;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,14 +21,9 @@ import java.util.List;
 
 public class DataBase {
 
-    private Connection connection;
+    private final Connection connection;
 
     public DataBase ( String csvFile ) throws ClassNotFoundException, IOException, SQLException {
-        // importation des donnees de base (toujour mettre ça en début de programme)
-        // File orekitData = new File("/Users/eliott/Documents/jumeau_numerique/lib/orekit-data-master");
-        // DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();
-        // manager.addProvider(new DirectoryCrawler(orekitData));
-
         Class.forName ( "org.apache.derby.jdbc.EmbeddedDriver" );
         String url = "jdbc:derby:myDB;create=true";
         this.connection = DriverManager.getConnection ( url );
@@ -40,7 +35,6 @@ public class DataBase {
             System.out.println ( "Table already exists" );
         }
 
-        //String csvFile = "/Users/eliott/Documents/jumeau_numerique/src/PIE_SQL/src/tle.csv";
         String filename = csvFile;
         BufferedReader reader = new BufferedReader ( new FileReader ( filename ) );
         String line = null;
@@ -94,24 +88,6 @@ public class DataBase {
             stmt2.executeUpdate ( );
         }
         reader.close ( );
-        /*
-        Statement stmt3 = connection.createStatement();
-        ResultSet rs = stmt3.executeQuery("SELECT * FROM tleDB");
-        while (rs.next()) {
-            String id_sat = rs.getString("id_sat");
-            String date = rs.getString("date");
-            String a = rs.getString("a");
-            String e = rs.getString("eccentricity");
-            String i = rs.getString("inclination");
-            String raan = rs.getString("raan");
-            String argp = rs.getString("argp");
-            String ma = rs.getString("ma");
-            String SM = rs.getString("SM");
-
-            System.out.println("id_sat: " + id_sat + "date: " + date + " a: " + a + " e: " + e
-                        + " i: " + i + " raan: " + raan + " argp: " + argp + " ma: " + ma + " SM: " + SM);
-        }
-        */
     }
 
     public List<Object> selectSatellites ( String type , Integer nb, AbsoluteDate initialDate ) throws SQLException {
@@ -150,15 +126,15 @@ public class DataBase {
 
             KeplerianOrbit orbit = new KeplerianOrbit ( Double.parseDouble ( a ) , Double.parseDouble ( e ) ,
                     Double.parseDouble ( i ) , Double.parseDouble ( argp ) , Double.parseDouble ( raan ) ,
-                    Double.parseDouble ( ma ) , constants.type , constants.gcrf , initialDate ,
-                    constants.mu );
+                    Double.parseDouble ( ma ) , constants.type , constants.GCRF , initialDate ,
+                    constants.MU );
             double[][] tolerances = NumericalPropagator.tolerances ( prop_position_error , orbit , OrbitType.CARTESIAN );
             DormandPrince853Integrator integrator = new DormandPrince853Integrator ( prop_min_step , prop_max_step , tolerances[0] , tolerances[1] );
             NumericalPropagator propagator = new NumericalPropagator ( integrator );
             CartesianOrbit cartOrbit = new CartesianOrbit ( orbit );
             SpacecraftState initialState = new SpacecraftState ( cartOrbit );
             propagator.setInitialState ( initialState );
-            propagator.setMu ( constants.mu );
+            propagator.setMu ( constants.MU );
             OrbitType orbitType = OrbitType.CARTESIAN;
             propagator.setOrbitType ( orbitType );
             propagator.setPositionAngleType ( constants.type );

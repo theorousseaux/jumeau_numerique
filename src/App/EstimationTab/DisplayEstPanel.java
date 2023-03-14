@@ -1,16 +1,11 @@
 package src.App.EstimationTab;
 
-import org.orekit.orbits.KeplerianOrbit;
-import org.orekit.orbits.Orbit;
 import src.App.MainFrame;
-import src.Kalman.constants;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-
-import static src.Kalman.OD.paramOrbitaux;
 
 public class DisplayEstPanel extends JPanel {
 

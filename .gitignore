@@ -5,7 +5,7 @@ out/
 .classpath
 .prject
 jumeau_numerique.iml
-src/TLE/pv
+src/Satellites/pv
 lib/Cesium-1/
 # Compiled class file
 *.class

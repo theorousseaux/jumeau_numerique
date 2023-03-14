@@ -2,9 +2,9 @@ package src.App.ObserverTab;
 
 import src.App.MainFrame;
 import src.App.WorldMapTab.WorldMapPanel;
-import src.Kalman.Radar;
-import src.Kalman.TelescopeAzEl;
-import src.UseCase1_GSNetwork.ObserverNetwork;
+import src.Observer.Radar;
+import src.Observer.TelescopeAzEl;
+import src.Observer.ObserverNetwork;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,8 +20,8 @@ public class CreateNetworkPanel extends JPanel {
     MainFrame parent;
     DisplayNetworkPanel displayNetworkPannel;
     Set<String> selectedStations;
-    private JList list;
-    private DefaultListModel listModel;
+    private final JList list;
+    private final DefaultListModel listModel;
 
     public CreateNetworkPanel ( MainFrame parent , DisplayNetworkPanel displayNetworkPannel , WorldMapPanel worldMapPanel ) {
 

@@ -1,7 +1,7 @@
 package src.App.SimulationTab;
 
 import src.App.MainFrame;
-import src.Data.LoadSimu;
+import src.Data.Simulation.LoadSimu;
 
 import javax.swing.*;
 import java.awt.*;
