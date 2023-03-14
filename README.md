@@ -8,3 +8,6 @@ Celui-ci permet de :
   - créer un réseau de station d'observations à la surface de la Terre
   - simuler les mesures faites par ce réseau des objets sélectionnés
   - estimer les positions dans le futur des objets en question en se basant sur les observations du réseau simulé
+  
+ 
+ ATTENTION : le programme tourne avec Java 11, toute autre version entrainera un disfonctionnement de l'application.
