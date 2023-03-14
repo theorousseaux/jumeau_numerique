@@ -74,7 +74,7 @@ public class DisplaySimPanel extends JPanel {
         gc.gridx = 1;
         gc.gridy = 1;
         gc.anchor = GridBagConstraints.WEST;
-        List<String> satelliteList = this.parent.simuController.model.getSatellitesNames ( );
+        List<String> satelliteList = this.parent.getSimuController ( ).model.getSatellitesNames ( );
         ArrayList<String> elements = new ArrayList<String> ( );
         for (String sat : satelliteList) {
             elements.add ( sat );
@@ -111,7 +111,7 @@ public class DisplaySimPanel extends JPanel {
          */
 
 
-        List<TelescopeAzEl> observersList = this.parent.simuController.model.getObserverNetwork ( ).getTelescopes ( );
+        List<TelescopeAzEl> observersList = this.parent.getSimuController ( ).model.getObserverNetwork ( ).getTelescopes ( );
         ArrayList<String> stations = new ArrayList<String> ( );
         for (TelescopeAzEl telescope : observersList) {
             stations.add ( String.valueOf ( telescope.getID ( ) ) );
@@ -132,8 +132,8 @@ public class DisplaySimPanel extends JPanel {
         this.add ( datesLabel , gc );
 
         gc.gridx = 1;
-        JLabel startDate = new JLabel ( "Start date: " + this.parent.simuController.model.getSimulationParameters ( ).getStartDate ( ).toString ( ) );
-        JLabel endDate = new JLabel ( "End date: " + this.parent.simuController.model.getSimulationParameters ( ).getEndDate ( ).toString ( ) );
+        JLabel startDate = new JLabel ( "Start date: " + this.parent.getSimuController ( ).model.getSimulationParameters ( ).getStartDate ( ).toString ( ) );
+        JLabel endDate = new JLabel ( "End date: " + this.parent.getSimuController ( ).model.getSimulationParameters ( ).getEndDate ( ).toString ( ) );
         this.add ( startDate , gc );
         gc.gridy++;
         this.add ( endDate , gc );
@@ -157,7 +157,7 @@ public class DisplaySimPanel extends JPanel {
 
 
                 LoadSimu saver = new LoadSimu ( fileNameInput.getText ( ) );
-                saver.save ( fileNameInput.getText ( ) , parent.simuController.model );
+                saver.save ( fileNameInput.getText ( ) , parent.getSimuController ( ).model );
 
             }
         } );

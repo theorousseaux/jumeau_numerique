@@ -86,20 +86,20 @@ public class SatellitePanel extends JPanel {
                 int nbSat = Integer.parseInt ( numberSat.getText ( ) );
                 if (Objects.equals ( satellitesList.getSelectedItem ( ) , "LEO" )) {
                     try {
-                        parent.satController.setSatellitesList ( "LEO" , nbSat ,parent);
+                        parent.getSatController ( ).setSatellitesList ( "LEO" , nbSat ,parent);
                     } catch (SQLException ex) {
                         throw new RuntimeException ( ex );
                     }
                 } else if (Objects.equals ( satellitesList.getSelectedItem ( ) , "GEO" )) {
                     try {
-                        parent.satController.setSatellitesList ( "GEO" , nbSat,parent );
+                        parent.getSatController ( ).setSatellitesList ( "GEO" , nbSat,parent );
                     } catch (SQLException ex) {
                         throw new RuntimeException ( ex );
                     }
                 }
                 // on vide la liste avant de la remplir
                 listModel.removeAllElements ( );
-                for (String idSat : parent.satController.idSatellitesList) {
+                for (String idSat : parent.getSatController ( ).idSatellitesList) {
                     listModel.addElement ( idSat );
                 }
             }

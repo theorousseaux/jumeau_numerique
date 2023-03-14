@@ -5,11 +5,18 @@ import java.sql.SQLException;
 
 public class UpdateDBController {
 
-    public DataBase db;
+    private DataBase model;
 
+    public DataBase getModel ( ) {
+        return model;
+    }
+
+    public void setModel ( DataBase model ) {
+        this.model = model;
+    }
 
     public void createDB ( String csvFile ) throws ClassNotFoundException, SQLException, IOException {
-        db = new DataBase ( csvFile );
+        model = new DataBase ( csvFile );
         System.out.println ( "Database created" );
     }
 

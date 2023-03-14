@@ -34,7 +34,7 @@ public class DisplayGSPannel extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (Station groundStation : parent.gsController.groundStationList) {
+        for (Station groundStation : parent.getGsController ( ).groundStationList) {
             // Affichage de la liste des stations sol dans une fenêtre de dialogue
             String sb = groundStation.getName ( ) +
                     " : " +
@@ -49,7 +49,7 @@ public class DisplayGSPannel extends JPanel {
 
             elements.add ( sb );
 
-            parent.gsController.numberOfGS++;
+            parent.getGsController ( ).numberOfGS++;
         }
         String[] arr = {};
         arr = elements.toArray ( arr );
@@ -86,7 +86,7 @@ public class DisplayGSPannel extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (Station groundStation : parent.gsController.groundStationList) {
+        for (Station groundStation : parent.getGsController ( ).groundStationList) {
             // Affichage de la liste des stations sol dans une fenêtre de dialogue
             String sb = groundStation.getName ( ) +
                     " : " +
@@ -101,7 +101,7 @@ public class DisplayGSPannel extends JPanel {
 
             elements.add ( sb );
 
-            parent.gsController.numberOfGS++;
+            parent.getGsController ( ).numberOfGS++;
         }
         String[] arr = {};
         arr = elements.toArray ( arr );

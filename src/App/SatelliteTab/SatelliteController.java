@@ -50,7 +50,7 @@ public class SatelliteController {
         this.observableSatellitesList.clear ( );
 
         int i = 0;
-        List<Object> objectList = this.updateDBController.db.selectSatellites ( type , number, parent.paramController.getStartDate ());
+        List<Object> objectList = this.updateDBController.getModel ().selectSatellites ( type , number, parent.getParamController ( ).getStartDate ());
         for (Object object : objectList) {
             this.satellitesList.add ( object.getPropagator ( ) );
             this.idSatellitesList.add ( object.getId ( ) );

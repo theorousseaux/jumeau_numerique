@@ -108,11 +108,11 @@ public class NewGSPannel extends JPanel {
                 Station groundStation = new Station ( name , latitude , longitude , altitude );
 
                 // Ajout de la station sol à la liste de la fenêtre principale
-                parent.gsController.addGroundStation ( groundStation );
+                parent.getGsController ( ).addGroundStation ( groundStation );
 
                 // update
                 try {
-                    parent.gsController.GSWriter.writeStation ( groundStation );
+                    parent.getGsController ( ).GSWriter.writeStation ( groundStation );
 
                     // Mise à jour du panneau d'affichage des stations sol
                     displayGSPannel.displayNewStation ( );
@@ -120,7 +120,7 @@ public class NewGSPannel extends JPanel {
                     displayGSPannel.revalidate ( );
 
                     // Mise à jour des choix dans l'onglet Observer
-                    JPanel tabPanel = (JPanel) parent.tabbedPane.getComponentAt ( 4 );
+                    JPanel tabPanel = (JPanel) parent.getTabbedPane ( ).getComponentAt ( 4 );
                     NewObserverPannel newObserverPannel = (NewObserverPannel) tabPanel.getComponent ( 1 );
                     newObserverPannel.updateStationComboBox ( );
 

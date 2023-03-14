@@ -43,10 +43,10 @@ public class CreateNetworkPanel extends JPanel {
 
 
         listModel = new DefaultListModel ( );
-        for (TelescopeAzEl tele : parent.obserController.telescopeAzElList) {
+        for (TelescopeAzEl tele : parent.getObserController ( ).telescopeAzElList) {
             listModel.addElement ( tele.getID ( ) );
         }
-        for (Radar radar : parent.obserController.radarList) {
+        for (Radar radar : parent.getObserController ( ).radarList) {
             listModel.addElement ( radar.getID ( ) );
         }
         list = new JList ( listModel );
@@ -96,7 +96,7 @@ public class CreateNetworkPanel extends JPanel {
 
 
                 System.out.println ( selectedStations );
-                parent.obserController.observerNetwork = new ObserverNetwork ( textField.getText ( ) , new ArrayList<> ( selectedStations ) , parent.obserController.telescopeAzElList );
+                parent.getObserController ( ).observerNetwork = new ObserverNetwork ( textField.getText ( ) , new ArrayList<> ( selectedStations ) , parent.getObserController ( ).telescopeAzElList );
                 displayNetworkPannel.update ( );
                 displayNetworkPannel.repaint ( );
                 displayNetworkPannel.revalidate ( );
@@ -126,10 +126,10 @@ public class CreateNetworkPanel extends JPanel {
 
     public void update ( ) {
         listModel.clear ( );
-        for (TelescopeAzEl tele : parent.obserController.telescopeAzElList) {
+        for (TelescopeAzEl tele : parent.getObserController ( ).telescopeAzElList) {
             listModel.addElement ( tele.getID ( ) );
         }
-        for (Radar radar : parent.obserController.radarList) {
+        for (Radar radar : parent.getObserController ( ).radarList) {
             listModel.addElement ( radar.getID ( ) );
         }
     }

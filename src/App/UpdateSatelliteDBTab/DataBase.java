@@ -42,7 +42,6 @@ public class DataBase {
         while ((line = reader.readLine ( )) != null) {
             // parse TLE data
             String[] parts = line.split ( "," );
-            // String epoch = parts1[3];contient la date
             String id_sat = parts[0];
             String a = parts[1];
             String e = parts[2];
@@ -65,15 +64,11 @@ public class DataBase {
             }
             double elapseDuration = (dateDouble - year * 1000) * 86400;
             AbsoluteDate abs_date_ = new AbsoluteDate ( yearDate , elapseDuration );
-            //
+
             String date = abs_date_.toString ( );
 
-            // System.out.println(satelliteNum);
 
             // add data into db
-            // "INSERT INTO maTable (id, nom) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM
-            // maTable WHERE id = ?)"
-            // WHERE NOT EXISTS (SELECT 1 FROM tleDB WHERE satellite_num = ?)
             String sql_add = "INSERT INTO tleDB (id_sat, date, a, eccentricity, inclination, raan, argp, ma, SM) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt2 = connection.prepareStatement ( sql_add );
             stmt2.setString ( 1 , id_sat );
@@ -90,7 +85,7 @@ public class DataBase {
         reader.close ( );
     }
 
-    public List<Object> selectSatellites ( String type , Integer nb, AbsoluteDate initialDate ) throws SQLException {
+    public List<Object> selectSatellites ( String type , Integer nb , AbsoluteDate initialDate ) throws SQLException {
         Statement stmt = connection.createStatement ( );
         stmt.setMaxRows ( nb );
         String query = selectSatellitesQuery ( type );

@@ -120,7 +120,7 @@ public class NewObserverPannel extends JPanel {
             JLabel stationLabel = new JLabel ( "Station :" );
             formPanel.add ( stationLabel );
             this.stationComboBox = new JComboBox<> ( );
-            for (Station s : parent.gsController.groundStationList) {
+            for (Station s : parent.getGsController ( ).groundStationList) {
                 stationComboBox.addItem ( s );
             }
             formPanel.add ( stationComboBox );
@@ -148,14 +148,14 @@ public class NewObserverPannel extends JPanel {
 
                     boolean geo = geoCheckBox.isSelected ( );
 
-                    String ID = station.getName ( ) + ":telescope:" + parent.obserController.getNumberOfTelescopePerStation ( station );
+                    String ID = station.getName ( ) + ":telescope:" + parent.getObserController ( ).getNumberOfTelescopePerStation ( station );
                     TelescopeAzEl newTelescope = new TelescopeAzEl ( ID , mean , angularIncertitude , Double.parseDouble ( elevation ) , Double.parseDouble ( angularoV ) , Double.parseDouble ( stepMeasure ) , Double.parseDouble ( breakTime ) , station , geo );
 
                     // Ajout du telescope au controller
-                    parent.obserController.addTelescope ( newTelescope );
+                    parent.getObserController ( ).addTelescope ( newTelescope );
 
                     // update
-                    parent.obserController.writeObserverFile.writeObserverTelescope ( newTelescope );
+                    parent.getObserController ( ).writeObserverFile.writeObserverTelescope ( newTelescope );
 
                     // Mise à jour du panneau d'affichage des stations sol
                     displayObserverPannel.displayNewObserver ( );
@@ -206,7 +206,7 @@ public class NewObserverPannel extends JPanel {
             JLabel stationLabel = new JLabel ( "Station :" );
             formPanel.add ( stationLabel );
             this.stationComboBox = new JComboBox<> ( );
-            for (Station s : parent.gsController.groundStationList) {
+            for (Station s : parent.getGsController ( ).groundStationList) {
                 stationComboBox.addItem ( s );
             }
             formPanel.add ( stationComboBox );
@@ -230,14 +230,14 @@ public class NewObserverPannel extends JPanel {
                     Station station = (Station) stationComboBox.getSelectedItem ( );
                     assert station != null;
 
-                    String ID = station.getName ( ) + ":radar:" + parent.obserController.getNumberOfRadarPerStation ( station );
+                    String ID = station.getName ( ) + ":radar:" + parent.getObserController ( ).getNumberOfRadarPerStation ( station );
                     Radar newRadar = new Radar ( ID , mean , angularIncertitude , Double.parseDouble ( angularoV ) , Double.parseDouble ( stepMeasure ) , station );
 
                     // Ajout du telescope au controller
-                    parent.obserController.addRadar ( newRadar );
+                    parent.getObserController ( ).addRadar ( newRadar );
 
                     // update
-                    parent.obserController.writeObserverFile.writeObserverRadar ( newRadar );
+                    parent.getObserController ( ).writeObserverFile.writeObserverRadar ( newRadar );
 
                     // Mise à jour du panneau d'affichage
                     displayObserverPannel.displayNewObserver ( );
@@ -256,7 +256,7 @@ public class NewObserverPannel extends JPanel {
 
     public void updateStationComboBox ( ) {
         stationComboBox.removeAllItems ( );
-        for (Station s : parent.gsController.groundStationList) {
+        for (Station s : parent.getGsController ( ).groundStationList) {
             stationComboBox.addItem ( s );
         }
     }

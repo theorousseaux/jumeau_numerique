@@ -37,7 +37,7 @@ public class RunSimulationPanel extends JPanel {
                     if (checkBox.isSelected ( )) {
                         meas = true;
                     }
-                    SimulationController controller = parent.simuController;
+                    SimulationController controller = parent.getSimuController ( );
                     controller.runSimulation ( parent );
                     disp.update ( );
                     disp.repaint ( );

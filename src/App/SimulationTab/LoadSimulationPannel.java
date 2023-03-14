@@ -34,7 +34,7 @@ public class LoadSimulationPannel extends JPanel {
                         LoadSimu saver = new LoadSimu ( file.getPath ( ) );
                         System.out.println ( file.getPath ( ) );
                         try {
-                            parent.simuController.model = saver.load ( parent );
+                            parent.getSimuController ( ).model = saver.load ( parent );
                             displaySimPanel.update ( );
                             displaySimPanel.repaint ( );
                             displaySimPanel.revalidate ( );
@@ -58,7 +58,7 @@ public class LoadSimulationPannel extends JPanel {
             @Override
             public void actionPerformed ( ActionEvent e ) {
 
-                SimulationController controller = parent.simuController;
+                SimulationController controller = parent.getSimuController ( );
                 try {
                     controller.loadSimulation ( parent );
                     displaySimPanel.update ( );

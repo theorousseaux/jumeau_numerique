@@ -22,18 +22,18 @@ public class SimulationController {
     }
 
     public void loadSimulation ( MainFrame parent ) throws IllegalArgumentException, IOException {
-        model.setSimulationParameters ( parent.paramController.model );
+        model.setSimulationParameters ( parent.getParamController ( ).model );
 
-        model.setObserverNetwork ( parent.obserController.observerNetwork );
+        model.setObserverNetwork ( parent.getObserController ( ).observerNetwork );
         // model.setSatellites(parent.satController.propagators);
         // model.setSatellites(parent.satController.satellites);
 
 
-        model.setSatellites ( parent.satController.getSatellitesList ( ) );
-        model.setSatellitesNames ( parent.satController.getIdSatellitesList ( ) );
-        model.setObservableSatellites ( parent.satController.getObservableSatellitesList ( ) );
+        model.setSatellites ( parent.getSatController ( ).getSatellitesList ( ) );
+        model.setSatellitesNames ( parent.getSatController ( ).getIdSatellitesList ( ) );
+        model.setObservableSatellites ( parent.getSatController ( ).getObservableSatellitesList ( ) );
         System.out.println ( "Parameters : " );
-        System.out.println ( parent.paramController.model.toString ( ) );
+        System.out.println ( parent.getParamController ( ).model.toString ( ) );
         System.out.println ( "Telescopes : " );
         model.getObserverNetwork ( ).display ( );
         System.out.println ( "Satellites : " );

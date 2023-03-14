@@ -35,9 +35,9 @@ public class DisplayTruePanel extends JPanel {
         gc.gridy++;
         ArrayList<String> elements2 = new ArrayList<String> ( );
         int j = 0;
-        for (String satname : parent.simuController.model.getSatellitesNames ( )) {
-            if (parent.estimationController.model.getObservedSat ( ).contains ( satname )) {
-                KeplerianOrbit nOrbit = (KeplerianOrbit) parent.estimationController.model.getPropagators ( ).get ( j ).getInitialState ( ).getOrbit ( );
+        for (String satname : parent.getSimuController ( ).model.getSatellitesNames ( )) {
+            if (parent.getEstimationController ( ).model.getObservedSat ( ).contains ( satname )) {
+                KeplerianOrbit nOrbit = (KeplerianOrbit) parent.getEstimationController ( ).model.getPropagators ( ).get ( j ).getInitialState ( ).getOrbit ( );
                 double[] param = {nOrbit.getA ( ) , nOrbit.getE ( ) , Math.IEEEremainder ( nOrbit.getI ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getRightAscensionOfAscendingNode ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getPerigeeArgument ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getAnomaly ( constants.type ) , 2 * Math.PI )};
 
 

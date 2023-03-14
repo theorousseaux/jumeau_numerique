@@ -105,7 +105,7 @@ public class EstimationPanel extends JPanel {
             @Override
             public void actionPerformed ( ActionEvent e ) {
                 //try {
-                EstimationController controller = parent.estimationController;
+                EstimationController controller = parent.getEstimationController ( );
                 controller.model.setStdV ( Double.parseDouble ( stdVField.getText ( ) ) );
                 controller.model.setStdPos ( Double.parseDouble ( stdPosField.getText ( ) ) );
                 controller.model.setNoiseLevelV ( Double.parseDouble ( noiseVField.getText ( ) ) );

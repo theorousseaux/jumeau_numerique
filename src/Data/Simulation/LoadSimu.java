@@ -75,7 +75,7 @@ public class LoadSimu {
                 boolean geo = Boolean.parseBoolean ( values[9].trim ( ) );
 
                 // On associe le TelescopeAzEl à un GroundStation
-                List<Station> stationList = parent.gsController.groundStationList;
+                List<Station> stationList = parent.getGsController().groundStationList;
                 for (Station groundStation : stationList) {
                     if (groundStation.getName ( ).equals ( station )) {
                         TelescopeAzEl telescope = new TelescopeAzEl ( values[0] , mean , angularIncertitude , elevationLimit , angularFoV , stepMeasure , breakTime , groundStation , geo );

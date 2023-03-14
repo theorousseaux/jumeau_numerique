@@ -34,7 +34,7 @@ public class DisplayObserverPannel extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (TelescopeAzEl telescopeAzEl : parent.obserController.telescopeAzElList) {
+        for (TelescopeAzEl telescopeAzEl : parent.getObserController ( ).telescopeAzElList) {
             // Affichage de la liste des telescopes
             String sb = telescopeAzEl.getID ( ) +
                     " : " +
@@ -61,7 +61,7 @@ public class DisplayObserverPannel extends JPanel {
             elements.add ( sb );
         }
 
-        for (Radar radar : parent.obserController.radarList) {
+        for (Radar radar : parent.getObserController ( ).radarList) {
             // Affichage de la liste des telescopes
             String sb = radar.getID ( ) +
                     " : " +
@@ -114,7 +114,7 @@ public class DisplayObserverPannel extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (TelescopeAzEl telescopeAzEl : parent.obserController.telescopeAzElList) {
+        for (TelescopeAzEl telescopeAzEl : parent.getObserController ( ).telescopeAzElList) {
             // Affichage de la liste des telescopes
             String sb = telescopeAzEl.getID ( ) +
                     " : " +
@@ -141,7 +141,7 @@ public class DisplayObserverPannel extends JPanel {
             elements.add ( sb );
         }
 
-        for (Radar radar : parent.obserController.radarList) {
+        for (Radar radar : parent.getObserController ( ).radarList) {
             // Affichage de la liste des telescopes
             String sb = radar.getID ( ) +
                     " : " +

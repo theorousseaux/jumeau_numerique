@@ -41,7 +41,7 @@ public final class WorldMapPanel extends JPanel {
 
         // Display of ground stations
         GSLayer = new RenderableLayer ( );
-        for (Station station : parent.gsController.groundStationList) {
+        for (Station station : parent.getGsController ( ).groundStationList) {
 
 
             double latitude = station.getLatitude ( );
@@ -79,13 +79,13 @@ public final class WorldMapPanel extends JPanel {
                 ( AVKey.MODEL_CLASS_NAME );
 
         HashMap<String, String> selectedStations = new HashMap<> ( );
-        for (TelescopeAzEl teles : parent.obserController.observerNetwork.getTelescopes ( )) {
+        for (TelescopeAzEl teles : parent.getObserController ( ).observerNetwork.getTelescopes ( )) {
             String station = teles.getStation ( ).getName ( );
             selectedStations.put ( station , "" );
         }
         wwPanel.setModel ( m );
         GSLayer = new RenderableLayer ( );
-        for (Station station : parent.gsController.groundStationList) {
+        for (Station station : parent.getGsController ( ).groundStationList) {
 
             double latitude = station.getLatitude ( );
             double longitude = station.getLongitude ( );

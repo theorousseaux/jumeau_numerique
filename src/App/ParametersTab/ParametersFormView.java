@@ -33,7 +33,7 @@ public class ParametersFormView extends JPanel {
 
         // Setting the attributes
         this.parent = parent;
-        controller = parent.paramController;
+        controller = parent.getParamController ( );
 
         // Title
         JLabel paramLabel = new JLabel ( "Set simulation parameters" ); // Set text
@@ -131,7 +131,7 @@ public class ParametersFormView extends JPanel {
                         System.out.println ( "Simulation saved" );
                         System.out.println ( "Start date: " + controller.getStartDate ( ) );
                         System.out.println ( "Start date: " + controller.getEndDate ( ) );
-                        System.out.println ( parent.paramController.getStartDate ( ).toString ( ) );
+                        System.out.println ( parent.getParamController ( ).getStartDate ( ).toString ( ) );
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog ( parent , "Invalid dates" , "Error" , JOptionPane.ERROR_MESSAGE );

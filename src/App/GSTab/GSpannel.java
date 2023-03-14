@@ -14,7 +14,7 @@ public class GSpannel extends JPanel {
     public GSpannel ( MainFrame parent ) {
 
         this.parent = parent;
-        WorldMapPanel worldMapPanel = (WorldMapPanel) parent.globePanel;
+        WorldMapPanel worldMapPanel = (WorldMapPanel) parent.getGlobePanel ( );
         setLayout ( new GridBagLayout ( ) );
 
         // Affichage des stations sol

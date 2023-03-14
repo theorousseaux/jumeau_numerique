@@ -23,7 +23,7 @@ public class ObserverPannel extends JPanel {
         // Affichage du réseau
         DisplayObserverPannel displayObserverPannel = new DisplayObserverPannel ( parent );
         DisplayNetworkPanel displayNetworkPannel = new DisplayNetworkPanel ( parent );
-        WorldMapPanel worldMapPanel = (WorldMapPanel) parent.globePanel;
+        WorldMapPanel worldMapPanel = (WorldMapPanel) parent.getGlobePanel ( );
         // Choix des stations sol pour le réseau
         //CreateNetworkPannel createNetworkPannel = new CreateNetworkPannel(parent, displayNetworkPannel);
         CreateNetworkPanel createNetworkPannel = new CreateNetworkPanel ( parent , displayNetworkPannel , worldMapPanel );

@@ -32,12 +32,12 @@ public class EstimationController {
 
 
     public void loadEstimation ( MainFrame parent ) throws IllegalArgumentException, IOException {
-        model.setSatellites ( parent.simuController.model.getObservableSatellites ( ) );
-        model.setPropagators ( parent.simuController.model.getSatellites ( ) );
-        model.setFinalDate ( parent.simuController.model.getSimulationParameters ( ).getEndDate ( ) );
-        model.setInitialDate ( parent.simuController.model.getSimulationParameters ( ).getStartDate ( ) );
-        model.setMeasurements ( parent.simuController.model.getMeasurementsSetsList ( ) );
-        model.setSatellitesNames ( parent.simuController.model.getSatellitesNames () );
+        model.setSatellites ( parent.getSimuController ( ).model.getObservableSatellites ( ) );
+        model.setPropagators ( parent.getSimuController ( ).model.getSatellites ( ) );
+        model.setFinalDate ( parent.getSimuController ( ).model.getSimulationParameters ( ).getEndDate ( ) );
+        model.setInitialDate ( parent.getSimuController ( ).model.getSimulationParameters ( ).getStartDate ( ) );
+        model.setMeasurements ( parent.getSimuController ( ).model.getMeasurementsSetsList ( ) );
+        model.setSatellitesNames ( parent.getSimuController ( ).model.getSatellitesNames () );
     }
 
     public void runEstimation ( MainFrame parent ) throws IOException {

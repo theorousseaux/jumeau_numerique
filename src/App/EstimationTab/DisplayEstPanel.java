@@ -33,7 +33,7 @@ public class DisplayEstPanel extends JPanel {
         gc.gridy = 0;
         gc.anchor = GridBagConstraints.WEST;
 
-        List<String> measurementsList = this.parent.estimationController.model.estimationsList;
+        List<String> measurementsList = this.parent.getEstimationController ( ).model.estimationsList;
 
         gc.anchor = GridBagConstraints.PAGE_START;
         ArrayList<String> elements = new ArrayList<String> ( );

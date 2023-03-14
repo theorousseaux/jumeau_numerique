@@ -26,20 +26,15 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class MainFrame extends JFrame {
-    public JPanel globePanel;
-    public GSController gsController;
-    public UpdateDBController updateDBController;
-
-    public ObserverController obserController;
-
-    public SatelliteController satController;
-
-    public ParametersController paramController;
-
-    public SimulationController simuController;
-
-    public EstimationController estimationController;
-    public JTabbedPane tabbedPane;
+    private JPanel globePanel;
+    private GSController gsController;
+    private UpdateDBController updateDBController;
+    private ObserverController obserController;
+    private SatelliteController satController;
+    private ParametersController paramController;
+    private SimulationController simuController;
+    private EstimationController estimationController;
+    private JTabbedPane tabbedPane;
 
     public MainFrame ( ) throws NumberFormatException, IOException, SQLException, ClassNotFoundException {
 
@@ -100,5 +95,77 @@ public class MainFrame extends JFrame {
         manager.addProvider ( new DirectoryCrawler ( orekitData ) );
 
         MainFrame frame = new MainFrame ( );
+    }
+
+    public JPanel getGlobePanel ( ) {
+        return globePanel;
+    }
+
+    public void setGlobePanel ( JPanel globePanel ) {
+        this.globePanel = globePanel;
+    }
+
+    public GSController getGsController ( ) {
+        return gsController;
+    }
+
+    public void setGsController ( GSController gsController ) {
+        this.gsController = gsController;
+    }
+
+    public UpdateDBController getUpdateDBController ( ) {
+        return updateDBController;
+    }
+
+    public void setUpdateDBController ( UpdateDBController updateDBController ) {
+        this.updateDBController = updateDBController;
+    }
+
+    public ObserverController getObserController ( ) {
+        return obserController;
+    }
+
+    public void setObserController ( ObserverController obserController ) {
+        this.obserController = obserController;
+    }
+
+    public SatelliteController getSatController ( ) {
+        return satController;
+    }
+
+    public void setSatController ( SatelliteController satController ) {
+        this.satController = satController;
+    }
+
+    public ParametersController getParamController ( ) {
+        return paramController;
+    }
+
+    public void setParamController ( ParametersController paramController ) {
+        this.paramController = paramController;
+    }
+
+    public SimulationController getSimuController ( ) {
+        return simuController;
+    }
+
+    public void setSimuController ( SimulationController simuController ) {
+        this.simuController = simuController;
+    }
+
+    public EstimationController getEstimationController ( ) {
+        return estimationController;
+    }
+
+    public void setEstimationController ( EstimationController estimationController ) {
+        this.estimationController = estimationController;
+    }
+
+    public JTabbedPane getTabbedPane ( ) {
+        return tabbedPane;
+    }
+
+    public void setTabbedPane ( JTabbedPane tabbedPane ) {
+        this.tabbedPane = tabbedPane;
     }
 }
