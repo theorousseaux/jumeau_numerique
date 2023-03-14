@@ -16,7 +16,7 @@ manager.addProvider(new DirectoryCrawler(orekitData));
 This zip file contains:
 
 * JPL DE 440 ephemerides from 1990 to 2149,
-* IERS Earth orientation parameters from 1973 to 27-October 2022
+* IERS Earth orientation parametersModel from 1973 to 27-October 2022
   with predicted data up to late 2023 (both IAU-1980 and IAU-2000),
 * configuration data for ITRF versions used in regular IERS files,
 * leap seconds history from 1972 to mid 2022,

@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 
 public class Observation {
 
-    public List<TelescopeAzEl> telescopesList;
-    public List<ObservableSatellite> objectsList;
-    public List<Propagator> propagatorsList;
-    public AbsoluteDate initialDate;
-    public AbsoluteDate finalDate;
+    public final List<TelescopeAzEl> telescopesList;
+    public final List<ObservableSatellite> objectsList;
+    public final List<Propagator> propagatorsList;
+    public final AbsoluteDate initialDate;
+    public final AbsoluteDate finalDate;
 
     public Observation ( List<TelescopeAzEl> telescopesList , List<ObservableSatellite> objectsList , List<Propagator> propagatorsList , AbsoluteDate initialDate , AbsoluteDate finalDate ) {
         this.telescopesList = telescopesList;

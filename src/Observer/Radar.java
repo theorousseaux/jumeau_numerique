@@ -27,33 +27,33 @@ public class Radar {
     /**
      * noiseSource
      */
-    public CorrelatedRandomVectorGenerator noiseSource;
+    public final CorrelatedRandomVectorGenerator noiseSource;
     /**
      * sigma
      */
-    public double[] sigma;
+    public final double[] sigma;
     /**
      * Measures weight
      */
-    public double[] baseWeight;
+    public final double[] baseWeight;
     /**
      * GroundStation
      */
-    public Station station;
+    public final Station station;
     /**
      * taille angulaire fov
      */
-    public double angularFoV;
+    public final double angularFoV;
     /**
      * nombre de secondes entre deux mesures
      */
-    public double stepMeasure;
+    public final double stepMeasure;
     /**
      * Programmation satellite LEO/GEO
      */
-    public FieldOfView fov;
-    public double baseWeightRadar;
-    public double sigmaRadar;
+    public final FieldOfView fov;
+    public final double baseWeightRadar;
+    public final double sigmaRadar;
     /**
      * ID (station:type:id)
      */
@@ -82,8 +82,7 @@ public class Radar {
         Vector3D vectorCenter = new Vector3D ( 0 , Math.PI / 2 );
         Vector3D axis1 = new Vector3D ( 1 , 0 , 0 );
         Vector3D axis2 = new Vector3D ( 0 , Math.sqrt ( 2 ) / 2 , Math.sqrt ( 2 ) / 2 );
-        DoubleDihedraFieldOfView fov = new DoubleDihedraFieldOfView ( vectorCenter , axis1 , angularFoV / 2 , axis2 , angularFoV / 2 , 0. );
-        this.fov = fov;
+        this.fov = new DoubleDihedraFieldOfView ( vectorCenter , axis1 , angularFoV / 2 , axis2 , angularFoV / 2 , 0. );
 
 
         // bruit de mesures
@@ -91,8 +90,7 @@ public class Radar {
         RealMatrix covariance = MatrixUtils.createRealDiagonalMatrix ( covarianceDiag );
         RandomGenerator randomGenerator = new RandomDataGenerator ( );
         GaussianRandomGenerator gaussianRandomGenerator = new GaussianRandomGenerator ( randomGenerator );
-        CorrelatedRandomVectorGenerator noiseSource = new CorrelatedRandomVectorGenerator ( mean , covariance , 1.0e-10 , gaussianRandomGenerator );//mesures parfaites:null
-        this.noiseSource = noiseSource;
+        this.noiseSource = new CorrelatedRandomVectorGenerator ( mean , covariance , 1.0e-10 , gaussianRandomGenerator );
 
         this.stepMeasure = stepMeasure;
 
@@ -177,31 +175,26 @@ public class Radar {
         NegateDetector newFovDetector = new NegateDetector ( fovDetector );
 
         //Final Detector
-        BooleanDetector finalDetector = BooleanDetector.andCombine ( elevationDetector , newAltitudeDetector , newFovDetector );
-        return finalDetector;
+        return BooleanDetector.andCombine ( elevationDetector , newAltitudeDetector , newFovDetector );
     }
 
 
     /* StepSelector */
     public FixedStepSelector createDateSelector ( ) {
-        FixedStepSelector dateSelector = new FixedStepSelector ( this.stepMeasure , constants.UTC );
-        return dateSelector;
+        return new FixedStepSelector ( this.stepMeasure , constants.UTC );
     }
 
     /* Creation des mesureBuilder */
     public AngularAzElBuilder createAzElBuilder ( ObservableSatellite satellite ) {
-        AngularAzElBuilder azElBuilder = new AngularAzElBuilder ( this.noiseSource , this.station , this.sigma , this.baseWeight , satellite );
-        return azElBuilder;
+        return new AngularAzElBuilder ( this.noiseSource , this.station , this.sigma , this.baseWeight , satellite );
     }
 
     public RangeBuilder createRangeBuilder ( ObservableSatellite satellite ) {
-        RangeBuilder rangeBuilder = new RangeBuilder ( noiseSource , station , true , sigmaRadar , baseWeightRadar , satellite );
-        return rangeBuilder;
+        return new RangeBuilder ( noiseSource , station , true , sigmaRadar , baseWeightRadar , satellite );
     }
 
     public RangeRateBuilder createRangeRateBuilder ( ObservableSatellite satellite ) {
-        RangeRateBuilder rangeRateBuilder = new RangeRateBuilder ( noiseSource , station , true , sigmaRadar , baseWeightRadar , satellite );
-        return rangeRateBuilder;
+        return new RangeRateBuilder ( noiseSource , station , true , sigmaRadar , baseWeightRadar , satellite );
     }
 
 

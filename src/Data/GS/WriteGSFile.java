@@ -16,9 +16,8 @@ public class WriteGSFile {
      *
      * @param station la station que l'on souhaite ajouter à la base de données
      * @throws NumberFormatException
-     * @throws IOException
      */
-    public void writeStation ( Station station ) throws NumberFormatException, IOException {
+    public void writeStation ( Station station ) throws NumberFormatException {
 
         try {
             FileWriter fw = new FileWriter ( "src/Data/GS/GS.csv" , true );

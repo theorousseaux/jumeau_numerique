@@ -49,18 +49,4 @@ public class ObserverNetwork {
         }
     }
 
-
-    public int countObservations ( List<SortedSet<ObservedMeasurement<?>>> observations ) {
-        int i = 0;
-        for (SortedSet<ObservedMeasurement<?>> object : observations) {
-            for (ObservedMeasurement<?> obs : object) {
-                if (this.getTelescopes ( ).contains ( ((AngularAzEl) obs).getStation ( ) )) {
-                    i += 1;
-                }
-            }
-        }
-        return i;
-    }
-
-
 }

@@ -43,21 +43,10 @@ public class CustomGenerator {
      * Add a propagator.
      *
      * @param propagator to add
-     * @return satellite satellite propagated by the propagator
      */
-    public ObservableSatellite addPropagator ( final Propagator propagator ) {
+    public void addPropagator ( final Propagator propagator ) {
         propagators.add ( propagator );
-        return new ObservableSatellite ( propagators.size ( ) - 1 );
-    }
-
-    /**
-     * Get a registered propagator.
-     *
-     * @param satellite satellite propagated by the propagator {@link #addPropagator(Propagator)}
-     * @return propagator corresponding to satellite
-     */
-    public Propagator getPropagator ( final ObservableSatellite satellite ) {
-        return propagators.get ( satellite.getPropagatorIndex ( ) );
+        new ObservableSatellite ( propagators.size ( ) - 1 );
     }
 
     /**

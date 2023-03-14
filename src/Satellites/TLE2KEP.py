@@ -34,7 +34,7 @@ MA = []  # list of mean anomalies
 Time = []  # list of epoch
 
 
-# we fetch the orbital parameters from TLES
+# we fetch the orbital parametersModel from TLES
 
 
 for j in tqdm(range(int(N/2))):

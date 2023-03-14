@@ -30,7 +30,7 @@ import java.util.List;
 
 public class TelescopeAzEl {
 
-    LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
+    final LinkedHashMap<TimeComponents, FieldOfView> skyCoveringMap;
     /**
      * ID (station:type:id)
      */
@@ -100,9 +100,8 @@ public class TelescopeAzEl {
             double a = 35786 + 6378;
             double c = a - b;
             double beta = Math.atan ( D / c );
-            double alpha = Math.PI / 2 - (beta + latitude);
 
-            alphaGEO = alpha;
+            alphaGEO = Math.PI / 2 - (beta + latitude);
 
         }
         // bruit de mesures
@@ -112,8 +111,7 @@ public class TelescopeAzEl {
         RealMatrix covariance = MatrixUtils.createRealDiagonalMatrix ( covarianceDiag );
         RandomGenerator randomGenerator = new RandomDataGenerator ( );
         GaussianRandomGenerator gaussianRandomGenerator = new GaussianRandomGenerator ( randomGenerator );
-        CorrelatedRandomVectorGenerator noiseSource = new CorrelatedRandomVectorGenerator ( mean , covariance , 1.0e-10 , gaussianRandomGenerator );//mesures parfaites:null
-        this.noiseSource = noiseSource;
+        this.noiseSource = new CorrelatedRandomVectorGenerator ( mean , covariance , 1.0e-10 , gaussianRandomGenerator );
 
         this.stepMeasure = stepMeasure;
         this.breakTime = breakTime;
@@ -188,10 +186,9 @@ public class TelescopeAzEl {
                 } );
 
         //FinalDetector
-        BooleanDetector finalDetector = BooleanDetector.andCombine ( elevationDetector , nightDetector , fovDetector );
 
 
-        return finalDetector;
+        return BooleanDetector.andCombine ( elevationDetector , nightDetector , fovDetector );
     }
 
     public BooleanDetector createDetectorGEO ( ) {
@@ -224,20 +221,16 @@ public class TelescopeAzEl {
                     return Action.CONTINUE;
                 } );
 
-        BooleanDetector finalDetector = BooleanDetector.andCombine ( elevationDetector , nightDetector , fovDetector );
-
-        return finalDetector;
+        return BooleanDetector.andCombine ( elevationDetector , nightDetector , fovDetector );
 
     }
 
     public FixedStepSelector createDateSelector ( ) {
-        FixedStepSelector dateSelector = new FixedStepSelector ( this.stepMeasure , constants.UTC );
-        return dateSelector;
+        return new FixedStepSelector ( this.stepMeasure , constants.UTC );
     }
 
     public AngularAzElBuilder createAzElBuilder ( ObservableSatellite satellite ) {
-        AngularAzElBuilder mesuresBuilder = new AngularAzElBuilder ( this.noiseSource , this.station , this.sigma , this.baseWeight , satellite );
-        return mesuresBuilder;
+        return new AngularAzElBuilder ( this.noiseSource , this.station , this.sigma , this.baseWeight , satellite );
     }
 
 
@@ -312,7 +305,6 @@ public class TelescopeAzEl {
         }
         FixedStepSelector selector = createDateSelector ( );
         AngularAzElBuilder builder = createAzElBuilder ( satellite );
-        CustomEventBasedScheduler scheduler = new CustomEventBasedScheduler ( builder , selector , propagator , detector , SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE );
-        return scheduler;
+        return new CustomEventBasedScheduler ( builder , selector , propagator , detector , SignSemantic.FEASIBLE_MEASUREMENT_WHEN_POSITIVE );
     }
 }
