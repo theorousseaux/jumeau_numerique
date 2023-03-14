@@ -102,7 +102,7 @@ public class UpdateSatelliteDBView extends JPanel {
         createDBButton.addActionListener ( new ActionListener ( ) {
             public void actionPerformed ( ActionEvent e ) {
                 try {
-                    parent.getUpdateDBController().createDB ( "src/Satellites/tle.csv" );
+                    parent.getUpdateDBController ( ).createDB ( "src/Satellites/tle.csv" );
                 } catch (SQLException | IOException | ClassNotFoundException ex) {
                     throw new RuntimeException ( ex );
                 }

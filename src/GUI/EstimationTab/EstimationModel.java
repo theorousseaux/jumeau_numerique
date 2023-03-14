@@ -14,7 +14,18 @@ public class EstimationModel {
 
     List<ObservableSatellite> satellites;
 
-    List<Propagator> propagators ;
+    List<Propagator> propagators;
+    Set<String> observedSat = new HashSet<> ( );
+    List<String> satellitesNames;
+    List<OrbitDeterminationPropagatorBuilder> propagatorBuilders;
+    Pair<List<SortedSet<ObservedMeasurement<?>>>, HashMap<ObservedMeasurement, SpacecraftState>> measurements;
+    AbsoluteDate initialDate;
+    AbsoluteDate finalDate;
+    List<String> estimationsList = new ArrayList<> ( );
+    double noiseLevelPos;
+    double noiseLevelV;
+    double stdPos;
+    double stdV;
 
     public Set<String> getObservedSat ( ) {
         return observedSat;
@@ -24,7 +35,6 @@ public class EstimationModel {
         this.observedSat = observedSat;
     }
 
-    Set<String> observedSat = new HashSet<> (  );
     public List<String> getSatellitesNames ( ) {
         return satellitesNames;
     }
@@ -45,22 +55,9 @@ public class EstimationModel {
         return stdPos;
     }
 
-    List<String> satellitesNames;
-
-    List<OrbitDeterminationPropagatorBuilder> propagatorBuilders;
-
-    Pair<List<SortedSet<ObservedMeasurement<?>>>, HashMap<ObservedMeasurement, SpacecraftState>> measurements;
-    AbsoluteDate initialDate;
-
-    AbsoluteDate finalDate;
-
-    List<String> estimationsList = new ArrayList<> ( );
-
-
-    double noiseLevelPos;
-    double noiseLevelV;
-    double stdPos;
-    double stdV;
+    public void setStdPos ( double stdP ) {
+        this.stdPos = stdP;
+    }
 
     public double getNoiseLevelPos ( ) {
         return noiseLevelPos;
@@ -82,10 +79,6 @@ public class EstimationModel {
         return stdPos;
     }
 
-    public void setStdPos ( double stdP ) {
-        this.stdPos = stdP;
-    }
-
     public double getStdV ( ) {
         return stdV;
     }
@@ -105,7 +98,6 @@ public class EstimationModel {
     public List<Propagator> getPropagators ( ) {
         return propagators;
     }
-
 
 
     public void setPropagators ( List<Propagator> propagators ) {

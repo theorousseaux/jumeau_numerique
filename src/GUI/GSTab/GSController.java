@@ -9,20 +9,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GSController {
-    public GSModel getModel ( ) {
-        return model;
-    }
-
-    private final GSModel model = new GSModel ();
-
+    private final GSModel model = new GSModel ( );
 
     public GSController ( ) throws IOException {
 
-        this.getModel ().setGroundStationList (new ArrayList<> ( ));
-        this.getModel().setGSReader ( new ReadGSFile ( ));
-        this.getModel().setGSWriter ( new WriteGSFile ( ));
+        this.getModel ( ).setGroundStationList ( new ArrayList<> ( ) );
+        this.getModel ( ).setGSReader ( new ReadGSFile ( ) );
+        this.getModel ( ).setGSWriter ( new WriteGSFile ( ) );
 
-        this.getModel ().getGroundStationList ().addAll (this.getModel ().getGSReader ().readStation ( "src/Data/GS/GS.csv" ));
+        this.getModel ( ).getGroundStationList ( ).addAll ( this.getModel ( ).getGSReader ( ).readStation ( "src/Data/GS/GS.csv" ) );
 
         // Ajou d'un télescope standard à chaque station sol
         for (Station station : this.getModel ( ).getGroundStationList ( )) {
@@ -31,8 +26,12 @@ public class GSController {
 
     }
 
+    public GSModel getModel ( ) {
+        return model;
+    }
+
     // Méthode pour ajouter une station sol à la liste
     public void addGroundStation ( Station groundStation ) {
-        this.getModel ().getGroundStationList ().add ( groundStation );
+        this.getModel ( ).getGroundStationList ( ).add ( groundStation );
     }
 }

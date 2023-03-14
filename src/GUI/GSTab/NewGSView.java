@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class NewGSView extends JPanel {
 
@@ -111,7 +110,7 @@ public class NewGSView extends JPanel {
                 parent.getGsController ( ).addGroundStation ( groundStation );
 
                 // update
-                parent.getGsController ( ).getModel ().getGSWriter ().writeStation ( groundStation );
+                parent.getGsController ( ).getModel ( ).getGSWriter ( ).writeStation ( groundStation );
 
                 // Mise à jour du panneau d'affichage des stations sol
                 displayGSView.displayNewStation ( );
@@ -123,7 +122,7 @@ public class NewGSView extends JPanel {
                 NewObserverView newObserverView = (NewObserverView) tabPanel.getComponent ( 1 );
                 newObserverView.updateStationComboBox ( );
 
-                worldMapView.displayNewGS ( parent, false );
+                worldMapView.displayNewGS ( parent , false );
                 worldMapView.repaint ( );
                 worldMapView.revalidate ( );
 

@@ -20,8 +20,8 @@ import org.orekit.propagation.events.GroundAtNightDetector;
 import org.orekit.propagation.events.GroundFieldOfViewDetector;
 import org.orekit.time.FixedStepSelector;
 import org.orekit.time.TimeComponents;
-import src.OrbitDetermination.CustomEventBasedScheduler;
 import src.GroundStation.Station;
+import src.OrbitDetermination.CustomEventBasedScheduler;
 import src.constants;
 
 import java.util.ArrayList;
@@ -117,7 +117,7 @@ public class TelescopeAzEl {
         this.breakTime = breakTime;
         this.skyCoveringMap = createSkyCoveringMap ( );
 
-        station.getListTelescopes().add ( this );
+        station.getListTelescopes ( ).add ( this );
     }
 
     public String getID ( ) {

@@ -53,7 +53,7 @@ public class DisplayNetworkView extends JPanel {
         gc.gridx = 1;
         gc.gridy = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
-        JLabel networkName = new JLabel ( parent.getObserController ( ).getModel ().getObserverNetwork ().getName ( ) );
+        JLabel networkName = new JLabel ( parent.getObserController ( ).getModel ( ).getObserverNetwork ( ).getName ( ) );
         this.add ( networkName , gc );
 
         gc = new GridBagConstraints ( ); // Réinitialisation de gc pour chaque nouvel élément
@@ -67,7 +67,7 @@ public class DisplayNetworkView extends JPanel {
         gc.gridx = 1;
         gc.gridy = 2;
         gc.anchor = GridBagConstraints.PAGE_START;
-        JLabel numberOfStation = new JLabel ( String.valueOf ( parent.getObserController ( ).getModel ().getObserverNetwork ().getTelescopes ( ).size ( ) ) );
+        JLabel numberOfStation = new JLabel ( String.valueOf ( parent.getObserController ( ).getModel ( ).getObserverNetwork ( ).getTelescopes ( ).size ( ) ) );
         this.add ( numberOfStation , gc );
     }
 

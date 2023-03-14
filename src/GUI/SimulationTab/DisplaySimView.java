@@ -1,7 +1,7 @@
 package src.GUI.SimulationTab;
 
-import src.GUI.MainFrame;
 import src.Data.Simulation.LoadSimu;
+import src.GUI.MainFrame;
 import src.Observer.TelescopeAzEl;
 
 import javax.swing.*;
@@ -74,7 +74,7 @@ public class DisplaySimView extends JPanel {
         gc.gridx = 1;
         gc.gridy = 1;
         gc.anchor = GridBagConstraints.WEST;
-        List<String> satelliteList = this.parent.getSimuController ( ).getModel ().getSatellitesNames ( );
+        List<String> satelliteList = this.parent.getSimuController ( ).getModel ( ).getSatellitesNames ( );
         ArrayList<String> elements = new ArrayList<String> ( );
         for (String sat : satelliteList) {
             elements.add ( sat );
@@ -97,7 +97,7 @@ public class DisplaySimView extends JPanel {
         gc.gridx = 1;
 
 
-        List<TelescopeAzEl> observersList = this.parent.getSimuController ( ).getModel ().getObserverNetwork ( ).getTelescopes ( );
+        List<TelescopeAzEl> observersList = this.parent.getSimuController ( ).getModel ( ).getObserverNetwork ( ).getTelescopes ( );
         ArrayList<String> stations = new ArrayList<String> ( );
         for (TelescopeAzEl telescope : observersList) {
             stations.add ( String.valueOf ( telescope.getID ( ) ) );
@@ -118,8 +118,8 @@ public class DisplaySimView extends JPanel {
         this.add ( datesLabel , gc );
 
         gc.gridx = 1;
-        JLabel startDate = new JLabel ( "Start date: " + this.parent.getSimuController ( ).getModel ().getSimulationParameters ( ).getStartDate ( ).toString ( ) );
-        JLabel endDate = new JLabel ( "End date: " + this.parent.getSimuController ( ).getModel ().getSimulationParameters ( ).getEndDate ( ).toString ( ) );
+        JLabel startDate = new JLabel ( "Start date: " + this.parent.getSimuController ( ).getModel ( ).getSimulationParameters ( ).getStartDate ( ).toString ( ) );
+        JLabel endDate = new JLabel ( "End date: " + this.parent.getSimuController ( ).getModel ( ).getSimulationParameters ( ).getEndDate ( ).toString ( ) );
         this.add ( startDate , gc );
         gc.gridy++;
         this.add ( endDate , gc );
@@ -143,7 +143,7 @@ public class DisplaySimView extends JPanel {
 
 
                 LoadSimu saver = new LoadSimu ( fileNameInput.getText ( ) );
-                saver.save ( fileNameInput.getText ( ) , parent.getSimuController ( ).getModel () );
+                saver.save ( fileNameInput.getText ( ) , parent.getSimuController ( ).getModel ( ) );
 
             }
         } );

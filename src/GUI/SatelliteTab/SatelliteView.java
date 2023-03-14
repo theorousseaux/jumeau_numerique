@@ -82,19 +82,24 @@ public class SatelliteView extends JPanel {
         validate.addActionListener ( new ActionListener ( ) {
             @Override
             public void actionPerformed ( ActionEvent e ) {
-                int nbSat = Integer.parseInt ( numberSat.getText ( ) );
-                if (Objects.equals ( satellitesList.getSelectedItem ( ) , "LEO" )) {
-                    try {
-                        parent.getSatController ( ).setSatellitesList ( "LEO" , nbSat ,parent);
-                    } catch (SQLException ex) {
-                        throw new RuntimeException ( ex );
+                try {
+                    int nbSat = Integer.parseInt ( numberSat.getText ( ) );
+                    if (Objects.equals ( satellitesList.getSelectedItem ( ) , "LEO" )) {
+                        try {
+                            parent.getSatController ( ).setSatellitesList ( "LEO" , nbSat , parent );
+                        } catch (NullPointerException | SQLException npe) {
+                            JOptionPane.showMessageDialog ( parent , "Load or connect your database first and select simulation dates" , "Error" , JOptionPane.ERROR_MESSAGE );
+                        }
+                    } else if (Objects.equals ( satellitesList.getSelectedItem ( ) , "GEO" )) {
+                        try {
+                            parent.getSatController ( ).setSatellitesList ( "GEO" , nbSat , parent );
+                        } catch (NullPointerException | SQLException npe) {
+                            JOptionPane.showMessageDialog ( parent , "Load or connect your database first and select simulation dates" , "Error" , JOptionPane.ERROR_MESSAGE );
+                        }
                     }
-                } else if (Objects.equals ( satellitesList.getSelectedItem ( ) , "GEO" )) {
-                    try {
-                        parent.getSatController ( ).setSatellitesList ( "GEO" , nbSat,parent );
-                    } catch (SQLException ex) {
-                        throw new RuntimeException ( ex );
-                    }
+                } catch (Exception exp) {
+                    JOptionPane.showMessageDialog ( parent , "Invalid number of satellites" , "Error" , JOptionPane.ERROR_MESSAGE );
+
                 }
                 // on vide la liste avant de la remplir
                 listModel.removeAllElements ( );

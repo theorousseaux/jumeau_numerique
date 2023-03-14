@@ -19,6 +19,7 @@ public class DisplayTrueView extends JPanel {
 
     /**
      * Constructeur de la classe DisplayTrueView.
+     *
      * @param parent la fenêtre parente
      */
     public DisplayTrueView ( MainFrame parent ) {
@@ -51,7 +52,7 @@ public class DisplayTrueView extends JPanel {
         gc.gridy++;
         ArrayList<String> elements2 = new ArrayList<String> ( );
         int j = 0;
-        for (String satname : parent.getSimuController ( ).getModel ().getSatellitesNames ( )) {
+        for (String satname : parent.getSimuController ( ).getModel ( ).getSatellitesNames ( )) {
             if (parent.getEstimationController ( ).model.getObservedSat ( ).contains ( satname )) {
                 KeplerianOrbit nOrbit = (KeplerianOrbit) parent.getEstimationController ( ).model.getPropagators ( ).get ( j ).getInitialState ( ).getOrbit ( );
                 double[] param = {nOrbit.getA ( ) , nOrbit.getE ( ) , Math.IEEEremainder ( nOrbit.getI ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getRightAscensionOfAscendingNode ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getPerigeeArgument ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getAnomaly ( constants.type ) , 2 * Math.PI )};

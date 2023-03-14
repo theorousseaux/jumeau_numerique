@@ -1,8 +1,8 @@
 package src.GUI.ObserverTab;
 
 import src.GUI.MainFrame;
-import src.Observer.Radar;
 import src.GroundStation.Station;
+import src.Observer.Radar;
 import src.Observer.TelescopeAzEl;
 
 import javax.swing.*;
@@ -12,10 +12,10 @@ import java.awt.event.ActionListener;
 
 public class NewObserverView extends JPanel {
 
-    public JComboBox<Station> stationComboBox;
     final MainFrame parent;
     private final JComboBox<String> cbType;
     private final JPanel formPanel;
+    public JComboBox<Station> stationComboBox;
 
     public NewObserverView ( MainFrame parent , DisplayObserverView displayObserverView , CreateNetworkView createNetworkPannel ) {
 
@@ -155,7 +155,7 @@ public class NewObserverView extends JPanel {
                     parent.getObserController ( ).addTelescope ( newTelescope );
 
                     // update
-                    parent.getObserController ( ).getModel ().getWriteObserverFile ().writeObserverTelescope ( newTelescope );
+                    parent.getObserController ( ).getModel ( ).getWriteObserverFile ( ).writeObserverTelescope ( newTelescope );
 
                     // Mise à jour du panneau d'affichage des stations sol
                     displayObserverView.displayNewObserver ( );
@@ -237,7 +237,7 @@ public class NewObserverView extends JPanel {
                     parent.getObserController ( ).addRadar ( newRadar );
 
                     // update
-                    parent.getObserController ( ).getModel ().getWriteObserverFile ().writeObserverRadar ( newRadar );
+                    parent.getObserController ( ).getModel ( ).getWriteObserverFile ( ).writeObserverRadar ( newRadar );
 
                     // Mise à jour du panneau d'affichage
                     displayObserverView.displayNewObserver ( );

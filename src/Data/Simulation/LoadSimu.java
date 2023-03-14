@@ -11,9 +11,9 @@ import src.GUI.MainFrame;
 import src.GUI.ParametersTab.ParametersModel;
 import src.GUI.SimulationTab.SimulationModel;
 import src.GroundStation.Station;
+import src.Observer.ObserverNetwork;
 import src.Observer.TelescopeAzEl;
 import src.constants;
-import src.Observer.ObserverNetwork;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class LoadSimu {
                 boolean geo = Boolean.parseBoolean ( values[9].trim ( ) );
 
                 // On associe le TelescopeAzEl à un GroundStation
-                List<Station> stationList = parent.getGsController().getModel ( ).getGroundStationList ( );
+                List<Station> stationList = parent.getGsController ( ).getModel ( ).getGroundStationList ( );
                 for (Station groundStation : stationList) {
                     if (groundStation.getName ( ).equals ( station )) {
                         TelescopeAzEl telescope = new TelescopeAzEl ( values[0] , mean , angularIncertitude , elevationLimit , angularFoV , stepMeasure , breakTime , groundStation , geo );
@@ -114,13 +114,13 @@ public class LoadSimu {
             // Reading satellites
             List<Propagator> satList = new ArrayList<> ( );
             List<ObservableSatellite> obsSat = new ArrayList<> ( );
-            List<String> satnames = new ArrayList<> (  );
+            List<String> satnames = new ArrayList<> ( );
             line = br.readLine ( );
             int i = 0;
             while ((line = br.readLine ( )) != null) {
                 String[] data = line.split ( "," );
                 if (!(data[0].equals ( "a" ))) {
-                    KeplerianOrbit trueOrbit = new KeplerianOrbit (Float.parseFloat ( data[1] ) , Float.parseFloat ( data[2] ) , Float.parseFloat ( data[3] ) , Float.parseFloat ( data[4] ) , Float.parseFloat ( data[5] ),Float.parseFloat ( data[6] ) , constants.type , constants.GCRF , initialDate , Constants.EGM96_EARTH_MU );
+                    KeplerianOrbit trueOrbit = new KeplerianOrbit ( Float.parseFloat ( data[1] ) , Float.parseFloat ( data[2] ) , Float.parseFloat ( data[3] ) , Float.parseFloat ( data[4] ) , Float.parseFloat ( data[5] ) , Float.parseFloat ( data[6] ) , constants.type , constants.GCRF , initialDate , Constants.EGM96_EARTH_MU );
                     KeplerianPropagator truePropagator = new KeplerianPropagator ( trueOrbit );
                     satList.add ( truePropagator );
                     satnames.add ( data[0] );
@@ -144,52 +144,52 @@ public class LoadSimu {
     /**
      * Cette fonction enregistre une simulation dans un fichier CSV.
      *
-     * @param fileName le nom du fichier dans lequel la simulation doit être enregistrée
+     * @param fileName        le nom du fichier dans lequel la simulation doit être enregistrée
      * @param simulationModel le modèle de simulation contenant les données à enregistrer
      */
-    public void save(String fileName, SimulationModel simulationModel) {
+    public void save ( String fileName , SimulationModel simulationModel ) {
         this.sourceFile = fileName;
         try {
-            FileWriter fw = new FileWriter("src/Data/Simulation/" + fileName + ".csv", false);
-            BufferedWriter bw = new BufferedWriter(fw);
+            FileWriter fw = new FileWriter ( "src/Data/Simulation/" + fileName + ".csv" , false );
+            BufferedWriter bw = new BufferedWriter ( fw );
 
             // Enregistrement du réseau
-            bw.write("NETWORK");
-            ObserverNetwork network = simulationModel.getObserverNetwork();
-            bw.newLine();
-            bw.write("Name: " + network.getName());
-            for (TelescopeAzEl telescopeAzEl : network.getTelescopes()) {
-                bw.newLine();
-                bw.write(telescopeAzEl.getID() + ',' + telescopeAzEl.getMean()[0] + ',' + telescopeAzEl.getMean()[1] + ',' + telescopeAzEl.getAngularIncertitude()[0] + ',' + telescopeAzEl.getAngularIncertitude()[1] + ',' + telescopeAzEl.getElevationLimit() + ',' + telescopeAzEl.getAngularFoV() + ',' + telescopeAzEl.getStepMeasure() + ',' + telescopeAzEl.getBreakTime() + ',' + telescopeAzEl.getGEO());
+            bw.write ( "NETWORK" );
+            ObserverNetwork network = simulationModel.getObserverNetwork ( );
+            bw.newLine ( );
+            bw.write ( "Name: " + network.getName ( ) );
+            for (TelescopeAzEl telescopeAzEl : network.getTelescopes ( )) {
+                bw.newLine ( );
+                bw.write ( telescopeAzEl.getID ( ) + ',' + telescopeAzEl.getMean ( )[0] + ',' + telescopeAzEl.getMean ( )[1] + ',' + telescopeAzEl.getAngularIncertitude ( )[0] + ',' + telescopeAzEl.getAngularIncertitude ( )[1] + ',' + telescopeAzEl.getElevationLimit ( ) + ',' + telescopeAzEl.getAngularFoV ( ) + ',' + telescopeAzEl.getStepMeasure ( ) + ',' + telescopeAzEl.getBreakTime ( ) + ',' + telescopeAzEl.getGEO ( ) );
             }
 
             // Enregistrement des paramètres
-            bw.newLine();
-            bw.write("PARAMETERS");
-            ParametersModel parametersModel = simulationModel.getSimulationParameters();
-            bw.newLine();
-            bw.write("Start date: " + parametersModel.getStartDate().toString());
-            bw.newLine();
-            bw.write("End date: " + parametersModel.getEndDate().toString());
+            bw.newLine ( );
+            bw.write ( "PARAMETERS" );
+            ParametersModel parametersModel = simulationModel.getSimulationParameters ( );
+            bw.newLine ( );
+            bw.write ( "Start date: " + parametersModel.getStartDate ( ).toString ( ) );
+            bw.newLine ( );
+            bw.write ( "End date: " + parametersModel.getEndDate ( ).toString ( ) );
 
             // Enregistrement des satellites
-            bw.newLine();
-            bw.write("SATELLITES");
-            List<Propagator> satellites = simulationModel.getSatellites();
-            List<String> satellitesNames = simulationModel.getSatellitesNames();
+            bw.newLine ( );
+            bw.write ( "SATELLITES" );
+            List<Propagator> satellites = simulationModel.getSatellites ( );
+            List<String> satellitesNames = simulationModel.getSatellitesNames ( );
             int i = 0;
             for (Propagator satellite : satellites) {
-                bw.newLine();
-                KeplerianOrbit state = new KeplerianOrbit(satellite.getInitialState().getOrbit());
-                bw.write(satellitesNames.get(i) + "," + state.getA() + "," + state.getE() + "," + state.getI() + "," + state.getPerigeeArgument() + "," + state.getRightAscensionOfAscendingNode() + "," + state.getMeanAnomaly());
+                bw.newLine ( );
+                KeplerianOrbit state = new KeplerianOrbit ( satellite.getInitialState ( ).getOrbit ( ) );
+                bw.write ( satellitesNames.get ( i ) + "," + state.getA ( ) + "," + state.getE ( ) + "," + state.getI ( ) + "," + state.getPerigeeArgument ( ) + "," + state.getRightAscensionOfAscendingNode ( ) + "," + state.getMeanAnomaly ( ) );
                 i++;
             }
 
-            bw.close();
-            System.out.println("Simulation saved on file" + "src/Data/OSimulation/" + fileName + ".csv");
+            bw.close ( );
+            System.out.println ( "Simulation saved on file" + "src/Data/OSimulation/" + fileName + ".csv" );
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException ( e );
         }
     }
 

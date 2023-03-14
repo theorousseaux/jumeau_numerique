@@ -21,11 +21,6 @@ public class RunSimulationView extends JPanel {
 
         gc.gridx = 0;
         gc.gridy = 0;
-        // Checkbox to choose to display measurements
-        JCheckBox checkBox = new JCheckBox ( "Display measurements" );
-        add ( checkBox , gc );
-        gc.gridx = 0;
-        gc.gridy = 1;
         add ( runSimulationButton , gc );
 
         // Event manager
@@ -34,9 +29,6 @@ public class RunSimulationView extends JPanel {
             public void actionPerformed ( ActionEvent e ) {
                 boolean meas = false;
                 try {
-                    if (checkBox.isSelected ( )) {
-                        meas = true;
-                    }
                     SimulationController controller = parent.getSimuController ( );
                     controller.runSimulation ( parent );
                     disp.update ( );

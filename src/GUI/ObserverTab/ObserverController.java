@@ -1,16 +1,33 @@
 package src.GUI.ObserverTab;
 
-import src.GUI.GSTab.GSController;
 import src.Data.Observer.ReadObserverFile;
 import src.Data.Observer.WriteObserverFile;
-import src.Observer.Radar;
+import src.GUI.GSTab.GSController;
 import src.GroundStation.Station;
+import src.Observer.Radar;
 import src.Observer.TelescopeAzEl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ObserverController {
+
+    private ObserverModel model = new ObserverModel ( );
+
+    public ObserverController ( GSController gsController ) {
+
+        this.getModel ( ).setTelescopeAzElList ( new ArrayList<> ( ) );
+        this.getModel ( ).setRadarList ( new ArrayList<> ( ) );
+
+        this.getModel ( ).setReadObserverFile ( new ReadObserverFile ( ) );
+        this.getModel ( ).setWriteObserverFile ( new WriteObserverFile ( ) );
+
+        this.getModel ( ).getTelescopeAzElList ( ).addAll ( this.getModel ( ).getReadObserverFile ( ).readTelescopesFromCSV ( "src/Data/Observer/Observer.csv" , gsController.getModel ( ).getGroundStationList ( ) ) );
+        this.getModel ( ).getRadarList ( ).addAll ( this.getModel ( ).getReadObserverFile ( ).readRadarsFromCSV ( "src/Data/Observer/Observer.csv" , gsController.getModel ( ).getGroundStationList ( ) ) );
+
+        this.getModel ( ).setNumberOfTelescope ( this.getModel ( ).getTelescopeAzElList ( ).size ( ) );
+        this.getModel ( ).setNumberOfRadar ( this.getModel ( ).getRadarList ( ).size ( ) );
+
+    }
 
     public ObserverModel getModel ( ) {
         return model;
@@ -20,30 +37,12 @@ public class ObserverController {
         this.model = model;
     }
 
-    private ObserverModel model = new ObserverModel ();
-
-    public ObserverController ( GSController gsController ) {
-
-        this.getModel ().setTelescopeAzElList ( new ArrayList<> ( ));
-        this.getModel ().setRadarList ( new ArrayList<> ( ));
-
-        this.getModel().setReadObserverFile ( new ReadObserverFile ( ));
-        this.getModel ().setWriteObserverFile ( new WriteObserverFile ( ));
-
-        this.getModel ().getTelescopeAzElList ().addAll (this.getModel ().getReadObserverFile ().readTelescopesFromCSV ( "src/Data/Observer/Observer.csv" , gsController.getModel ( ).getGroundStationList ( ) ));
-        this.getModel ().getRadarList ().addAll (  this.getModel ().getReadObserverFile ().readRadarsFromCSV ( "src/Data/Observer/Observer.csv" , gsController.getModel ( ).getGroundStationList ( ) ));
-
-        this.getModel ().setNumberOfTelescope (this.getModel ().getTelescopeAzElList ().size ( ));
-        this.getModel ().setNumberOfRadar ( this.getModel ().getRadarList ().size() );
-
-    }
-
     public void addTelescope ( TelescopeAzEl newTelescope ) {
-        this.getModel ().getTelescopeAzElList ().add ( newTelescope );
+        this.getModel ( ).getTelescopeAzElList ( ).add ( newTelescope );
     }
 
     public void addRadar ( Radar newRadar ) {
-        this.getModel ().getRadarList ().add ( newRadar );
+        this.getModel ( ).getRadarList ( ).add ( newRadar );
     }
 
     public int getNumberOfTelescopePerStation ( Station station ) {

@@ -1,12 +1,7 @@
 package src.Observer;
 
-import org.orekit.estimation.measurements.AngularAzEl;
-import org.orekit.estimation.measurements.ObservedMeasurement;
-import src.Observer.TelescopeAzEl;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
 
 
 public class ObserverNetwork {

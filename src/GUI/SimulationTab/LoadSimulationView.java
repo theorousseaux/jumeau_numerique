@@ -1,8 +1,8 @@
 package src.GUI.SimulationTab;
 
+import src.Data.Simulation.LoadSimu;
 import src.GUI.MainFrame;
 import src.GUI.WorldMapTab.WorldMapView;
-import src.Data.Simulation.LoadSimu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,15 +35,15 @@ public class LoadSimulationView extends JPanel {
                         LoadSimu saver = new LoadSimu ( file.getPath ( ) );
                         System.out.println ( file.getPath ( ) );
                         try {
-                            parent.getSimuController ( ).setModel (saver.load ( parent ));
+                            parent.getSimuController ( ).setModel ( saver.load ( parent ) );
                         } catch (IOException e) {
                             throw new RuntimeException ( e );
                         }
                         displaySimView.update ( );
                         displaySimView.repaint ( );
                         displaySimView.revalidate ( );
-                        WorldMapView worldMapView =(WorldMapView) parent.getGlobePanel ();
-                        worldMapView.displayNewGS ( parent, true );
+                        WorldMapView worldMapView = (WorldMapView) parent.getGlobePanel ( );
+                        worldMapView.displayNewGS ( parent , true );
                         worldMapView.repaint ( );
                         worldMapView.revalidate ( );
                     }
@@ -70,8 +70,8 @@ public class LoadSimulationView extends JPanel {
                     displaySimView.update ( );
                     displaySimView.repaint ( );
                     displaySimView.revalidate ( );
-                    WorldMapView worldMapView =(WorldMapView) parent.getGlobePanel ();
-                    worldMapView.displayNewGS ( parent, true );
+                    WorldMapView worldMapView = (WorldMapView) parent.getGlobePanel ( );
+                    worldMapView.displayNewGS ( parent , true );
                     worldMapView.repaint ( );
                     worldMapView.revalidate ( );
                 } catch (Exception e2) {

@@ -34,7 +34,7 @@ public class DisplayGSView extends JPanel {
         gc.gridwidth = 1;
         ArrayList<String> elements = new ArrayList<String> ( );
 
-        for (Station groundStation : parent.getGsController ( ).getModel ().getGroundStationList ()) {
+        for (Station groundStation : parent.getGsController ( ).getModel ( ).getGroundStationList ( )) {
             // Affichage de la liste des stations sol dans une fenêtre de dialogue
             String sb = groundStation.getName ( ) +
                     " : " +

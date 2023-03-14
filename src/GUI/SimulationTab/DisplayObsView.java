@@ -70,14 +70,14 @@ public class DisplayObsView extends JPanel {
         gc.gridy = 2;
         gc.anchor = GridBagConstraints.WEST;
 
-        List<SortedSet<ObservedMeasurement<?>>> measurementsList = this.parent.getSimuController ( ).getModel ().getMeasurementsSetsList ( ).getFirst ( );
+        List<SortedSet<ObservedMeasurement<?>>> measurementsList = this.parent.getSimuController ( ).getModel ( ).getMeasurementsSetsList ( ).getFirst ( );
 
         gc.anchor = GridBagConstraints.PAGE_START;
         ArrayList<String> elements = new ArrayList<String> ( );
 
         for (SortedSet<ObservedMeasurement<?>> set : measurementsList) {
             for (ObservedMeasurement<?> obs : set) {
-                elements.add ( "Date: " + obs.getDate ( ).toString ( ) + "; Station: " + ((AngularAzEl) obs).getStation ( ).getBaseFrame ( ).getName ( ) + "; Satellite: " + parent.getSimuController ( ).getModel ().getSatellitesNames().get( obs.getSatellites ( ).get ( 0 ).getPropagatorIndex ( ) ));
+                elements.add ( "Date: " + obs.getDate ( ).toString ( ) + "; Station: " + ((AngularAzEl) obs).getStation ( ).getBaseFrame ( ).getName ( ) + "; Satellite: " + parent.getSimuController ( ).getModel ( ).getSatellitesNames ( ).get ( obs.getSatellites ( ).get ( 0 ).getPropagatorIndex ( ) ) );
             }
         }
         String[] arr = {};

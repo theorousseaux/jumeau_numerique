@@ -14,7 +14,6 @@ import src.Observer.TelescopeAzEl;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,8 +22,8 @@ import java.util.HashMap;
  * It will display in different colors selected and unselected stations
  */
 public final class WorldMapView extends JPanel {
-    public MainFrame parent;
     public final WorldWindowGLJPanel wwPanel;
+    public MainFrame parent;
     public RenderableLayer GSLayer;
     public RenderableLayer orbitLayer;
     GridBagConstraints gc = new GridBagConstraints ( );
@@ -42,7 +41,7 @@ public final class WorldMapView extends JPanel {
 
         // Display of ground stations
         GSLayer = new RenderableLayer ( );
-        for (Station station : parent.getGsController ( ).getModel ().getGroundStationList()) {
+        for (Station station : parent.getGsController ( ).getModel ( ).getGroundStationList ( )) {
 
 
             double latitude = station.getLatitude ( );
@@ -71,7 +70,7 @@ public final class WorldMapView extends JPanel {
      *
      * @param parent
      */
-    public void displayNewGS ( MainFrame parent, boolean loaded) {
+    public void displayNewGS ( MainFrame parent , boolean loaded ) {
         this.repaint ( );
         // Display of ground stations
 
@@ -81,21 +80,22 @@ public final class WorldMapView extends JPanel {
 
         wwPanel.setModel ( m );
         GSLayer = new RenderableLayer ( );
-        ArrayList<Station> stations = new ArrayList<> (  );
+        ArrayList<Station> stations = new ArrayList<> ( );
         HashMap<String, String> selectedStations = new HashMap<> ( );
-        stations.addAll ( parent.getGsController ().getModel ().getGroundStationList () );
-        if (loaded){
+        stations.addAll ( parent.getGsController ( ).getModel ( ).getGroundStationList ( ) );
+        if (loaded) {
 
 
-            for (TelescopeAzEl teles : parent.getSimuController ().getModel ().getObserverNetwork ().getTelescopes ()) {
+            for (TelescopeAzEl teles : parent.getSimuController ( ).getModel ( ).getObserverNetwork ( ).getTelescopes ( )) {
                 Station station = teles.getStation ( );
                 selectedStations.put ( station.getName ( ) , "" );
             }
-        }else{
-            for (TelescopeAzEl teles : parent.getObserController ().getModel ().getTelescopeAzElList ()) {
+        } else {
+            for (TelescopeAzEl teles : parent.getObserController ( ).getModel ( ).getTelescopeAzElList ( )) {
                 Station station = teles.getStation ( );
                 selectedStations.put ( station.getName ( ) , "" );
-            }        }
+            }
+        }
         for (Station station : stations) {
 
             double latitude = station.getLatitude ( );

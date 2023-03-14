@@ -15,7 +15,7 @@ public class SimulationView extends JPanel {
 
         this.parent = parent;
         DisplaySimView displaySetup = new DisplaySimView ( parent );
-        LoadSimulationView loadSimulation = new LoadSimulationView ( parent , displaySetup);
+        LoadSimulationView loadSimulation = new LoadSimulationView ( parent , displaySetup );
         DisplayObsView displayObs = new DisplayObsView ( parent );
         RunSimulationView runSimulation = new RunSimulationView ( parent , displayObs );
 

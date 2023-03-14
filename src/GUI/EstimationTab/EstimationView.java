@@ -86,9 +86,9 @@ public class EstimationView extends JPanel {
         DisplayEstView disp = new DisplayEstView ( parent );
 
         GC.gridx = 0;
-        GC.gridy ++;
-        add(new JLabel ( "Estimated orbital parameters" ));
-        GC.gridy ++;
+        GC.gridy++;
+        add ( new JLabel ( "Estimated orbital parameters" ) );
+        GC.gridy++;
 
         add ( disp , GC );
 
@@ -96,28 +96,31 @@ public class EstimationView extends JPanel {
 
         GC.gridx = 0;
 
-        GC.gridy ++;
-        add(new JLabel ( "True orbital parameters" ));
-        GC.gridy ++;
-        add(truePanel,GC);
+        GC.gridy++;
+        add ( new JLabel ( "True orbital parameters" ) );
+        GC.gridy++;
+        add ( truePanel , GC );
 
         // Event manager
         runEstimationButton.addActionListener ( new ActionListener ( ) {
             @Override
             public void actionPerformed ( ActionEvent e ) {
-                //try {
-                EstimationController controller = parent.getEstimationController ( );
-                controller.model.setStdV ( Double.parseDouble ( stdVField.getText ( ) ) );
-                controller.model.setStdPos ( Double.parseDouble ( stdPosField.getText ( ) ) );
-                controller.model.setNoiseLevelV ( Double.parseDouble ( noiseVField.getText ( ) ) );
-                controller.model.setNoiseLevelPos ( Double.parseDouble ( noisePosField.getText ( ) ) );
-                controller.loadEstimation ( parent );
-
                 try {
-                    controller.runEstimation ( parent );
-                } catch (IOException ex) {
-                    throw new RuntimeException ( ex );
+                    EstimationController controller = parent.getEstimationController ( );
+                    controller.model.setStdV ( Double.parseDouble ( stdVField.getText ( ) ) );
+                    controller.model.setStdPos ( Double.parseDouble ( stdPosField.getText ( ) ) );
+                    controller.model.setNoiseLevelV ( Double.parseDouble ( noiseVField.getText ( ) ) );
+                    controller.model.setNoiseLevelPos ( Double.parseDouble ( noisePosField.getText ( ) ) );
+                    try {
+                        controller.loadEstimation ( parent );
+                        controller.runEstimation ( parent );
+                    } catch (NullPointerException | IOException npe) {
+                        JOptionPane.showMessageDialog ( parent , "No measurement loaded " , "Error" , JOptionPane.ERROR_MESSAGE );
+                    }
+                } catch (Exception ez) {
+                    JOptionPane.showMessageDialog ( parent , "Incorrect estimation parameters input" , "Error" , JOptionPane.ERROR_MESSAGE );
                 }
+
 
                 disp.update ( );
                 disp.repaint ( );

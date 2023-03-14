@@ -2,15 +2,14 @@ package src.GUI.ObserverTab;
 
 import src.GUI.MainFrame;
 import src.GUI.WorldMapTab.WorldMapView;
+import src.Observer.ObserverNetwork;
 import src.Observer.Radar;
 import src.Observer.TelescopeAzEl;
-import src.Observer.ObserverNetwork;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,9 +18,9 @@ public class CreateNetworkView extends JPanel {
 
     final MainFrame parent;
     final DisplayNetworkView displayNetworkPannel;
-    Set<String> selectedStations;
     private final JList<String> list;
     private final DefaultListModel<String> listModel;
+    Set<String> selectedStations;
 
     public CreateNetworkView ( MainFrame parent , DisplayNetworkView displayNetworkPannel , WorldMapView worldMapView ) {
 
@@ -96,12 +95,12 @@ public class CreateNetworkView extends JPanel {
 
 
                 System.out.println ( selectedStations );
-                parent.getObserController ( ).getModel ().setObserverNetwork ( new ObserverNetwork ( textField.getText ( ) , new ArrayList<> ( selectedStations ) , parent.getObserController ( ).getModel ( ).getTelescopeAzElList ( ) ));
+                parent.getObserController ( ).getModel ( ).setObserverNetwork ( new ObserverNetwork ( textField.getText ( ) , new ArrayList<> ( selectedStations ) , parent.getObserController ( ).getModel ( ).getTelescopeAzElList ( ) ) );
                 displayNetworkPannel.update ( );
                 displayNetworkPannel.repaint ( );
                 displayNetworkPannel.revalidate ( );
 
-                worldMapView.displayNewGS ( parent, false );
+                worldMapView.displayNewGS ( parent , false );
                 worldMapView.repaint ( );
                 worldMapView.revalidate ( );
 

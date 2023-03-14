@@ -6,7 +6,6 @@ import org.orekit.propagation.SpacecraftState;
 import src.GUI.MainFrame;
 import src.Observer.Observation;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
@@ -35,9 +34,9 @@ public class SimulationController {
         model.setObserverNetwork ( parent.getObserController ( ).getModel ( ).getObserverNetwork ( ) );
 
 
-        model.setSatellites ( parent.getSatController ( ).getModel ().getSatellitesList ( ) );
-        model.setSatellitesNames ( parent.getSatController ( ).getModel ().getIdSatellitesList ( ) );
-        model.setObservableSatellites ( parent.getSatController ( ).getModel ().getObservableSatellitesList ( ) );
+        model.setSatellites ( parent.getSatController ( ).getModel ( ).getSatellitesList ( ) );
+        model.setSatellitesNames ( parent.getSatController ( ).getModel ( ).getIdSatellitesList ( ) );
+        model.setObservableSatellites ( parent.getSatController ( ).getModel ( ).getObservableSatellitesList ( ) );
         System.out.println ( "Parameters : " );
         System.out.println ( parent.getParamController ( ).model.toString ( ) );
         System.out.println ( "Telescopes : " );

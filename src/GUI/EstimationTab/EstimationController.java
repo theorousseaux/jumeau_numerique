@@ -34,7 +34,7 @@ public class EstimationController {
     /**
      * Le modèle de l'estimation.
      */
-    public final EstimationModel model = new EstimationModel();
+    public final EstimationModel model = new EstimationModel ( );
 
     /**
      * Charge les données d'estimation à partir du contrôleur parent.
@@ -42,13 +42,13 @@ public class EstimationController {
      * @param parent le contrôleur parent
      * @throws IllegalArgumentException si une exception est levée
      */
-    public void loadEstimation(MainFrame parent) throws IllegalArgumentException {
-        model.setSatellites(parent.getSimuController().getModel().getObservableSatellites());
-        model.setPropagators(parent.getSimuController().getModel().getSatellites());
-        model.setFinalDate(parent.getSimuController().getModel().getSimulationParameters().getEndDate());
-        model.setInitialDate(parent.getSimuController().getModel().getSimulationParameters().getStartDate());
-        model.setMeasurements(parent.getSimuController().getModel().getMeasurementsSetsList());
-        model.setSatellitesNames(parent.getSimuController().getModel().getSatellitesNames());
+    public void loadEstimation ( MainFrame parent ) throws IllegalArgumentException {
+        model.setSatellites ( parent.getSimuController ( ).getModel ( ).getObservableSatellites ( ) );
+        model.setPropagators ( parent.getSimuController ( ).getModel ( ).getSatellites ( ) );
+        model.setFinalDate ( parent.getSimuController ( ).getModel ( ).getSimulationParameters ( ).getEndDate ( ) );
+        model.setInitialDate ( parent.getSimuController ( ).getModel ( ).getSimulationParameters ( ).getStartDate ( ) );
+        model.setMeasurements ( parent.getSimuController ( ).getModel ( ).getMeasurementsSetsList ( ) );
+        model.setSatellitesNames ( parent.getSimuController ( ).getModel ( ).getSatellitesNames ( ) );
     }
 
     /**
@@ -57,11 +57,11 @@ public class EstimationController {
      * @param parent le contrôleur parent
      * @throws IOException si une exception est levée
      */
-    public void runEstimation(MainFrame parent) throws IOException {
-        this.loadEstimation(parent);
+    public void runEstimation ( MainFrame parent ) throws IOException {
+        this.loadEstimation ( parent );
         int j = 0;
-        for (SortedSet<ObservedMeasurement<?>> measureListInit : this.model.getMeasurements().getFirst()) {
-            performEstimation(j, measureListInit, model.getMeasurements().getSecond());
+        for (SortedSet<ObservedMeasurement<?>> measureListInit : this.model.getMeasurements ( ).getFirst ( )) {
+            performEstimation ( j , measureListInit , model.getMeasurements ( ).getSecond ( ) );
             j++;
         }
     }
@@ -69,9 +69,9 @@ public class EstimationController {
     /**
      * Effectue une estimation de l'orbite à partir des mesures observées pour un satellite donné.
      *
-     * @param j                  l'indice du satellite à estimer.
-     * @param measureListInit    l'ensemble des mesures observées.
-     * @param states             la carte des états initiaux des satellites.
+     * @param j               l'indice du satellite à estimer.
+     * @param measureListInit l'ensemble des mesures observées.
+     * @param states          la carte des états initiaux des satellites.
      */
     public void performEstimation ( int j , SortedSet<ObservedMeasurement<?>> measureListInit , HashMap<ObservedMeasurement, SpacecraftState> states ) {
         if (measureListInit.size ( ) > 0) {
@@ -113,7 +113,7 @@ public class EstimationController {
             for (ObservedMeasurement<?> measure : measureListInit) {
                 AngularAzEl m = new AngularAzEl ( ((AngularAzEl) measure).getStation ( ) , measure.getDate ( ) , measure.getObservedValue ( ) , measure.getTheoreticalStandardDeviation ( ) , measure.getBaseWeight ( ) , sat );
                 measureList.add ( m );
-                model.getObservedSat ().add ( this.model.satellitesNames.get(j) );
+                model.getObservedSat ( ).add ( this.model.satellitesNames.get ( j ) );
             }
 
             OD estimator = new OD ( this.model.getSatellites ( ).get ( j ) , propagator , numericalPropagatorBuilder , measureList , this.model.getInitialDate ( ) , this.model.getFinalDate ( ) , this.model.stdPos , this.model.stdV );
@@ -128,7 +128,7 @@ public class EstimationController {
             LinkedHashMap<ObservedMeasurement<?>, Propagator> estimation = estimator.Kalman ( processNoise );
 
             for (Map.Entry<ObservedMeasurement<?>, Propagator> entry : estimation.entrySet ( )) {
-                this.model.estimationsList.add ( "Sat " + model.getSatellitesNames ().get(j) + ": " + Arrays.toString ( paramOrbitaux ( entry.getValue ( ).getInitialState ( ).getOrbit ( ) ) ) );
+                this.model.estimationsList.add ( "Sat " + model.getSatellitesNames ( ).get ( j ) + ": " + Arrays.toString ( paramOrbitaux ( entry.getValue ( ).getInitialState ( ).getOrbit ( ) ) ) );
 
             }
 
