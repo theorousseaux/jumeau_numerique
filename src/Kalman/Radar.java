@@ -56,7 +56,13 @@ public class Radar {
 
     public double baseWeightRadar;
 
-    public double sigmaRadar;
+    public double sigmaRange;
+
+    public double sigmaRangeRate;
+
+    public CorrelatedRandomVectorGenerator noiseSourceRange;
+    
+    public CorrelatedRandomVectorGenerator noiseSourceRangeRate;
 
     /** Constructor */
     public Radar(String ID, double[] mean, double[] angularIncertitude, double angularFoV, double stepMeasure, Station station) {
@@ -66,8 +72,11 @@ public class Radar {
 
         this.sigma = angularIncertitude;
         this.baseWeight = new double[]{1., 1.};
-        this.sigmaRadar = 30.;
+        this.sigmaRange = 30.;
+        this.sigmaRangeRate = 0.01;
         this.baseWeightRadar = 1.;
+
+        double [] meanRadar = {0.};
 
         // Mise en place du field of view du radar
         this.angularFoV = angularFoV;
@@ -78,13 +87,25 @@ public class Radar {
         this.fov = fov;
         
  
-        // bruit de mesures
+        // bruit de mesures AzEl
         double[] covarianceDiag = {Math.pow(angularIncertitude[0],2), Math.pow(angularIncertitude[1],2)};
         RealMatrix covariance = MatrixUtils.createRealDiagonalMatrix(covarianceDiag);
         RandomGenerator randomGenerator = new RandomDataGenerator();
         GaussianRandomGenerator gaussianRandomGenerator = new GaussianRandomGenerator(randomGenerator);
         CorrelatedRandomVectorGenerator noiseSource = new CorrelatedRandomVectorGenerator(mean, covariance, 1.0e-10, gaussianRandomGenerator);//mesures parfaites:null
         this.noiseSource = noiseSource;
+
+        //bruit de mesures Range
+        double[] covarianceDiag2 = {Math.pow(sigmaRange, 2)};
+        RealMatrix covariance2 = MatrixUtils.createRealDiagonalMatrix(covarianceDiag2);
+        CorrelatedRandomVectorGenerator noiseSourceRange = new CorrelatedRandomVectorGenerator(meanRadar, covariance2, 1.0e-10, gaussianRandomGenerator);
+        this.noiseSourceRange = noiseSourceRange;
+
+        //bruit de mesure RangeRate
+        double[] covarianceDiag3 = {Math.pow(sigmaRangeRate, 2)};
+        RealMatrix covariance3 = MatrixUtils.createRealDiagonalMatrix(covarianceDiag3);
+        CorrelatedRandomVectorGenerator noiseSourceRangeRate = new CorrelatedRandomVectorGenerator(meanRadar, covariance3, 1.0e-10, gaussianRandomGenerator);
+        this.noiseSourceRangeRate = noiseSourceRangeRate;
 
         this.stepMeasure = stepMeasure;
         
@@ -127,8 +148,8 @@ public class Radar {
         return this.baseWeightRadar;
     }
 
-    public double getSigmaRadar(){
-        return this.sigmaRadar;
+    public double getSigmaRange(){
+        return this.sigmaRange;
     }
 
 
@@ -178,12 +199,12 @@ public class Radar {
     	return azElBuilder;
     }
     public RangeBuilder createRangeBuilder(ObservableSatellite satellite){
-        RangeBuilder rangeBuilder = new RangeBuilder(noiseSource, station, true, sigmaRadar, baseWeightRadar, satellite);
+        RangeBuilder rangeBuilder = new RangeBuilder(noiseSourceRange, station, true, sigmaRange, baseWeightRadar, satellite);
         return rangeBuilder;
     }
 
     public RangeRateBuilder createRangeRateBuilder(ObservableSatellite satellite){
-        RangeRateBuilder rangeRateBuilder = new RangeRateBuilder(noiseSource, station, true, sigmaRadar, baseWeightRadar, satellite);
+        RangeRateBuilder rangeRateBuilder = new RangeRateBuilder(noiseSourceRangeRate, station, true, sigmaRangeRate, baseWeightRadar, satellite);
         return rangeRateBuilder;
     }
 
