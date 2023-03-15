@@ -33,10 +33,10 @@ public class Radar {
     /** ID (station:type:id) */	
 	private String ID;
 
-    /** noiseSource */
+    /** noiseSource mesures AzEl */
 	public CorrelatedRandomVectorGenerator noiseSource;
 
-	/** sigma */
+	/** sigma et incertitude angulaire pour les mesures AzEl*/
 	public double[] sigma;
 
 	/** Measures weight */
@@ -51,17 +51,22 @@ public class Radar {
 	/** nombre de secondes entre deux mesures */
 	public double stepMeasure;
 	
-	/** Programmation satellite LEO/GEO */
+	/** champ de vision du radar */
 	public FieldOfView fov;
 
+    /** poids des mesures Range, RangeRate */
     public double baseWeightRadar;
 
+    /** sigma et incertitude sur la mesure de type Range */
     public double sigmaRange;
 
+    /** sigma et incertitude sur la mesure de type RangeRate */
     public double sigmaRangeRate;
 
+    /** bruit de le mesure Range */
     public CorrelatedRandomVectorGenerator noiseSourceRange;
     
+    /** bruit de la mesure RangeRate */
     public CorrelatedRandomVectorGenerator noiseSourceRangeRate;
 
     /** Constructor */
