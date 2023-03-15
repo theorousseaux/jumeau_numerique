@@ -14,12 +14,15 @@ public class NewObserverView extends JPanel {
 
     final MainFrame parent;
     private final JComboBox<String> cbType;
-    private final JPanel formPanel;
+    protected JPanel formPanel;
     public JComboBox<Station> stationComboBox;
+    protected DefaultComboBoxModel<Station> stationListModel;
 
     public NewObserverView ( MainFrame parent , DisplayObserverView displayObserverView , CreateNetworkView createNetworkPannel ) {
 
         this.parent = parent;
+        this.stationListModel = new DefaultComboBoxModel<>();
+        this.stationComboBox = new JComboBox<> (stationListModel);
 
         setLayout ( new GridBagLayout ( ) );
         GridBagConstraints gc = new GridBagConstraints ( );
@@ -65,7 +68,7 @@ public class NewObserverView extends JPanel {
         add ( formPanel , gc );
     }
 
-    private void updateFormPanel ( DisplayObserverView displayObserverView , CreateNetworkView createNetworkPannel ) {
+    public void updateFormPanel ( DisplayObserverView displayObserverView , CreateNetworkView createNetworkPannel ) {
         String selectedType = (String) cbType.getSelectedItem ( );
         assert selectedType != null;
         if (selectedType.equals ( "Telescope" )) {
@@ -119,10 +122,8 @@ public class NewObserverView extends JPanel {
 
             JLabel stationLabel = new JLabel ( "Station :" );
             formPanel.add ( stationLabel );
-            this.stationComboBox = new JComboBox<> ( );
-            for (Station s : parent.getGsController ( ).getModel ( ).getGroundStationList ( )) {
-                stationComboBox.addItem ( s );
-            }
+
+            this.updateStationComboBox();
             formPanel.add ( stationComboBox );
 
             JButton addTelescopeButton = new JButton ( "Add telescope" );
@@ -205,10 +206,8 @@ public class NewObserverView extends JPanel {
 
             JLabel stationLabel = new JLabel ( "Station :" );
             formPanel.add ( stationLabel );
-            this.stationComboBox = new JComboBox<> ( );
-            for (Station s : parent.getGsController ( ).getModel ( ).getGroundStationList ( )) {
-                stationComboBox.addItem ( s );
-            }
+
+            this.updateStationComboBox();
             formPanel.add ( stationComboBox );
 
             JButton addRadarButton = new JButton ( "Add radar" );
@@ -255,9 +254,13 @@ public class NewObserverView extends JPanel {
     }
 
     public void updateStationComboBox ( ) {
-        stationComboBox.removeAllItems ( );
+        stationListModel.removeAllElements();
         for (Station s : parent.getGsController ( ).getModel ( ).getGroundStationList ( )) {
-            stationComboBox.addItem ( s );
+            stationListModel.addElement(s);
         }
+        this.stationComboBox.repaint();
+        this.stationComboBox.revalidate();
+        this.repaint();
+        this.revalidate();
     }
 }

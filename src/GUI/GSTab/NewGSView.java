@@ -119,9 +119,9 @@ public class NewGSView extends JPanel {
                 displayGSView.revalidate ( );
 
                 // Mise à jour des choix dans l'onglet Observer
-                ObserverView tabPanel = (ObserverView) parent.getObserverPanel ();
+                ObserverView obsPannel = (ObserverView) parent.getObserverPanel ();
                 try {
-                    NewObserverView newObserverView = tabPanel.getNewObserverView();
+                    NewObserverView newObserverView = obsPannel.getNewObserverView();
                     newObserverView.updateStationComboBox ( );
 
                     worldMapView.displayNewGS ( parent , false );
