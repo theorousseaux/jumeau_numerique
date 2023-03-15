@@ -8,9 +8,9 @@ and unzip it anywhere you want. Rename the `orekit-data-master` folder to
 the start of your program:
 
 ```java
-File orekitData = new File("/path/to/the/folder/orekit-data");
-DataProvidersManager manager = DataContext.getDefault().getDataProvidersManager();
-manager.addProvider(new DirectoryCrawler(orekitData));
+File orekitData=new File("/path/to/the/folder/orekit-data");
+        DataProvidersManager manager=DataContext.getDefault().getDataProvidersManager();
+        manager.addProvider(new DirectoryCrawler(orekitData));
 ```
 
 This zip file contains:

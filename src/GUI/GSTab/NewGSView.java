@@ -2,6 +2,7 @@ package src.GUI.GSTab;
 
 import src.GUI.MainFrame;
 import src.GUI.ObserverTab.NewObserverView;
+import src.GUI.ObserverTab.ObserverView;
 import src.GUI.WorldMapTab.WorldMapView;
 import src.GroundStation.Station;
 
@@ -118,13 +119,15 @@ public class NewGSView extends JPanel {
                 displayGSView.revalidate ( );
 
                 // Mise à jour des choix dans l'onglet Observer
-                JPanel tabPanel = (JPanel) parent.getTabbedPane ( ).getComponentAt ( 4 );
-                NewObserverView newObserverView = (NewObserverView) tabPanel.getComponent ( 1 );
-                newObserverView.updateStationComboBox ( );
+                ObserverView tabPanel = (ObserverView) parent.getObserverPanel ();
+                try {
+                    NewObserverView newObserverView = tabPanel.getNewObserverView();
+                    newObserverView.updateStationComboBox ( );
 
-                worldMapView.displayNewGS ( parent , false );
-                worldMapView.repaint ( );
-                worldMapView.revalidate ( );
+                    worldMapView.displayNewGS ( parent , false );
+                    worldMapView.repaint ( );
+                    worldMapView.revalidate ( );
+                }catch (Exception el){}
 
             }
         } );

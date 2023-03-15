@@ -65,7 +65,7 @@ public class UpdateSatelliteDBView extends JPanel {
                     public void run ( ) {
                         try {
                             // Exécution du script sh
-                            Process p = Runtime.getRuntime ( ).exec ( "sh src/TLE/TLE_recov_kep.sh" );
+                            Process p = Runtime.getRuntime ( ).exec ( "sh src/Satellites/TLE_recov_kep.sh" );
 
                             // Redirection de la sortie d'erreur du processus vers le JTextArea en temps réel
                             BufferedReader errorReader = new BufferedReader ( new InputStreamReader ( p.getErrorStream ( ) ) );

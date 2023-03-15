@@ -83,7 +83,7 @@ public class CreateNetworkView extends JPanel {
         gc.anchor = GridBagConstraints.EAST;
         this.add ( button , gc );
 
-        // Si le boutton add est cliqué, on crée un réseau avec les stations sélectionnées
+        // Si le boutton add est cliqué, on crée un réseau avec les observeurs sélectionnées
         button.addActionListener ( new ActionListener ( ) {
             @Override
             public void actionPerformed ( ActionEvent e ) {

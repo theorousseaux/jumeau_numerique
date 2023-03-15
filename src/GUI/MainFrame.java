@@ -27,6 +27,7 @@ import java.sql.SQLException;
 
 public class MainFrame extends JFrame {
     private JPanel globePanel;
+    private JPanel observerPanel;
     private GSController gsController;
     private UpdateDBController updateDBController;
     private ObserverController obserController;
@@ -49,7 +50,7 @@ public class MainFrame extends JFrame {
 
         JFrame frame = new JFrame ( "Space Observation Digital Twin" );
         globePanel = new WorldMapView ( this );
-
+        observerPanel = new ObserverView ( this );
         // Création des onglets
         this.tabbedPane = new JTabbedPane ( );
         JPanel homePanel = new HomeView ( );
@@ -57,7 +58,6 @@ public class MainFrame extends JFrame {
         JPanel satPanel = new SatelliteView ( this );
         JPanel groundStationPanel = new GSView ( this );
         JPanel observerPanel = new ObserverView ( this );
-        // JPanel analysisPanel = new AnalysisPannel();
         JPanel parametersPanel = new ParametersView ( this );
         JPanel simulationPanel = new SimulationView ( this );
         JPanel estimationPanel = new EstimationView ( this );
@@ -165,5 +165,13 @@ public class MainFrame extends JFrame {
 
     public void setTabbedPane ( JTabbedPane tabbedPane ) {
         this.tabbedPane = tabbedPane;
+    }
+
+    public JPanel getObserverPanel ( ) {
+        return observerPanel;
+    }
+
+    public void setObserverPanel ( JPanel observerPanel ) {
+        this.observerPanel = observerPanel;
     }
 }

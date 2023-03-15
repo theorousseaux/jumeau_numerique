@@ -10,7 +10,7 @@ public class ObserverView extends JPanel {
 
     final MainFrame parent;
     final GridBagConstraints gc = new GridBagConstraints ( );
-
+    private NewObserverView newObserverView;
     public ObserverView ( MainFrame parent ) {
 
         this.parent = parent;
@@ -29,7 +29,7 @@ public class ObserverView extends JPanel {
         CreateNetworkView createNetworkPannel = new CreateNetworkView ( parent , displayNetworkPannel , worldMapView );
 
         // Affichage du formulaire d'ajout d'une station sol
-        NewObserverView newObserverView = new NewObserverView ( parent , displayObserverView , createNetworkPannel );
+        this.setNewObserverView (new NewObserverView ( parent , displayObserverView , createNetworkPannel ));
 
 
         // Choix des stations sol pour le réseau
@@ -46,7 +46,7 @@ public class ObserverView extends JPanel {
         gc.gridx = 0;
         gc.gridwidth = 1;
         gc.anchor = GridBagConstraints.CENTER;
-        this.add ( newObserverView , gc );
+        this.add ( this.getNewObserverView () , gc );
 
         gc.gridx = 1;
         gc.gridy = 1;
@@ -61,5 +61,14 @@ public class ObserverView extends JPanel {
         gc.anchor = GridBagConstraints.CENTER;
         this.add ( displayNetworkPannel , gc );
 
+    }
+
+
+    public NewObserverView getNewObserverView ( ) {
+        return newObserverView;
+    }
+
+    public void setNewObserverView ( NewObserverView newObserverView ) {
+        this.newObserverView = newObserverView;
     }
 }
