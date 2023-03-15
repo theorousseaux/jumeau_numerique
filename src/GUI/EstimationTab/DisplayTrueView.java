@@ -54,7 +54,7 @@ public class DisplayTrueView extends JPanel {
         int j = 0;
         for (String satname : parent.getSimuController ( ).getModel ( ).getSatellitesNames ( )) {
             if (parent.getEstimationController ( ).model.getObservedSat ( ).contains ( satname )) {
-                KeplerianOrbit nOrbit = (KeplerianOrbit) parent.getEstimationController ( ).model.getPropagators ( ).get ( j ).getInitialState ( ).getOrbit ( );
+                KeplerianOrbit nOrbit = new KeplerianOrbit(parent.getEstimationController ( ).model.getPropagators ( ).get ( j ).getInitialState ( ).getOrbit ( ));
                 double[] param = {nOrbit.getA ( ) , nOrbit.getE ( ) , Math.IEEEremainder ( nOrbit.getI ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getRightAscensionOfAscendingNode ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getPerigeeArgument ( ) , 2 * Math.PI ) , Math.IEEEremainder ( nOrbit.getAnomaly ( constants.type ) , 2 * Math.PI )};
 
                 elements2.add ( "Sat " + satname + "    : [" + Arrays.toString ( param ) );
