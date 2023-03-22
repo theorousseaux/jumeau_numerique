@@ -27,26 +27,25 @@ public class HomeView extends JPanel {
         text3.setVerticalAlignment ( SwingConstants.CENTER );
         text3.setBounds ( 0 , 100 , 800 , 50 );
 
-        JLabel text4 = new JLabel ( "2. Select satellites to observe" );
+        JLabel text4 = new JLabel ( "2. Add a new ground station" );
         text4.setFont ( new java.awt.Font ( "Arial" , 1 , 15 ) );
         text4.setHorizontalAlignment ( SwingConstants.CENTER );
         text4.setVerticalAlignment ( SwingConstants.CENTER );
         text4.setBounds ( 0 , 150 , 800 , 50 );
 
-
-        JLabel text5 = new JLabel ( "3. Add a new ground station" );
+        JLabel text5 = new JLabel ( "3. Add a new observer to a ground station, and create a network of observers" );
         text5.setFont ( new java.awt.Font ( "Arial" , 1 , 15 ) );
         text5.setHorizontalAlignment ( SwingConstants.CENTER );
         text5.setVerticalAlignment ( SwingConstants.CENTER );
         text5.setBounds ( 0 , 200 , 800 , 50 );
 
-        JLabel text6 = new JLabel ( "4. Add a new observer to a ground station, and create a network of observers" );
+        JLabel text6 = new JLabel ( "4. Select the parameters of the simulation" );
         text6.setFont ( new java.awt.Font ( "Arial" , 1 , 15 ) );
         text6.setHorizontalAlignment ( SwingConstants.CENTER );
         text6.setVerticalAlignment ( SwingConstants.CENTER );
         text6.setBounds ( 0 , 250 , 800 , 50 );
 
-        JLabel text7 = new JLabel ( "5. Select the parameters of the simulation" );
+        JLabel text7 = new JLabel ( "5. Select satellites to observe" );
         text7.setFont ( new java.awt.Font ( "Arial" , 1 , 15 ) );
         text7.setHorizontalAlignment ( SwingConstants.CENTER );
         text7.setVerticalAlignment ( SwingConstants.CENTER );
