@@ -12,3 +12,5 @@ Celui-ci permet de :
   
  
  ATTENTION : le programme tourne avec Java 11, toute autre version entrainera un disfonctionnement de l'application.
+
+Pour l'utiliser, il vous faudra créer un compte Space Track sur spacetrack.org, puis entrer vos identifiants dans le fichier src/Satellites/TLE_recov_kep.sh dans la première ligne.
