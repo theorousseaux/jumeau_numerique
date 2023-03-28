@@ -1,4 +1,4 @@
-curl -c cookies.txt -b cookies.txt https://www.space-track.org/ajaxauth/login -d 'identity=eliotty77@hotmail.fr&password=730ElJ77976EbK77' 2>&1
+curl -c cookies.txt -b cookies.txt https://www.space-track.org/ajaxauth/login -d 'identity=YOUR_EMAILE&password=YOUR_PASSWORD' 2>&1
 echo "Connecting to spacetrack.org" >&2
 echo "" >&2
 
